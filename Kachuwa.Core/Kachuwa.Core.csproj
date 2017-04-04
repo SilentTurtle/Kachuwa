@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\MySQL\" />
+    <Folder Include="Data\PostgreSQL\" />
+    <Folder Include="Data\SQLite\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Web\" />
+    <Folder Include="Plugin\" />
+    <Folder Include="Service\" />
+    <Folder Include="Queue\" />
+    <Folder Include="Localization\" />
+    <Folder Include="MultiTenant\" />
+    <Folder Include="Dev\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="1.2.1" />
+  </ItemGroup>
+
+</Project>
