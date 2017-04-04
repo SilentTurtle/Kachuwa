@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Payment\" />
+    <Folder Include="Templating\" />
+    <Folder Include="Image\" />
+    <Folder Include="State\" />
+    <Folder Include="EmailTemplate\" />
+    <Folder Include="Job\" />
+    <Folder Include="Theme - Copy %285%29\" />
+    <Folder Include="Service\" />
+    <Folder Include="Theme\" />
+  </ItemGroup>
+
+</Project>
