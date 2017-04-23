@@ -42,6 +42,16 @@ namespace Kachuwa.Caching
         {
             Connection.Dispose();
         }
+        public T Get<T>(string key)
+        {
+            IDatabase cache = Connection.GetDatabase();
+            lock (_lock)
+            {
+                var obj = cache.Get<T>(key);
+                return obj;
+            }
+
+        }
 
         public T Get<T>(string key, Func<T> dataFactory)
         {

@@ -599,26 +599,17 @@ namespace Kachuwa.Identity.Stores
                 //TODO::here delete claims with 
                 foreach (var claim in claims)
                 {
-                    //await _userService.ClaimService.DeleteAsync(
-                    //    "Where UserId=@UserId and ClaimType=@ct and ClaimValue=@cv",
-                    //    new
-                    //    {
-                    //        UserId = user.Id,
-                    //        cv = claim.Value,
-                    //        ct = claim.Type
-                    //    });
+                    await _userService.ClaimService.DeleteAsync(
+                        "Where UserId=@UserId and ClaimType=@ct and ClaimValue=@cv",
+                        new
+                        {
+                            UserId = user.Id,
+                            cv = claim.Value,
+                            ct = claim.Type
+                        });
 
                 }
-
-                //var result = await _userRepository.RemoveClaims(user.Id, claims, cancellationToken, _transaction);
-                //if (result)
-                //{
-                //    CommitTransaction();
-                //}
-                //else
-                //{
-                //    RollbackTransaction();
-                //}
+               
             }
             catch (Exception ex)
             {
@@ -629,7 +620,6 @@ namespace Kachuwa.Identity.Stores
         public async Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            // await CreateTransactionIfNotExists(cancellationToken);
 
             if (user == null)
                 throw new ArgumentNullException(nameof(user));

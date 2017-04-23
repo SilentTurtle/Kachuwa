@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
@@ -33,6 +34,24 @@ namespace Kachuwa.Reflection
         {
             return compilationLibrary.Name.Contains("Kachuwa")
                    || compilationLibrary.Dependencies.Any(d => d.Name.StartsWith("Kachuwa"));
+        }
+
+        private static IEnumerable<Assembly> GetReferencingAssemblies()
+        {
+            var assemblies = new List<Assembly>();
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+
+            foreach (var library in dependencies)
+            {
+                try
+                {
+                    var assembly = Assembly.Load(new AssemblyName(library.Name));
+                    assemblies.Add(assembly);
+                }
+                catch (FileNotFoundException)
+                { }
+            }
+            return assemblies;
         }
     }
 }

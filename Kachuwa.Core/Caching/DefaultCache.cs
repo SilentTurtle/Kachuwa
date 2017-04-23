@@ -21,6 +21,15 @@ namespace Kachuwa.Caching
             _cache.Dispose();
         }
 
+        public T Get<T>(string key)
+        {
+            lock (_lock)
+            {
+                var cacheObj = _cache.Get(key);
+                return (T)cacheObj;
+            }
+
+        }
         public T Get<T>(string key, Func<T> dataFactory)
         {
             return Get<T>(key, ExpireInSeconds, dataFactory);

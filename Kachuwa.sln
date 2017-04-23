@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KachuwaApp", "KachuwaApp\KachuwaApp.csproj", "{50220F69-43D1-43DC-B55D-EA8539A19131}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.Core", "Kachuwa.Core\Kachuwa.Core.csproj", "{3D51BC3B-4742-4941-AAB6-522ABDFD1EA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.Web", "Kachuwa.Web\Kachuwa.Web.csproj", "{B56214B7-DB79-4612-989B-4B7FDC9BEFDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.Identity", "Kachuwa.Identity\Kachuwa.Identity.csproj", "{CA8F8919-A544-4FFB-9E8C-815521324E78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.PluginOne", "Kachuwa.PluginOne\Kachuwa.PluginOne.csproj", "{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{FD9AD17D-3A68-48F6-BDAB-384763BDD025}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.ContactUs", "Kachuwa.ContactUs\Kachuwa.ContactUs.csproj", "{32A8CCD9-2E05-43DA-804B-9AF6493C7696}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{50220F69-43D1-43DC-B55D-EA8539A19131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50220F69-43D1-43DC-B55D-EA8539A19131}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50220F69-43D1-43DC-B55D-EA8539A19131}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50220F69-43D1-43DC-B55D-EA8539A19131}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D51BC3B-4742-4941-AAB6-522ABDFD1EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D51BC3B-4742-4941-AAB6-522ABDFD1EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D51BC3B-4742-4941-AAB6-522ABDFD1EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +33,18 @@ Global
 		{CA8F8919-A544-4FFB-9E8C-815521324E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA8F8919-A544-4FFB-9E8C-815521324E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA8F8919-A544-4FFB-9E8C-815521324E78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9AD17D-3A68-48F6-BDAB-384763BDD025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9AD17D-3A68-48F6-BDAB-384763BDD025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9AD17D-3A68-48F6-BDAB-384763BDD025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9AD17D-3A68-48F6-BDAB-384763BDD025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

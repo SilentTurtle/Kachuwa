@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="NewFolder\" />
     <Folder Include="Payment\" />
     <Folder Include="Templating\" />
     <Folder Include="Image\" />
@@ -13,7 +14,10 @@
     <Folder Include="Job\" />
     <Folder Include="Theme - Copy %285%29\" />
     <Folder Include="Service\" />
-    <Folder Include="Theme\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
   </ItemGroup>
 
 </Project>
