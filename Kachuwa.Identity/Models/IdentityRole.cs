@@ -2,11 +2,11 @@
 
 namespace Kachuwa.Identity.Models
 {
-    [Table("IdentityTole")]
+    [Table("IdentityRole")]
     public class IdentityRole: KachuwaIdentityRole
     {
         [Key]
-        public new int Id { get; set; }
+        public new long Id { get; set; }
 
         // public string Name { get; set; }
     }

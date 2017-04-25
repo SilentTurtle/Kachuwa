@@ -5,9 +5,7 @@ namespace Kachuwa.Identity.Models
     [Table("IdentityUserRole")]
     public class IdentityUserRole
     {
-
         public long UserId { get; set; }
-
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
     }
 }

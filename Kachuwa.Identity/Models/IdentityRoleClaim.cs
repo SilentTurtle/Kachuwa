@@ -2,13 +2,13 @@
 
 namespace Kachuwa.Identity.Models
 {
-    [Table("IdentityUserClaim")]
-    public class IdentityUserClaim
+    [Table("IdentityRoleClaim")]
+    public class IdentityRoleClaim
     {
         [Key]
         public long Id { get; set; }
 
-        public long UserId { get; set; }
+        public long RoleId { get; set; }
 
         public string ClaimType { get; set; }
 

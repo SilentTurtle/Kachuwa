@@ -1,4 +1,5 @@
 ﻿using System;
+using Kachuwa.Identity.ClaimFactory;
 using Kachuwa.Identity.Cryptography;
 using Kachuwa.Identity.Models;
 using Kachuwa.Identity.Service;
@@ -63,6 +64,13 @@ namespace Kachuwa.Identity.Extensions
            
         }
 
-        
+        public static IServiceCollection AddIdentityServerUserClaimsPrincipalFactory<TUser, TRole>(this IServiceCollection services)
+          where TUser : class
+          where TRole : class
+        {
+            return services.AddTransient<IUserClaimsPrincipalFactory<TUser>, KachuwaClaimsPrincipalFactory<TUser, TRole>>();
+        }
+
+
     }
 }
