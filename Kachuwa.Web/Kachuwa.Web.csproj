@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="API\Extension\" />
+    <Folder Include="API\Version\" />
+    <Folder Include="API\Provider\" />
     <Folder Include="NewFolder\" />
     <Folder Include="Payment\" />
     <Folder Include="Templating\" />
@@ -12,12 +15,16 @@
     <Folder Include="State\" />
     <Folder Include="EmailTemplate\" />
     <Folder Include="Job\" />
-    <Folder Include="Theme - Copy %285%29\" />
-    <Folder Include="Service\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
+    <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
   </ItemGroup>
 
 </Project>
