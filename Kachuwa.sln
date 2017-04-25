@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.ContactUs", "Kachuwa.ContactUs\Kachuwa.ContactUs.csproj", "{32A8CCD9-2E05-43DA-804B-9AF6493C7696}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{236B30BF-81C3-4527-83F2-FD698F829862}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D910375E-9EE7-4EAF-9DCB-E338BE1D70E8} = {236B30BF-81C3-4527-83F2-FD698F829862}
+		{32A8CCD9-2E05-43DA-804B-9AF6493C7696} = {236B30BF-81C3-4527-83F2-FD698F829862}
 	EndGlobalSection
 EndGlobal
