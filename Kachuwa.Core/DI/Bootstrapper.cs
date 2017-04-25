@@ -4,15 +4,18 @@ using System.Linq;
 using System.Reflection;
 using Kachuwa.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace Kachuwa.Core.DI
 {
     public class Bootstrapper
     {
         private readonly IServiceCollection _serviceCollection;
-        public Bootstrapper(IServiceCollection serviceCollection )
+        private readonly IConfigurationRoot _configuration;
+        public Bootstrapper(IServiceCollection serviceCollection, IConfigurationRoot configuration)
         {
             _serviceCollection = serviceCollection;
+            _configuration = configuration;
             Build();
         }
         private  void Build()
@@ -34,7 +37,7 @@ namespace Kachuwa.Core.DI
             }
             foreach (var instance in serviceInstances)
             {
-                instance.Register(_serviceCollection);
+                instance.Register(_serviceCollection, _configuration);
             }
             //var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             //    .Where(a => a.GetTypes().Contains(typeof(ApiController)))

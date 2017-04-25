@@ -87,8 +87,8 @@ namespace Kachuwa.Data
         {
             var currenttype = typeof(T);
             var idProps = GetIdProperties(currenttype).ToList();
-            if (!idProps.Any())
-                throw new ArgumentException("Entity must have at least one [Key] property");
+            //if (!idProps.Any())
+            //    throw new ArgumentException("Entity must have at least one [Key] property");
 
             var name = GetTableName(currenttype);
             var joins = currenttype.GetTypeInfo().GetCustomAttributes<JoinAttribute>();
@@ -127,9 +127,10 @@ namespace Kachuwa.Data
         public QueryRequest GetList<T>(string conditions, object parameters = null)
         {
             var currenttype = typeof(T);
-            var idProps = GetIdProperties(currenttype).ToList();
-            if (!idProps.Any())
-                throw new ArgumentException("Entity must have at least one [Key] property");
+            //primary key not required!
+            //var idProps = GetIdProperties(currenttype).ToList();
+            //if (!idProps.Any())
+            //    throw new ArgumentException("Entity must have at least one [Key] property");
 
             var name = GetTableName(currenttype);
             var joins = currenttype.GetTypeInfo().GetCustomAttributes<JoinAttribute>();
