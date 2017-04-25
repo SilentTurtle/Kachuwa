@@ -23,9 +23,16 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Controllers\AccountOldController.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
     <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Quickstart\" />
   </ItemGroup>
 
 </Project>

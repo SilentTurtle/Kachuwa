@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Kachuwa.Core.DI;
-using Kachuwa.Data;
-using Kachuwa.Data.Crud;
-using Kachuwa.Identity.Extensions;
-using Kachuwa.Identity.Models;
+﻿
 using Kachuwa.Log;
 using Kachuwa.Plugin;
 using Kachuwa.Web.Razor;
@@ -25,6 +16,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using WebApp.TagHelpers;
 using WebApp.Test;
+using Kachuwa.Web.IdentityConfig;
+using Kachuwa.Web.Services;
+using Kachuwa.Core.Extensions;
 
 namespace WebApp
 {
@@ -48,33 +42,12 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.RegisterKachuwaCoreServices(Configuration);      
 
-            services.AddScoped<IViewRenderService, ViewRenderService>();
-            services.TryAddSingleton<IViewComponentSelector, Default2ViewComponentSelector>();
-            services.TryAddTransient<IViewComponentHelper, Default2ViewComponentHelper>();
-            string conn = Configuration.GetConnectionString("DefaultConnection");
-            IDatabaseFactory dbFactory = DatabaseFactories.GetFactory(Dialect.SQLServer, conn);
-            // services.AddScoped(typeof(IDatabaseFactory)).
-            var asdf = new Bootstrapper(services);
-
-
-            services.AddSingleton(Configuration);
-            services.ConfigureIdentityCryptography(Configuration.GetSection("DapperIdentityCryptography"));
-            //      .ConfigureDapperIdentityCryptography(Configuration.GetSection("DapperIdentityCryptography"));
-
-            services.AddIdentity<IdentityUser, IdentityRole>(x =>
-                {
-                    x.Password.RequireDigit = false;
-                    x.Password.RequiredLength = 1;
-                    x.Password.RequireLowercase = false;
-                    x.Password.RequireNonAlphanumeric = false;
-                    x.Password.RequireUppercase = false;
-                }).UseDapperWithSqlServer()
-                .AddClaimsPrincipalFactory
-                <Kachuwa.Identity.ClaimFactory.KachuwaClaimsPrincipalFactory<IdentityUser, IdentityRole>>()
-                .AddDefaultTokenProviders();
             // Add framework services.
             services.AddMvc();
+
+
             services.AddScoped<IView, Razor2View>();
             //var moduleAssembly = typeof(Kachuwa.PluginOne.PluginOneViewComponent).GetTypeInfo().Assembly;
 
@@ -82,7 +55,7 @@ namespace WebApp
             //    moduleAssembly
             //);
             var plugs = new PluginBootStrapper(hostingEnvironment, new FileBaseLogger(), services);
-          
+
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
             //    //options.FileProviders.Add(embeddedFileProvider);
@@ -93,13 +66,13 @@ namespace WebApp
                 opts.FileProviders.Add(
                     new DatabaseFileProvider(Configuration.GetConnectionString("DefaultConnection")));
             });
-            services.RegisterThemeService(config =>
-            {
-                config.Directory = "~/Themes";
-                config.FrontendThemeName = "Default";
-                config.BackendThemeName = "Default";
-                config.ThemeResolver = new DefaultThemeResolver();
-            });
+            //services.RegisterThemeService(config =>
+            //{
+            //    config.Directory = "~/Themes";
+            //    config.FrontendThemeName = "Default";
+            //    config.BackendThemeName = "Default";
+            //    config.ThemeResolver = new DefaultThemeResolver();
+            //});
 
         }
 
@@ -121,6 +94,17 @@ namespace WebApp
 
             app.UseStaticFiles();
             app.UseIdentity();
+            app.UseIdentityServer();
+
+            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            //var externalCookieScheme = app.ApplicationServices.GetRequiredService<IOptions<IdentityOptions>>().Value.Cookies.ExternalCookieAuthenticationScheme;
+            //app.UseGoogleAuthentication(new GoogleOptions
+            //{
+            //    AuthenticationScheme = "Google",
+            //    SignInScheme = externalCookieScheme,
+            //    ClientId = "998042782978-s07498t8i8jas7npj4crve1skpromf37.apps.googleusercontent.com",
+            //    ClientSecret = "HsnwJri_53zn7VcO1Fm7THBb",
+            //});
             app.UseWebSockets();
             app.UseMiddleware<ChatWebSocketMiddleware>();
             app.UseMvc(routes =>
@@ -130,17 +114,5 @@ namespace WebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-    }
-
-    public class PluginViewProvider : EmbeddedFileProvider
-    {
-        public PluginViewProvider(Assembly assembly) : base(assembly)
-        {
-        }
-
-        public PluginViewProvider(Assembly assembly, string baseNamespace) : base(assembly, baseNamespace)
-        {
-        }
-
     }
 }

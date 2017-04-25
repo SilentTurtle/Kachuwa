@@ -13,6 +13,7 @@ using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApp.Controllers
 {
@@ -32,7 +33,7 @@ namespace WebApp.Controllers
     }
     public class TestServiceRegistrar : IServiceRegistrar
     {
-        public void Register(IServiceCollection serviceCollection)
+        public void Register(IServiceCollection serviceCollection, IConfigurationRoot configuration)
         {
             serviceCollection.AddSingleton<ITest, Test>();
         }
@@ -57,7 +58,7 @@ namespace WebApp.Controllers
             Console.WriteLine(message);
         }
     }
-    [Theme("Default")]
+   // [Theme("Default")]
     public class HomeController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
