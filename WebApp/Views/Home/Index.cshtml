@@ -3,6 +3,7 @@
 }
 
 <h1>Home</h1>
+<p>@DateTime.Now.ToString()</p>
 @if (User.Identity.IsAuthenticated)
 {
     <h1>Welcome back @User.Identity.Name</h1>

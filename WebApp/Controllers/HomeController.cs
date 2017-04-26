@@ -7,7 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
+using Kachuwa.Caching;
 using Kachuwa.Core.DI;
+using Kachuwa.Log;
+using Kachuwa.Web;
 using Kachuwa.Web.Razor;
 using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Hosting;
@@ -17,90 +20,64 @@ using Microsoft.Extensions.Configuration;
 
 namespace WebApp.Controllers
 {
-    public interface ITest
-    {
-        int value { get; set; }
-        string ping();
-    }
-    public class Test : ITest
-    {
-        public int value { get; set; } = 1;
+    //public interface ITest
+    //{
+    //    int value { get; set; }
+    //    string ping();
+    //}
+    //public class Test : ITest
+    //{
+    //    public int value { get; set; } = 1;
 
-        public string ping()
-        {
-            return "PONG";
-        }
-    }
-    public class TestServiceRegistrar : IServiceRegistrar
-    {
-        public void Register(IServiceCollection serviceCollection, IConfigurationRoot configuration)
-        {
-            serviceCollection.AddSingleton<ITest, Test>();
-        }
+    //    public string ping()
+    //    {
+    //        return "PONG";
+    //    }
+    //}
+    //public class TestServiceRegistrar : IServiceRegistrar
+    //{
+    //    public void Register(IServiceCollection serviceCollection, IConfigurationRoot configuration)
+    //    {
+    //        serviceCollection.AddSingleton<ITest, Test>();
+    //    }
 
-        public void Update(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<ITest>(new Test { value = 2 });
-            //throw new NotImplementedException();
-        }
-    }
+    //    public void Update(IServiceCollection serviceCollection)
+    //    {
+    //        serviceCollection.AddSingleton<ITest>(new Test { value = 2 });
+    //        //throw new NotImplementedException();
+    //    }
+    //}
 
-    public interface IMessageSender
-    {
-        void Send(string message);
-    }
+    //public interface IMessageSender
+    //{
+    //    void Send(string message);
+    //}
 
-    [Export(typeof(IMessageSender))]
-    public class EmailSender : IMessageSender
+    //[Export(typeof(IMessageSender))]
+    //public class EmailSender : IMessageSender
+    //{
+    //    public void Send(string message)
+    //    {
+    //        Console.WriteLine(message);
+    //    }
+    //}
+    // [Theme("Default")]
+    
+    public class HomeController : BaseController
     {
-        public void Send(string message)
-        {
-            Console.WriteLine(message);
-        }
-    }
-   // [Theme("Default")]
-    public class HomeController : Controller
-    {
+        private readonly ILogger _logger;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-
-        [Import]
-        public IMessageSender MessageSender { get; set; }
-        public HomeController(ITest test, IHostingEnvironment hostingEnvironment)
+        public HomeController(IHostingEnvironment hostingEnvironment, ILogger logger)
         {
-            //_hostingEnvironment = hostingEnvironment;
-            //string asdf = test.ping();
-
-            //var assemblies1 = new[] { typeof(Program).GetTypeInfo().Assembly };
-            //var configuration1 = new ContainerConfiguration()
-            //    .WithAssembly(typeof(Program).GetTypeInfo().Assembly);
-            //using (var container = configuration1.CreateContainer())
-            //{
-            //    var MessageSender = container.GetExport<IMessageSender>();
-            //}
-
-            //var executableLocation = Assembly.GetEntryAssembly().Location;
-            ////Path.GetDirectoryName(executableLocation)
-            //var path = Path.Combine(
-            //     _hostingEnvironment.ContentRootPath, "Plugins");
-
-            //var assemblies = Directory
-            //            .GetFiles(path, "*.dll", SearchOption.AllDirectories)
-            //            .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)
-            //            .ToList();
-            //var configuration = new ContainerConfiguration()
-            //    .WithAssemblies(assemblies);
-
-            //using (var container = configuration.CreateContainer())
-            //{
-            //    MessageSenders = container.GetExports<IMessageSender>();
-            //}
+            _logger = logger;
+            _logger.Log(LogType.Info, () => "HomePage constructor Initialized");
         }
 
-        public IEnumerable<IMessageSender> MessageSenders { get; set; }
-
+        [KachuwaCache(Duration = 15)]
         public IActionResult Index()
         {
+            _logger.Log(LogType.Info, () => "HomePage index Initialized");
 
             //return ViewComponent("PluginOne", new {number = 5});
             return View();
@@ -110,13 +87,15 @@ namespace WebApp.Controllers
 
         public IActionResult About()
         {
+            _logger.Log(LogType.Info, () => "HomePage plugin base Initialized");
             return View("Plugin/PluginOne/pluginone");
         }
 
         public IActionResult Contact()
         {
+            throw new Exception("fuck me");
             ViewData["Message"] = "Your contact page.";
-
+            _logger.Log(LogType.Info, () => "HomePage contactpage Initialized");
             return View();
         }
 

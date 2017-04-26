@@ -41,9 +41,9 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.RegisterKachuwaCoreServices(Configuration);      
-
+            //services.AddMemoryCache();
+            services.RegisterKachuwaCoreServices(hostingEnvironment,Configuration);
+          
             // Add framework services.
             services.AddMvc();
 
@@ -54,18 +54,17 @@ namespace WebApp
             //var embeddedFileProvider = new EmbeddedFileProvider(
             //    moduleAssembly
             //);
-            var plugs = new PluginBootStrapper(hostingEnvironment, new FileBaseLogger(), services);
-
+           
             //services.Configure<RazorViewEngineOptions>(options =>
             //{
             //    //options.FileProviders.Add(embeddedFileProvider);
             //    options.FileProviders.Add(pluginFileProvider);
             //});
-            services.Configure<RazorViewEngineOptions>(opts =>
-            {
-                opts.FileProviders.Add(
-                    new DatabaseFileProvider(Configuration.GetConnectionString("DefaultConnection")));
-            });
+            //services.Configure<RazorViewEngineOptions>(opts =>
+            //{
+            //    opts.FileProviders.Add(
+            //        new DatabaseFileProvider(Configuration.GetConnectionString("DefaultConnection")));
+            //});
             //services.RegisterThemeService(config =>
             //{
             //    config.Directory = "~/Themes";
@@ -91,7 +90,7 @@ namespace WebApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+           
             app.UseStaticFiles();
             app.UseIdentity();
             app.UseIdentityServer();
@@ -107,12 +106,7 @@ namespace WebApp
             //});
             app.UseWebSockets();
             app.UseMiddleware<ChatWebSocketMiddleware>();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseKachuwaApps();
         }
     }
 }
