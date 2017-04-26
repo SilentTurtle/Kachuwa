@@ -22,7 +22,7 @@ namespace Kachuwa.Web.Razor
             get
             {
 
-                var query = "SELECT LastRequested, LastModified FROM Views WHERE Location = @Path;";
+                var query = "SELECT LastRequested, LastModified FROM ViewContent WHERE Location = @Path;";
                 try
                 {
                     using (var conn = new SqlConnection(_connection))

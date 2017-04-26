@@ -46,8 +46,8 @@ namespace Kachuwa.Web.Razor
 
         private void GetView(string connection, string viewPath)
         {
-            var query = @"SELECT Content, LastModified FROM Views WHERE Location = @Path;
-                    UPDATE Views SET LastRequested = GetUtcDate() WHERE Location = @Path";
+            var query = @"SELECT Content, LastModified FROM ViewContent WHERE Location = @Path;
+                    UPDATE ViewContent SET LastRequested = GetUtcDate() WHERE Location = @Path";
             try
             {
                 using (var conn = new SqlConnection(connection))
