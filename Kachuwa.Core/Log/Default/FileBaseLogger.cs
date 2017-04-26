@@ -2,13 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 
 namespace Kachuwa.Log
 {
     public class FileBaseLogger : ILogger, ILoggerService
     {
-        private readonly string _basedir ="\\wwwroot" + "\\Logs\\";
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private  string _basedir { get; set; }
+        public FileBaseLogger(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+            _basedir = _hostingEnvironment.ContentRootPath + "\\Logs\\";
+        }
+        public FileBaseLogger()
+        {
+            //_hostingEnvironment = hostingEnvironment;
+            //_basedir = _hostingEnvironment.ContentRootPath + "\\Logs\\";
+        }
+
         private string LogFilePath { get; set; }
         private List<Log> Logs { get; set; }
         private void _init()
@@ -93,10 +106,16 @@ namespace Kachuwa.Log
                 _init();
                 var log = new Log
                 {
-                    LogType = (int)logtype,
+                    LogType = (int) logtype,
                     DateTime = DateTime.Now.ToString(),
                     Status = messageFunc(),
-                    Error = obj == null ? "" : JsonConvert.SerializeObject(obj)
+                    Error = obj == null
+                        ? ""
+                        : JsonConvert.SerializeObject(obj, Formatting.None,
+                            new JsonSerializerSettings()
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            })
                 };
                 Logs.Add(log);
                 string json = JsonConvert.SerializeObject(Logs);

@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace Kachuwa.Caching
 {
-    public class RedisCache : ICache
+    public class RedisCacheService : ICacheService
     {
         private readonly Lazy<ConnectionMultiplexer> _lazyConnection;
 
@@ -15,7 +15,7 @@ namespace Kachuwa.Caching
         private const int ExpireInSeconds = 600;//10 min
         public ConnectionMultiplexer Connection => _lazyConnection.Value;
 
-        public RedisCache(IOptions<RedisConfiguration> optionConfig)
+        public RedisCacheService(IOptions<RedisConfiguration> optionConfig)
         {
             if (optionConfig == null)
                 throw new Exception("");

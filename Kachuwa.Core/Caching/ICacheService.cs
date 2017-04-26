@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Kachuwa.Caching
 {
-    public interface ICache : IDisposable
+    public interface ICacheService : IDisposable
     {
         T Get<T>(string key);
         T Get<T>(string key, Func<T> dataFactory);

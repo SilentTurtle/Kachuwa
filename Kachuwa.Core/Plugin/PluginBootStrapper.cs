@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using Kachuwa.Core.DI;
 using Kachuwa.Log;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Kachuwa.Plugin
 {
-    public class PluginBootStrapper
+    public class PluginBootStrapper : IBootstrapper
     {
         private readonly IHostingEnvironment _hostingEnvironment;
 
@@ -27,18 +28,27 @@ namespace Kachuwa.Plugin
         private CompositionHost Container { get; set; }
         public Dictionary<string, Assembly> PluginDict { get; set; }
 
-        public PluginBootStrapper(IHostingEnvironment hostingEnvironment, ILogger logger,IServiceCollection services)
+        public PluginBootStrapper(IHostingEnvironment hostingEnvironment, ILogger logger, IServiceCollection services)
         {
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
             _services = services;
+            Init();
+        }
+        public void Init()
+        {
+            Build();
+        }
+
+        public bool Build()
+        {
             BuildContainer();
+            return true;
         }
         private void BuildContainer()
         {
             try
             {
-
 
                 var executingAssembly = Assembly.GetEntryAssembly();
                 //Path.GetDirectoryName(executableLocation)
@@ -63,12 +73,8 @@ namespace Kachuwa.Plugin
                 PluginDict = new Dictionary<string, Assembly>();
                 foreach (var plugin in Plugins)
                 {
+                    //TODO:: installed or not 
                     PluginDict[plugin.Configuration.SystemName] = plugin.Configuration.Assembly;
-                    //pluginassemblies.Add(plugin.Configuration.Assembly);
-                    //var embeddedFileProvider = new EmbeddedFileProvider(
-                    //    plugin.Configuration.Assembly
-                    //);
-                    //options.FileProviders.Add(embeddedFileProvider);
                 }
                 var pluginFileProvider = new PluginViewProvider(PluginDict);
                 _services.Configure<RazorViewEngineOptions>(options =>
@@ -79,10 +85,10 @@ namespace Kachuwa.Plugin
             }
             catch (Exception ex)
             {
-                _logger.Log(LogType.Error, () => "Plugin Catalog", ex);
+                _logger.Log(LogType.Error, () => "Plugin Catalog Error", ex);
             }
         }
 
-      
+
     }
 }

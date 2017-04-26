@@ -4,15 +4,18 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Kachuwa.Caching
 {
-    public class DefaultCache : ICache
+    public class DefaultCacheService : ICacheService
     {
         private readonly MemoryCache _cache;
         private readonly object _lock = new Object();
         private const int ExpireInSeconds = 600;//10 min
 
-        public DefaultCache(MemoryCacheOptions options)
+        public DefaultCacheService()
         {
-            _cache = new MemoryCache(options);
+            _cache = new MemoryCache(new MemoryCacheOptions()
+            {
+                
+            });
         }
 
 

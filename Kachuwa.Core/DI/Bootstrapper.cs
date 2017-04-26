@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Kachuwa.Core.DI
 {
-    public class Bootstrapper
+    public class Bootstrapper : IBootstrapper
     {
         private readonly IServiceCollection _serviceCollection;
         private readonly IConfigurationRoot _configuration;
@@ -16,22 +16,29 @@ namespace Kachuwa.Core.DI
         {
             _serviceCollection = serviceCollection;
             _configuration = configuration;
+            Init();
+        }
+        public void Init()
+        {
             Build();
         }
-        private  void Build()
-        {
 
+        public bool Build()
+        {
+            FindThenBuild();
+            return true;
+        }
+        private void FindThenBuild()
+        {
+            //will return assembly start with kachuwa
             var assesmblies = AppDomain.CurrentDomain.GetAssemblies();
-            //To avoid this issue use the GetReferencedAssemblies() method on 
-            //http://docs.autofac.org/en/latest/register/scanning.html
-            // var assesmblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>();
             var serviceInstances = new List<IServiceRegistrar>();
             foreach (var assembly in assesmblies)
             {
                 var instances = from t in assembly.GetTypes()
-                    where TypeExtensions.GetInterfaces(t).Contains(typeof(IServiceRegistrar))
-                          && t.GetConstructor(Type.EmptyTypes) != null
-                    select Activator.CreateInstance(t) as IServiceRegistrar;
+                                where TypeExtensions.GetInterfaces(t).Contains(typeof(IServiceRegistrar))
+                                      && t.GetConstructor(Type.EmptyTypes) != null
+                                select Activator.CreateInstance(t) as IServiceRegistrar;
 
                 serviceInstances.AddRange(instances);
             }
@@ -60,5 +67,7 @@ namespace Kachuwa.Core.DI
             // GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
 
         }
+
+
     }
 }

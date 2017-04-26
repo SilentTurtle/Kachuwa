@@ -19,9 +19,10 @@ namespace Kachuwa.Web.Theme
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
             string theme = context.Values["themename"];
+            //only for layout file look up
             IEnumerable<string> themeLocations = new[]
             {
-                $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
+               // $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
                 $"/Themes/{theme}/Views/Shared/{{0}}.cshtml"
             };
             viewLocations = themeLocations.Concat(viewLocations);

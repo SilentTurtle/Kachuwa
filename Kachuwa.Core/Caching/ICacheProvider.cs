@@ -2,6 +2,6 @@
 {
     public interface ICacheProvider
     {
-        ICache Get(string name);
+        ICacheService Get(string name);
     }
 }
