@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ApplicationInsightsLogging;
 using Kachuwa.Caching;
 using Kachuwa.Log;
 using Kachuwa.Plugin;
@@ -17,6 +18,9 @@ using Kachuwa.Storage;
 using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using ILogger = Kachuwa.Log.ILogger;
 
 namespace Kachuwa.Core.Extensions
 {
@@ -30,8 +34,9 @@ namespace Kachuwa.Core.Extensions
             services.TryAddSingleton<ILogger, FileBaseLogger>();
             services.TryAddSingleton<ILoggerService, FileBaseLogger>();
             services.AddTransient<LogErrorAttribute>();
-            var plugs = new PluginBootStrapper(hostingEnvironment, new FileBaseLogger(), services);
-
+            var logger = services.BuildServiceProvider().GetService<ILogger>();
+            var plugs = new PluginBootStrapper(hostingEnvironment, logger, services);
+            
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
             //services.TryAddSingleton<IViewComponentSelector, Default2ViewComponentSelector>();
@@ -60,17 +65,32 @@ namespace Kachuwa.Core.Extensions
                 config.BackendThemeName = "Default";
                 config.ThemeResolver = new DefaultThemeResolver();
             });
+            services.Configure<ApplicationInsightsSettings>(options => configuration.GetSection("ApplicationInsights").Bind(options));
+       
             return services;
             // Add application services.
             //services.AddTransient<IEmailSender, EmailSender>();
             //services.AddTransient<ISmsSender, SmsSender>();
+            }
+
+        
+        public static IApplicationBuilder UseKachuwaApps(this IApplicationBuilder app, ILoggerFactory loggerFactory, IOptions<ApplicationInsightsSettings> applicationInsightsSettings)
+        {
+            app.UseMiddleware<CacheMiddleware>();
+            loggerFactory.AddApplicationInsights(applicationInsightsSettings.Value);
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+            return app;
+
         }
-
-
         public static IApplicationBuilder UseKachuwaApps(this IApplicationBuilder app)
         {
             app.UseMiddleware<CacheMiddleware>();
-
+           
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

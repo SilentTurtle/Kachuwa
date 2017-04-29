@@ -25,11 +25,11 @@ namespace Kachuwa.Web.Razor
                 opts.FileProviders.Add( 
                     new DatabaseFileProvider(configuration.GetConnectionString("DefaultConnection")));
             });
-            services.Configure<RazorViewEngineOptions>(opts =>
-            {
-                opts.FileProviders.Add(
-                    new DatabaseFileProvider(configuration.GetConnectionString("DefaultConnection")));
-            });
+            //services.Configure<RazorViewEngineOptions>(opts =>
+            //{
+            //    opts.FileProviders.Add(
+            //        new DatabaseFileProvider(configuration.GetConnectionString("DefaultConnection")));
+            //});
             return services;
         }
     }

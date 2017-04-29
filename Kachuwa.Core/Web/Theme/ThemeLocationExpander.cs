@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Kachuwa.Web.Theme
@@ -18,6 +19,14 @@ namespace Kachuwa.Web.Theme
         }
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
+            // we don't want to change layout pages & partials ...
+            if (context.IsMainPage)
+                return viewLocations;
+
+            var descriptor = (context.ActionContext.ActionDescriptor as ControllerActionDescriptor);
+            if (descriptor == null)
+            { return viewLocations; }
+
             string theme = context.Values["themename"];
             //only for layout file look up
             IEnumerable<string> themeLocations = new[]

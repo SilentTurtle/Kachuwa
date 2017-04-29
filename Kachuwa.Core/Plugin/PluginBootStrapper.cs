@@ -11,6 +11,7 @@ using Kachuwa.Log;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 
 namespace Kachuwa.Plugin
@@ -82,6 +83,7 @@ namespace Kachuwa.Plugin
                     options.FileProviders.Add(pluginFileProvider);
 
                 });
+                _services.TryAddSingleton(pluginFileProvider);
             }
             catch (Exception ex)
             {
