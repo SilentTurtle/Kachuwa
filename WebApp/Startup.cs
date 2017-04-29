@@ -19,6 +19,8 @@ using WebApp.Test;
 using Kachuwa.Web.IdentityConfig;
 using Kachuwa.Web.Services;
 using Kachuwa.Core.Extensions;
+using ApplicationInsightsLogging;
+using Microsoft.Extensions.Options;
 
 namespace WebApp
 {
@@ -76,10 +78,14 @@ namespace WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptions<ApplicationInsightsSettings> applicationInsightsSettings)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             // loggerFactory.AddDebug();
+           // loggerFactory.MinimumLevel = LogLevel.Debug;
+           // loggerFactory.AddDebug(LogLevel.Debug);
+            var logger = loggerFactory.CreateLogger("Startup");
+            logger.LogWarning("Logger configured!");
 
             if (env.IsDevelopment())
             {
@@ -106,7 +112,7 @@ namespace WebApp
             //});
             app.UseWebSockets();
             app.UseMiddleware<ChatWebSocketMiddleware>();
-            app.UseKachuwaApps();
+            app.UseKachuwaApps(loggerFactory,applicationInsightsSettings);
         }
     }
 }

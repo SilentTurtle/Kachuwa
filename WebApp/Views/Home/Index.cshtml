@@ -4,6 +4,10 @@
 
 <h1>Home</h1>
 <p>@DateTime.Now.ToString()</p>
+@await Component.InvokeAsync("ContactUsView")
+
+<component name="ContactUsView"></component>
+
 @if (User.Identity.IsAuthenticated)
 {
     <h1>Welcome back @User.Identity.Name</h1>

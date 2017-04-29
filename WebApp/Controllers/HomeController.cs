@@ -78,7 +78,7 @@ namespace WebApp.Controllers
         public IActionResult Index()
         {
             _logger.Log(LogType.Info, () => "HomePage index Initialized");
-
+           // return View("Module/ContactUs/Default");
             //return ViewComponent("PluginOne", new {number = 5});
             return View();
             //Plugin/PluginOne/Home/index
