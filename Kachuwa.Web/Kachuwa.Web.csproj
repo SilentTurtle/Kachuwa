@@ -8,7 +8,7 @@
     <Folder Include="API\Extension\" />
     <Folder Include="API\Version\" />
     <Folder Include="API\Provider\" />
-    <Folder Include="NewFolder\" />
+    <Folder Include="Security\" />
     <Folder Include="Payment\" />
     <Folder Include="Templating\" />
     <Folder Include="Image\" />
