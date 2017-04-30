@@ -3,23 +3,33 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Kachuwa.Web;
 
 namespace ApplicationInsightsLogging
 {
+
+ 
     public class ApplicationInsightsLogger : ILogger
     {
+        private readonly ApplicationInsightHandler _applicationInsightHandler;
         private readonly string _name;
         private readonly Func<string, LogLevel, bool> _filter;
         private readonly ApplicationInsightsSettings _settings;
         private readonly TelemetryClient _telemetryClient;
 
-        public ApplicationInsightsLogger(string name)
-            : this(name, null, new ApplicationInsightsSettings())
+        public ApplicationInsightsLogger(string name, ApplicationInsightHandler applicationInsightHandler)
+            : this(name, null, new ApplicationInsightsSettings(), applicationInsightHandler)
         {
+            _applicationInsightHandler = applicationInsightHandler;
         }
 
-        public ApplicationInsightsLogger(string name, Func<string, LogLevel, bool> filter, ApplicationInsightsSettings settings)
+        public ApplicationInsightsLogger(string name, Func<string, LogLevel, bool> filter, ApplicationInsightsSettings settings, ApplicationInsightHandler applicationInsightHandler)
         {
+            _applicationInsightHandler= applicationInsightHandler;
             _name = string.IsNullOrEmpty(name) ? nameof(ApplicationInsightsLogger) : name;
             _filter = filter;
             _settings = settings;
@@ -80,6 +90,16 @@ namespace ApplicationInsightsLogging
             if (!string.IsNullOrEmpty(message))
             {
 
+                Task.Run(async () =>
+                {
+                    await _applicationInsightHandler.SendMessageToAllAsync(new Message()
+                    {
+                        Data = message,
+                        MessageType = MessageType.Text
+                    });
+                });
+                
+                
                 _telemetryClient.TrackTrace(message, GetSeverityLevel(logLevel));
             }
         }

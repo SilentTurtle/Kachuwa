@@ -1,0 +1,87 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Kachuwa.Web;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApp.Admin
+{
+    [Authorize()]
+    public class AdminController : BaseController
+    {
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+    }
+    public class LibraryDetails
+    {
+        public int Id { get; set; }
+        public string Author { get; set; }
+        public string BookName { get; set; }
+        public string Category { get; set; }
+
+    }
+    [Route("api/[controller]")]
+    public class LibraryAPI : Controller
+    {
+      
+        LibraryDetails[] LibraryDetails = new LibraryDetails[]
+        {
+            new LibraryDetails { Id=1, BookName="Programming C# for Beginners", Author="Mahesh Chand", Category="C#" },
+            new LibraryDetails { Id=2, BookName="Setting Up SharePoint 2016 Multi-Server Farm In Azure", Author="Priyaranjan K S", Category="SharePoint" },
+            new LibraryDetails { Id=3, BookName="SQL Queries For Beginners", Author="Syed Shanu", Category="Sql" },
+            new LibraryDetails { Id=4, BookName="OOPs Principle and Theory", Author="Syed Shanu", Category="Basic Concepts" },
+            new LibraryDetails { Id=5, BookName="ASP.NET GridView Control Pocket Guide", Author="Vincent Maverick Durano", Category="Asp.Net" }
+        };
+
+        // GET: api/values
+        [HttpGet]
+        public IEnumerable<LibraryDetails> GetAllBooks()
+        {
+            return LibraryDetails;
+        }
+        [HttpGet]
+        [Route("new")]
+        public string GetAllBooks2()
+        {
+            return "Hellow";
+        }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var books = LibraryDetails.FirstOrDefault((p) => p.Id == id);
+
+            var item = books;
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
+        }
+
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+    }
+
+
+}

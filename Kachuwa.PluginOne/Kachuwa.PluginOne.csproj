@@ -10,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Views\Shared\pluginone.cshtml" />
     <EmbeddedResource Include="Views\Shared\Components\Simple\Default.cshtml" />
     <EmbeddedResource Include="Views\Shared\Components\PluginOne\Default.cshtml" />

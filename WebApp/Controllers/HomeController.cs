@@ -93,13 +93,17 @@ namespace WebApp.Controllers
 
         public IActionResult Contact()
         {
-            throw new Exception("fuck me");
+           // throw new Exception("fuck me");
             ViewData["Message"] = "Your contact page.";
-            _logger.Log(LogType.Info, () => "HomePage contactpage Initialized");
+            //_logger.Log(LogType.Info, () => "HomePage contactpage Initialized");
             return View();
         }
 
         public IActionResult Error()
+        {
+            return View();
+        }
+        public IActionResult Event()
         {
             return View();
         }

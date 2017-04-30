@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Controllers\AccountOldController.cs" />
+    <None Include="wwwroot\resources\websocket\WebSocketManager.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kachuwa.ContactUs\Kachuwa.ContactUs.csproj" />

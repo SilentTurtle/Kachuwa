@@ -15,6 +15,7 @@ using Kachuwa.Caching;
 using Kachuwa.Log;
 using Kachuwa.Plugin;
 using Kachuwa.Storage;
+using Kachuwa.Web;
 using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,7 +67,9 @@ namespace Kachuwa.Core.Extensions
                 config.ThemeResolver = new DefaultThemeResolver();
             });
             services.Configure<ApplicationInsightsSettings>(options => configuration.GetSection("ApplicationInsights").Bind(options));
-       
+
+            //enable socket
+            services.AddWebSocketManager();
             return services;
             // Add application services.
             //services.AddTransient<IEmailSender, EmailSender>();
@@ -74,10 +77,10 @@ namespace Kachuwa.Core.Extensions
             }
 
         
-        public static IApplicationBuilder UseKachuwaApps(this IApplicationBuilder app, ILoggerFactory loggerFactory, IOptions<ApplicationInsightsSettings> applicationInsightsSettings)
+        public static IApplicationBuilder UseKachuwaApps(this IApplicationBuilder app, ILoggerFactory loggerFactory, IOptions<ApplicationInsightsSettings> applicationInsightsSettings,IServiceProvider serviceProvider)
         {
             app.UseMiddleware<CacheMiddleware>();
-            loggerFactory.AddApplicationInsights(applicationInsightsSettings.Value);
+            loggerFactory.AddApplicationInsights(applicationInsightsSettings.Value, serviceProvider);
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

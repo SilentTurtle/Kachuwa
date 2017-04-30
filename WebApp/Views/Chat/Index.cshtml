@@ -34,7 +34,7 @@
         var userName = '@Model';
 
         var protocol = location.protocol === "https:" ? "wss:" : "ws:";
-        var wsUri = protocol + "//" + window.location.host;
+        var wsUri = protocol + "//" + window.location.host +"/chat";
         var socket = new WebSocket(wsUri);
         socket.onopen = e => {
             console.log("socket opened", e);

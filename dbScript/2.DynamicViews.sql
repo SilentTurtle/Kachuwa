@@ -1,6 +1,6 @@
 CREATE TABLE dbo.ViewContent
 (
-	ViewId									bigint primary key not null,
+	ViewId									bigint primary key identity(1,1) not null,
 	Location								nvarchar(150) NOT NULL,
 	Content									nvarchar(max) NOT NULL,
 	LastModified							datetime NOT NULL,
