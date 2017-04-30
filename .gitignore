@@ -212,5 +212,5 @@ _Pvt_Extensions/
 ModelManifest.xml
 webApp/wwwroot/*
 buildlog/
-webApp/Log
+webApp/Logs
 
