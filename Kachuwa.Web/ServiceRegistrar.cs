@@ -11,6 +11,7 @@ using Kachuwa.Identity.IdSrv;
 using Kachuwa.Log;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Kachuwa.Web
 {
@@ -20,27 +21,16 @@ namespace Kachuwa.Web
         {
             serviceCollection.AddTransient<IEmailSender, EmailSender>();
             serviceCollection.AddTransient<ISmsSender, SmsSender>();
-            var logger = serviceCollection.BuildServiceProvider().GetService<ILogger>();
-            var modules = new ModuleRegistrar(serviceCollection, logger);
-			
 			 var ctxaccessor=  serviceCollection.BuildServiceProvider().GetService<IHttpContextAccessor>();
             var ctx = new ContextResolver(ctxaccessor);
             serviceCollection.AddSingleton(ctx);
+            var logger = serviceCollection.BuildServiceProvider().GetService<ILogger>();
+            var modules = new ModuleRegistrar(serviceCollection, logger);
         }
 
         public void Update(IServiceCollection serviceCollection)
         {
             
         }
-    }
-	 public class ContextResolver
-    {
-
-        public ContextResolver(IHttpContextAccessor contextAccessor)
-        {
-            _contextAccessor = contextAccessor;
-        }
-        private static IHttpContextAccessor _contextAccessor;
-        public static HttpContext CurrentContext { get { return _contextAccessor.HttpContext; } }
     }
 }
