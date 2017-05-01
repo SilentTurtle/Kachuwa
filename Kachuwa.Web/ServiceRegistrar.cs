@@ -22,11 +22,25 @@ namespace Kachuwa.Web
             serviceCollection.AddTransient<ISmsSender, SmsSender>();
             var logger = serviceCollection.BuildServiceProvider().GetService<ILogger>();
             var modules = new ModuleRegistrar(serviceCollection, logger);
+			
+			 var ctxaccessor=  serviceCollection.BuildServiceProvider().GetService<IHttpContextAccessor>();
+            var ctx = new ContextResolver(ctxaccessor);
+            serviceCollection.AddSingleton(ctx);
         }
 
         public void Update(IServiceCollection serviceCollection)
         {
             
         }
+    }
+	 public class ContextResolver
+    {
+
+        public ContextResolver(IHttpContextAccessor contextAccessor)
+        {
+            _contextAccessor = contextAccessor;
+        }
+        private static IHttpContextAccessor _contextAccessor;
+        public static HttpContext CurrentContext { get { return _contextAccessor.HttpContext; } }
     }
 }
