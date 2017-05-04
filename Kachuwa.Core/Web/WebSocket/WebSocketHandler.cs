@@ -12,7 +12,7 @@ namespace Kachuwa.Web
     public abstract class WebSocketHandler
     {
         protected WebSocketConnectionManager WebSocketConnectionManager { get; set; }
-        private JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings()
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
