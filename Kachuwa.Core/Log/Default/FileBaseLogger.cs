@@ -1,112 +1,70 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 
 namespace Kachuwa.Log
 {
-    public class FileBaseLogger : ILogger, ILoggerService
+    public class FileBaseLogger : ILogger
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private  string _basedir { get; set; }
-        public FileBaseLogger(IHostingEnvironment hostingEnvironment)
+        private readonly ILoggerSetting _loggerSetting;
+        private static object _ratesFileLock = new object();
+        private string Basedir { get; set; }
+        public FileBaseLogger(IHostingEnvironment hostingEnvironment, ILoggerSetting loggerSetting)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _basedir = _hostingEnvironment.ContentRootPath + "\\Logs\\";
-        }
-        public FileBaseLogger()
-        {
-            //_hostingEnvironment = hostingEnvironment;
-            //_basedir = _hostingEnvironment.ContentRootPath + "\\Logs\\";
+            _loggerSetting = loggerSetting;
+            Basedir = hostingEnvironment.ContentRootPath + "\\Logs\\";
+            _init();
         }
 
         private string LogFilePath { get; set; }
         private List<Log> Logs { get; set; }
         private void _init()
         {
-            var TodayDate = DateTime.Now.ToString("yyyy_MM_dd");
+            var todayDate = DateTime.Now.ToString("yyyy_MM_dd");
 
-            if (!Directory.Exists(_basedir))
+            if (!Directory.Exists(Basedir))
             {
-                Directory.CreateDirectory(_basedir);
+                Directory.CreateDirectory(Basedir);
             }
-            LogFilePath = _basedir + TodayDate + ".json";
+            LogFilePath = Basedir + todayDate + ".log";
             if (!File.Exists(LogFilePath))
             {
-                //File.Create(LogFilePath);
                 using (var stream = File.Create(LogFilePath, 1024, FileOptions.None))
                 {
-                    //stream.Close();
-                    // stream.Dispose();
                 }
             }
-            string json = "";
-            using (var stream = File.Open(LogFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            else
             {
-                StreamReader sr = new StreamReader(stream);
-                json = sr.ReadToEnd();
-                // sr.Close();
-                // Use stream
+                long b = new FileInfo(LogFilePath).Length;
+                long kb = b / 1024;
+                long mb = kb / 1024;
+                // long gb = mb / 1024;
+                if (mb >= 5)
+                {
+                    LogFilePath = Basedir + todayDate + "-" + DateTime.Now.ToString("h.mm") + ".log";
+                    using (var stream = File.Create(LogFilePath, 1024, FileOptions.None))
+                    {
+                    }
+                }
             }
-            try
-            {
-                // string json = File.ReadAllText(LogFilePath);
-                Logs = JsonConvert.DeserializeObject<List<Log>>(json);
-                if (Logs == null)
-                    Logs = new List<Log>();
-            }
-            catch (Exception ex)
-            {
-                if (Logs == null)
-                    Logs = new List<Log>();
-            }
-
 
         }
 
-        private List<Log> _init(DateTime day )
-        {
-            List<Log> logs=new List<Log>();
-            var TodayDate = day.ToString("yyyy_MM_dd");
-           
-            LogFilePath = _basedir + TodayDate + ".json";
-            if (!File.Exists(LogFilePath))
-            {
-                throw  new Exception("Please use previos dates.");
-            }
-            string json = "";
-            using (var stream = File.Open(LogFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                StreamReader sr = new StreamReader(stream);
-                json = sr.ReadToEnd();
-                //sr.Close();
-                // Use stream
-            }
-            try
-            {
-                // string json = File.ReadAllText(LogFilePath);
-                logs = JsonConvert.DeserializeObject<List<Log>>(json);
-                return logs;
-               
-            }
-            catch (Exception ex)
-            {
-                return logs;
-            }
-
-
-        }
-        
         public bool Log(LogType logtype, Func<string> messageFunc, object obj = null)
         {
             try
             {
+                if (!_loggerSetting.AllowLogging)
+                {
+                    return false;
+                }
                 _init();
                 var log = new Log
                 {
-                    LogType = (int) logtype,
+                    LogType = (int)logtype,
                     DateTime = DateTime.Now.ToString(),
                     Status = messageFunc(),
                     Error = obj == null
@@ -117,10 +75,9 @@ namespace Kachuwa.Log
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                             })
                 };
-                Logs.Add(log);
-                string json = JsonConvert.SerializeObject(Logs);
+                string json = JsonConvert.SerializeObject(log);
 
-                File.WriteAllText(LogFilePath, json);
+                AddLog(string.Format("{0}{1}", json, Environment.NewLine));
                 return true;
             }
             catch (Exception ex)
@@ -129,24 +86,53 @@ namespace Kachuwa.Log
             }
         }
 
-        public DailyLog GetTodaysLogs(int offset = 0, int limit = 20)
+        public void AddLog(string log)
         {
-            _init();
-            Logs.Reverse();
-            var logs = new DailyLog();
-            logs.TotalCount = Logs.Count();
-            logs.Logs = Logs.Skip((offset - 1) * limit).Take(limit).ToList();
-            return logs;
+            Attempt(TryToUpdateRates, log, maximumNumberOfAttempts: 50, timeToWaitBetweenRetriesInMs: 100);
         }
 
-        public DailyLog GetLogs(int offset, int limit, DateTime day)
+        private void TryToUpdateRates(string log)
         {
-            var _logs= _init(day);
-            _logs.Reverse();
-            var logs = new DailyLog();
-            logs.TotalCount = _logs.Count();
-            logs.Logs = _logs.Skip((offset - 1) * limit).Take(limit).ToList();
-            return logs;
+            lock (_ratesFileLock)
+            {
+                using (var stream = GetRatesFileStream())
+                {
+                    WriteLog(log, stream);
+                }
+            }
+        }
+
+        private Stream GetRatesFileStream()
+        {
+            return File.Open(LogFilePath, FileMode.Append, FileAccess.Write);
+        }
+
+        private void WriteLog(string log, Stream stream)
+        {
+            using (StreamWriter writer =new StreamWriter(stream))
+            {
+                writer.WriteLine(log);
+            }
+        }
+
+        private static void Attempt(Action<string> work, string log, int maximumNumberOfAttempts, int timeToWaitBetweenRetriesInMs)
+        {
+            var numberOfFailedAttempts = 0;
+            while (true)
+            {
+                try
+                {
+                    work(log);
+                    return;
+                }
+                catch
+                {
+                    numberOfFailedAttempts++;
+                    if (numberOfFailedAttempts >= maximumNumberOfAttempts)
+                        throw;
+                    Thread.Sleep(timeToWaitBetweenRetriesInMs);
+                }
+            }
         }
     }
 }
