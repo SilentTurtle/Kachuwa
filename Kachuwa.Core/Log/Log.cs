@@ -4,7 +4,7 @@ namespace Kachuwa.Log
 {
     public class Log
     {
-        public string LogId { get; set; } = Guid.NewGuid().ToString();
+        public string LogId { get; set; } 
         public string Status { get; set; }
         public string DateTime { get; set; }
         public int LogType { get; set; }
