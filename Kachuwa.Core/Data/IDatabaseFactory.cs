@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using Kachuwa.Data.Crud;
+using Kachuwa.Log;
 
 namespace Kachuwa.Data
 {
@@ -10,5 +11,6 @@ namespace Kachuwa.Data
         Dialect Dialect { get; }
         QueryBuilder QueryBuilder { get; }
         IDbConnection GetConnection();
-    }
+        ILogger DbLogger { get; set; }
+     }
 }

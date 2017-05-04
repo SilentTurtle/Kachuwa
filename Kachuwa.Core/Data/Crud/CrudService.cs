@@ -31,7 +31,7 @@ namespace Kachuwa.Data
 
         public virtual T Get(object id)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 db.Open();
                 return db.Get<T>(id);
@@ -40,7 +40,7 @@ namespace Kachuwa.Data
         }
         public virtual async Task<T> GetAsync(object id)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 return await db.GetAsync<T>(id);
@@ -49,7 +49,7 @@ namespace Kachuwa.Data
         }
         public virtual T Get(string condition, object parameters = null)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 db.Open();
                 return db.Get<T>(condition, parameters);
@@ -58,7 +58,7 @@ namespace Kachuwa.Data
         }
         public virtual async Task<T> GetAsync(string condition, object parameters = null)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 return await db.GetAsync<T>(condition, parameters);
@@ -69,7 +69,7 @@ namespace Kachuwa.Data
         public virtual IEnumerable<T> GetList(object whereConditions)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.GetList<T>(whereConditions);
@@ -80,7 +80,7 @@ namespace Kachuwa.Data
         public virtual async Task<IEnumerable<T>> GetListAsync(object whereConditions)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetListAsync<T>(whereConditions);
@@ -93,7 +93,7 @@ namespace Kachuwa.Data
            object parameters)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.GetList<T>(conditions, parameters);
@@ -105,7 +105,7 @@ namespace Kachuwa.Data
             object parameters)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetListAsync<T>(conditions, parameters);
@@ -117,7 +117,7 @@ namespace Kachuwa.Data
            object parameters = null)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetJoinedList<T>(conditions, parameters);
@@ -129,7 +129,7 @@ namespace Kachuwa.Data
         public virtual IEnumerable<T> GetList()
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.GetList<T>();
@@ -140,7 +140,7 @@ namespace Kachuwa.Data
         public virtual async Task<IEnumerable<T>> GetListAsync()
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetListAsync<T>();
@@ -153,7 +153,7 @@ namespace Kachuwa.Data
            int pageSize, string conditions, string orderby, object parameters = null)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.GetListPaged<T>(pageNumber, rowsPerPage, pageSize, conditions, orderby, parameters);
@@ -165,7 +165,7 @@ namespace Kachuwa.Data
             int pageSize, string conditions, string orderby, object parameters = null)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetListPagedAsync<T>(pageNumber, rowsPerPage, pageSize, conditions, orderby, parameters);
@@ -177,7 +177,7 @@ namespace Kachuwa.Data
         public virtual int? Insert(object entityToInsert)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Insert<int?>(entityToInsert);
@@ -188,7 +188,7 @@ namespace Kachuwa.Data
         public virtual async Task<int?> InsertAsync(object entityToInsert)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.InsertAsync<int?>(entityToInsert);
@@ -200,7 +200,7 @@ namespace Kachuwa.Data
         public virtual TKey Insert<TKey>(object entityToInsert)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Insert<TKey>(entityToInsert);
@@ -211,7 +211,7 @@ namespace Kachuwa.Data
         public virtual async Task<TKey> InsertAsync<TKey>(object entityToInsert)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.InsertAsync<TKey>(entityToInsert);
@@ -231,7 +231,7 @@ namespace Kachuwa.Data
         public virtual int Update(object entityToUpdate)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Update(entityToUpdate);
@@ -259,7 +259,7 @@ namespace Kachuwa.Data
         }
         public async Task UpdateAsync(object entityToUpdate, string condition, object paramters = null)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 await db.UpdateAsync(entityToUpdate, condition, paramters);
@@ -269,7 +269,7 @@ namespace Kachuwa.Data
         public virtual async Task<bool> UpdateAsync(object entityToUpdate)
         {
 
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 await db.UpdateAsync(entityToUpdate);
@@ -280,7 +280,7 @@ namespace Kachuwa.Data
         public virtual int Delete(T entityToDelete)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Delete(entityToDelete);
@@ -291,7 +291,7 @@ namespace Kachuwa.Data
         public virtual async Task<int> DeleteAsync(T entityToDelete)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.DeleteAsync(entityToDelete);
@@ -302,7 +302,7 @@ namespace Kachuwa.Data
         public virtual int Delete(object id)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Delete<T>(id);
@@ -322,7 +322,7 @@ namespace Kachuwa.Data
         public virtual async Task<int> DeleteAsync(object id)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.DeleteAsync<T>(id);
@@ -333,7 +333,7 @@ namespace Kachuwa.Data
         public virtual int Delete(int[] ids)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     db.Open();
                     return db.Delete<T>(ids);
@@ -344,7 +344,7 @@ namespace Kachuwa.Data
         public virtual async Task<int> DeleteAsync(int[] ids)
         {
 
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 return await db.DeleteAsync<T>(ids);
@@ -354,7 +354,7 @@ namespace Kachuwa.Data
         }
         public virtual async Task DeleteAsync(string condition, object parameters = null)
         {
-            using (var db = (SqlConnection)DbFactory.GetConnection())
+            using (var db = (DbConnection)DbFactory.GetConnection())
             {
                 await db.OpenAsync();
                 await db.DeleteAsync<T>(condition, parameters);
@@ -366,7 +366,7 @@ namespace Kachuwa.Data
         public virtual async Task<int> DeleteListAsync(object whereConditions)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.DeleteListAsync<T>(whereConditions);
@@ -378,7 +378,7 @@ namespace Kachuwa.Data
             object parameters = null)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.DeleteListAsync<T>(conditions, parameters);
@@ -391,7 +391,7 @@ namespace Kachuwa.Data
             object parameters = null)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.RecordCountAsync<T>(conditions, parameters);
@@ -402,7 +402,7 @@ namespace Kachuwa.Data
         public virtual async Task<int> RecordCountAsync(object whereConditions)
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.RecordCountAsync<T>(whereConditions);
@@ -414,7 +414,7 @@ namespace Kachuwa.Data
         public virtual async Task<object> GetDependents()
         {
             {
-                using (var db = (SqlConnection)DbFactory.GetConnection())
+                using (var db = (DbConnection)DbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     return await db.GetDependents<T>();

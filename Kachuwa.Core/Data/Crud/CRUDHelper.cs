@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Kachuwa.Log;
 
 namespace Kachuwa.Data.Crud
 {
@@ -21,7 +22,9 @@ namespace Kachuwa.Data.Crud
             int? commandTimeout = null)
         {
             IDatabaseFactory factory = connection.GetFactory();
+
             var sql = factory.QueryBuilder.Get<T>(id);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Query<T>(sql.QuerySql, sql.Parameters, transaction, true, commandTimeout).FirstOrDefault();
         }
 
@@ -30,6 +33,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Get<T>(id);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             var result = await connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
             return result.FirstOrDefault();
         }
@@ -38,6 +42,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Get<T>(condition, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             var result = connection.Query<T>(sql.QuerySql, sql.Parameters);
             return result.FirstOrDefault();
         }
@@ -46,6 +51,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Get<T>(condition, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             var result = await connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
             return result.FirstOrDefault();
         }
@@ -55,6 +61,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetList<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Query<T>(sql.QuerySql, sql.Parameters, transaction, true, commandTimeout);
 
         }
@@ -64,6 +71,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetList<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -73,6 +81,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetList<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Query<T>(sql.QuerySql, sql.Parameters, transaction, true, commandTimeout);
         }
 
@@ -81,6 +90,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetList<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -89,6 +99,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetJoinedList<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -96,6 +107,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetList<T>(new { });
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Query<T>(sql.QuerySql);
         }
 
@@ -110,6 +122,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetPaginatedList<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Query<T>(sql.QuerySql, sql.Parameters, transaction, true, commandTimeout);
         }
 
@@ -119,6 +132,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.GetPaginatedList<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.QueryAsync<T>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -139,6 +153,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Insert<TKey>(entityToInsert);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             var result = connection.Query(sql.QuerySql, sql.Parameters, transaction, true, commandTimeout);
             if (sql.IsKeyGuidType || sql.KeyHasPredefinedValue)
             {
@@ -152,6 +167,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Insert<TKey>(entityToInsert);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             var result = await connection.QueryAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
             if (sql.IsKeyGuidType || sql.KeyHasPredefinedValue)
             {
@@ -165,6 +181,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Update(entityToUpdate);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -174,6 +191,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Update(entityToUpdate);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             System.Threading.CancellationToken cancelToken = token ?? default(System.Threading.CancellationToken);
             return connection.ExecuteAsync(new CommandDefinition(sql.QuerySql, sql.Parameters, transaction, commandTimeout, cancellationToken: cancelToken));
 
@@ -187,6 +205,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Update(entityToUpdate, condition, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             System.Threading.CancellationToken cancelToken = token ?? default(System.Threading.CancellationToken);
             return connection.ExecuteAsync(new CommandDefinition(sql.QuerySql, sql.Parameters, transaction, commandTimeout, cancellationToken: cancelToken));
 
@@ -198,6 +217,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(entityToDelete);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -206,6 +226,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(entityToDelete);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -214,6 +235,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(condition, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -222,6 +244,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(id);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -230,6 +253,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(id);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -238,6 +262,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(ids);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -247,6 +272,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.Delete<T>(ids);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -254,12 +280,14 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.DeleteList<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
         public static int DeleteList<T>(this IDbConnection connection, string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.DeleteList<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.Execute(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -268,6 +296,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.DeleteList<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -276,6 +305,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.DeleteList<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -287,12 +317,14 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.RecordCount<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteScalar<int>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
         public static int RecordCount<T>(this IDbConnection connection, object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.RecordCount<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteScalar<int>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
         }
 
@@ -301,6 +333,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.RecordCount<T>(conditions, parameters);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteScalarAsync<int>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -310,6 +343,7 @@ namespace Kachuwa.Data.Crud
         {
             IDatabaseFactory factory = connection.GetFactory();
             var sql = factory.QueryBuilder.RecordCount<T>(whereConditions);
+            factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
             return connection.ExecuteScalarAsync<int>(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
 
         }
@@ -320,6 +354,7 @@ namespace Kachuwa.Data.Crud
             var datas = new List<object>();
             foreach (var sql in factory.QueryBuilder.GetDependents<T>())
             {
+                factory.DbLogger.Log(LogType.Trace, () => $"starting--{sql.QuerySql} --datetime-->{DateTime.Now:yyyy_MM_d_hh_mm}");
                 var data = await connection.QueryAsync(sql.QuerySql, sql.Parameters, transaction, commandTimeout);
                 datas.Add(data);
             }

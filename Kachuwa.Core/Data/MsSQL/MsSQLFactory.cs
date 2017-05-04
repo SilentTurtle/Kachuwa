@@ -2,6 +2,10 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Kachuwa.Data.Crud;
+using Kachuwa.Log;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Data
 {
@@ -23,17 +27,19 @@ namespace Kachuwa.Data
             return Db;
         }
         //in appsetting file
-  //      "DBInfo": {
-  //  "Name": "coresample",
-  //  "ConnectionString": "User ID=postgres;Password=xxxxxx;Host=localhost;Port=5432;Database=coresample;Pooling=true;"
-  //}
-        public MsSQLFactory(string conString)
+        //      "DBInfo": {
+        //  "Name": "coresample",
+        //  "ConnectionString": "User ID=postgres;Password=xxxxxx;Host=localhost;Port=5432;Database=coresample;Pooling=true;"
+        //}
+        public MsSQLFactory(IConfigurationRoot configuration, IServiceProvider serviceProvider)
         {
             //IConfiguration configuration
-           // connectionString = configuration.GetValue<string>("DBInfo:ConnectionString");
-            _connectionString = conString;// ConfigurationManager.ConnectionStrings[connectionStringName].ToString();
+            // connectionString = configuration.GetValue<string>("DBInfo:ConnectionString");
+            _connectionString = configuration.GetConnectionString("DefaultConnection");// ConfigurationManager.ConnectionStrings[connectionStringName].ToString();
             Db = new SqlConnection(_connectionString);
             QueryBuilder = new MsSqlQueryBuilder(new MsSQLTemplate());
+            var hostingenv = serviceProvider.GetService<IHostingEnvironment>();
+            DbLogger = new DbLogger(hostingenv,new DefaultDbLoggerSetting());
         }
 
         public void Dispose()
@@ -43,6 +49,8 @@ namespace Kachuwa.Data
             Db.Close();
             //db.Dispose();
         }
+
+        public ILogger DbLogger { get; set; }
     }
 
 

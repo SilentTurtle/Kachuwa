@@ -11,11 +11,11 @@ namespace Kachuwa.Data
             _currentDatabaseFactory = dbFactory;
         }
 
-        public static IDatabaseFactory GetFactory(string connectionString)
-        {
-            IDatabaseFactory dbfactory = _currentDatabaseFactory ?? new MsSQLFactory(connectionString);
-            return dbfactory;
-        }
+        //public static IDatabaseFactory GetFactory(string connectionString)
+        //{
+        //    IDatabaseFactory dbfactory = _currentDatabaseFactory ?? new MsSQLFactory(connectionString);
+        //    return dbfactory;
+        //}
         public static IDatabaseFactory GetFactory()
         {
             if(_currentDatabaseFactory==null)

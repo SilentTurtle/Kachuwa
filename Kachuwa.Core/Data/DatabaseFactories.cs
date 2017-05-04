@@ -1,5 +1,9 @@
+using System;
 using System.Data;
 using Kachuwa.Data.Crud;
+using Kachuwa.Log;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Data
 {
@@ -13,12 +17,12 @@ namespace Kachuwa.Data
         ///  gets a provider specific (i.e. database specific) factory 
         /// </summary>
         /// <param name="dialect"></param>
-        /// <param name="connectionString"></param>
+        /// <param name="serviceProvider"></param>
         /// <returns>an instance of service factory of given provider.</returns>
-        public static IDatabaseFactory GetFactory(Dialect dialect,string connectionString)
+        public static IDatabaseFactory GetFactory(Dialect dialect, IServiceProvider serviceProvider )
         {
             // return the requested DaoFactory
-
+            var configuration = serviceProvider.GetService<IConfigurationRoot>();
             switch (dialect)
             {
                 //instance of corresponding provider
@@ -27,14 +31,15 @@ namespace Kachuwa.Data
                 //case Dialect.PostgreSQL:
                 //    break;
                 case Dialect.SQLServer:
-                    var dbfactory= new MsSQLFactory(connectionString);
+                   
+                    var dbfactory= new MsSQLFactory(configuration, serviceProvider);
                     DbFactoryProvider.SetCurrentDbFactory(dbfactory);
                     return DbFactoryProvider.GetFactory();
                 //case Dialect.SQLite:
                 //    break;
 
                 default:
-                    var dbFactory = new MsSQLFactory(connectionString);
+                    var dbFactory = new MsSQLFactory(configuration, serviceProvider);
                     DbFactoryProvider.SetCurrentDbFactory(dbFactory);
                     return DbFactoryProvider.GetFactory();
             }
