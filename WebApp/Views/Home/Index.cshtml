@@ -4,17 +4,72 @@
 }
 <h1>Home</h1>
 <p>@DateTime.Now.ToString()</p>
-@await Component.InvokeAsync("ContactUsView")
+
+@*@await Component.InvokeAsync("ContactUsView")*@
 <component name="ContactUsView"></component>
 
 <h1>This should be mapped to "/notifications"</h1>
 <input type=text id="textInput" placeholder="Enter your text" />
 <button id="sendButton">Send</button>
 <ul id="messages"></ul>
+
+<markdown>
+    # Octa Grid
+
+    The Octa Grid is specially designed to reduce heavy work load on creating crud application. This is written in typescript  and will give you fully automated crud functionality with any server side language. By default it uses bootstrap forms but you can also create own forms(eg,materialcss) and inputs.
+
+    see the [Demo](https://silentturtle.github.io/octagriddemo.github.io/) here.
+    #Note
+    (Still in Development though you can hit try :))
+
+    # Included Feature
+
+    - Grid
+    - Form Builder
+    - Form Elements
+    - Toster
+
+
+    You can also:
+    - Create own form bulder
+    - Create customized toaster
+    - add new grid components
+
+
+    ### Documentation
+
+
+
+    ### Installation
+
+    Just RUN npmrestore.bat or type command manually
+    ```sh
+    $ npm install
+    ```
+
+
+
+    ### Contribution?
+
+    Want to contribute? Yes,sure you can.
+
+
+
+
+    ### Todos
+
+    -bug fix
+    -enhancement
+
+    License
+    ----
+
+    MIT
+</markdown>
 <script src="~/resources/websocket/WebSocketManager.js"></script>
 <script language="javascript" type="text/javascript">
 
-    var connection = new WebSocketManager.Connection("ws://localhost:" + location.port + "@SocketHubs.NotificationHub");
+    var connection = new WebSocketManager.Connection("ws://"+location.hostname+":" + location.port + "@SocketHubs.NotificationHub");
 
     connection.clientMethods["receiveMessage"] = (message) => {
         var messageText = "Someone said: " + message;
@@ -61,8 +116,8 @@
     <dl>
         @foreach (var claim in User.Claims)
         {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
+            <dt>@claim.Type</dt>
+            <dd>@claim.Value</dd>
         }
     </dl>
 

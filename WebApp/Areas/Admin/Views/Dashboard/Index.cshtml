@@ -1,0 +1,49 @@
+﻿@using Kachuwa.Web
+<div class="container">
+    <h1>App Insights</h1>
+
+    <ul id="msgs"></ul>
+</div>
+
+<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        // $(document).ready(function() {
+       // var connection = new WebSocketManager.Connection("ws://" + window.location.host + "@SocketHubs.AppInsight");
+      //var protocol = location.protocol === "https:" ? "wss:" : "ws:";
+        var wsUri = "ws://" + window.location.host + "@SocketHubs.AppInsight";
+        var socket = new WebSocket(wsUri);
+        socket.onopen = e => {
+            console.log("socket opened", e);
+        };
+
+        socket.onclose = function (e) {
+            console.log("socket closed", e);
+        };
+
+        socket.onmessage = function (e) {
+            console.log(e);
+            $('#msgs').append(e.data + '<br />');
+        };
+
+        socket.onerror = function (e) {
+            console.error(e.data);
+        };
+
+        //$('#MessageField').keypress(function (e) {
+        //    if (e.which != 13) {
+        //        return;
+        //    }
+
+        //    e.preventDefault();
+
+        //    var message = userName + ": " + $('#MessageField').val();
+        //    socket.send(message);
+        //    $('#MessageField').val('');
+        //});
+    </script>
+}

@@ -1,29 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Kachuwa.Web;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Admin
 {
-    [Authorize()]
-    public class AdminController : BaseController
-    {
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
-    }
-    public class LibraryDetails
-    {
-        public int Id { get; set; }
-        public string Author { get; set; }
-        public string BookName { get; set; }
-        public string Category { get; set; }
-
-    }
     [Route("api/[controller]")]
     public class LibraryAPI : Controller
     {
@@ -82,6 +62,4 @@ namespace WebApp.Admin
         {
         }
     }
-
-
 }

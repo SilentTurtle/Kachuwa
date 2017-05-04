@@ -12,11 +12,11 @@
     <Folder Include="Queue\" />
     <Folder Include="Dev\" />
     <Folder Include="Security\" />
+    <Folder Include="Web\ViewEngine\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.1" />

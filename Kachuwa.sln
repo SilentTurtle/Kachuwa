@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.ContactUs", "Kachuw
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{236B30BF-81C3-4527-83F2-FD698F829862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachuwa.InsightConsole", "Kachuwa.InsightConsole\Kachuwa.InsightConsole.csproj", "{D7DAC87D-4AB0-46A4-A29F-6BE547A76061}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32A8CCD9-2E05-43DA-804B-9AF6493C7696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DAC87D-4AB0-46A4-A29F-6BE547A76061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DAC87D-4AB0-46A4-A29F-6BE547A76061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DAC87D-4AB0-46A4-A29F-6BE547A76061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DAC87D-4AB0-46A4-A29F-6BE547A76061}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
