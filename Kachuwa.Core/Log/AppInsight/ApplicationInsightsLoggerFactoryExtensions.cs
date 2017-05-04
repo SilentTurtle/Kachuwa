@@ -3,7 +3,7 @@ using System;
 using Kachuwa.Web;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ApplicationInsightsLogging
+namespace Kachuwa.Log.Insight
 {
     public static class ApplicationInsightsLoggerFactoryExtensions
     {

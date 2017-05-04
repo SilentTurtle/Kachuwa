@@ -2,9 +2,9 @@
 using System;
 using Kachuwa.Web;
 
-namespace ApplicationInsightsLogging
+namespace Kachuwa.Log.Insight
 {
-    public class ApplicationInsightsLoggerProvider : ILoggerProvider
+    public class ApplicationInsightsLoggerProvider : Microsoft.Extensions.Logging.ILoggerProvider
     {
         private readonly Func<string, LogLevel, bool> _filter;
         private readonly ApplicationInsightsSettings _settings;
@@ -17,7 +17,7 @@ namespace ApplicationInsightsLogging
             _applicationInsightHandler = applicationInsightHandler;
         }
 
-        public ILogger CreateLogger(string name)
+        public Microsoft.Extensions.Logging.ILogger CreateLogger(string name)
         {
             return new ApplicationInsightsLogger(name, _filter, _settings, _applicationInsightHandler);
         }

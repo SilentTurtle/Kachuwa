@@ -1,4 +1,4 @@
-﻿namespace ApplicationInsightsLogging
+﻿namespace Kachuwa.Log.Insight
 {
     public class ApplicationInsightsSettings
     {

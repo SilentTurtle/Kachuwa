@@ -1,7 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Net.WebSockets;
 using System.Text;
@@ -9,17 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Kachuwa.Web;
 
-namespace ApplicationInsightsLogging
+
+namespace Kachuwa.Log.Insight
 {
 
  
-    public class ApplicationInsightsLogger : ILogger
+    public class ApplicationInsightsLogger :Microsoft.Extensions.Logging.ILogger
     {
         private readonly ApplicationInsightHandler _applicationInsightHandler;
         private readonly string _name;
         private readonly Func<string, LogLevel, bool> _filter;
         private readonly ApplicationInsightsSettings _settings;
-        private readonly TelemetryClient _telemetryClient;
 
         public ApplicationInsightsLogger(string name, ApplicationInsightHandler applicationInsightHandler)
             : this(name, null, new ApplicationInsightsSettings(), applicationInsightHandler)
@@ -33,23 +30,23 @@ namespace ApplicationInsightsLogging
             _name = string.IsNullOrEmpty(name) ? nameof(ApplicationInsightsLogger) : name;
             _filter = filter;
             _settings = settings;
-            _telemetryClient = new TelemetryClient();
+           //// _telemetryClient = new TelemetryClient();
 
-            if (_settings.DeveloperMode.HasValue)
-            {
-                TelemetryConfiguration.Active.TelemetryChannel.DeveloperMode = _settings.DeveloperMode;
-            }
+           // if (_settings.DeveloperMode.HasValue)
+           // {
+           //     //TelemetryConfiguration.Active.TelemetryChannel.DeveloperMode = _settings.DeveloperMode;
+           // }
 
-            if(!_settings.DeveloperMode.Value)
-            {
-                if (string.IsNullOrWhiteSpace(_settings.InstrumentationKey))
-                {
-                    throw new ArgumentNullException(nameof(_settings.InstrumentationKey));
-                }
+           // if(!_settings.DeveloperMode.Value)
+           // {
+           //     if (string.IsNullOrWhiteSpace(_settings.InstrumentationKey))
+           //     {
+           //         throw new ArgumentNullException(nameof(_settings.InstrumentationKey));
+           //     }
 
-                TelemetryConfiguration.Active.InstrumentationKey = _settings.InstrumentationKey;
-                _telemetryClient.InstrumentationKey = _settings.InstrumentationKey;
-            }
+           //    // TelemetryConfiguration.Active.InstrumentationKey = _settings.InstrumentationKey;
+           //    // _telemetryClient.InstrumentationKey = _settings.InstrumentationKey;
+           // }
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -71,7 +68,15 @@ namespace ApplicationInsightsLogging
 
             if (exception != null)
             {
-                _telemetryClient.TrackException(new ExceptionTelemetry(exception));
+               // _telemetryClient.TrackException(new ExceptionTelemetry(exception));
+                Task.Run(async () =>
+                {
+                    await _applicationInsightHandler.SendMessageToAllAsync(new Message()
+                    {
+                        Data = exception.Message.ToString(),
+                        MessageType = MessageType.Text
+                    });
+                });
                 return;
             }
 
@@ -89,7 +94,7 @@ namespace ApplicationInsightsLogging
             }
             if (!string.IsNullOrEmpty(message))
             {
-
+                //TODO:: on/off setting
                 Task.Run(async () =>
                 {
                     await _applicationInsightHandler.SendMessageToAllAsync(new Message()
@@ -100,23 +105,23 @@ namespace ApplicationInsightsLogging
                 });
                 
                 
-                _telemetryClient.TrackTrace(message, GetSeverityLevel(logLevel));
+               // _telemetryClient.TrackTrace(message, GetSeverityLevel(logLevel));
             }
         }
 
 
-        private static SeverityLevel GetSeverityLevel(LogLevel logLevel)
-        {
-            switch (logLevel)
-            {
-                case LogLevel.Critical: return SeverityLevel.Critical;
-                case LogLevel.Error: return SeverityLevel.Error;
-                case LogLevel.Warning: return SeverityLevel.Warning;
-                case LogLevel.Information: return SeverityLevel.Information;
-                case LogLevel.Trace:
-                default: return SeverityLevel.Verbose;
-            }
-        }
+        //private static SeverityLevel GetSeverityLevel(LogLevel logLevel)
+        //{
+        //    switch (logLevel)
+        //    {
+        //        case LogLevel.Critical: return SeverityLevel.Critical;
+        //        case LogLevel.Error: return SeverityLevel.Error;
+        //        case LogLevel.Warning: return SeverityLevel.Warning;
+        //        case LogLevel.Information: return SeverityLevel.Information;
+        //        case LogLevel.Trace:
+        //        default: return SeverityLevel.Verbose;
+        //    }
+        //}
 
         private class NoopDisposable : IDisposable
         {
