@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resources\hello.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources\hello.js" />
     <EmbeddedResource Include="Views\Shared\Components\ContactUsManage\Default.cshtml" />
     <EmbeddedResource Include="Views\Shared\Components\ContactUsView\Default.cshtml" />
     <EmbeddedResource Include="Views\Shared\Default.cshtml" />
