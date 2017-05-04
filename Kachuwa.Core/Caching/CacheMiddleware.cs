@@ -20,8 +20,15 @@ namespace Kachuwa.Caching
                 var fullResponse = httpContext.Response.Body;
                 httpContext.Response.Body = responseStream;
                 await NextMiddleware.Invoke(httpContext);
-                responseStream.Seek(0, SeekOrigin.Begin);
-                await responseStream.CopyToAsync(fullResponse);
+               // if (httpContext.Response.StatusCode != StatusCodes.Status304NotModified)
+                //{
+                    responseStream.Seek(0, SeekOrigin.Begin);
+                    await responseStream.CopyToAsync(fullResponse);
+               // }
+               // else
+                //{
+                    
+               // }
             }
         }
 
