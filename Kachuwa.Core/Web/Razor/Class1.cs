@@ -5,34 +5,19 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Dapper;
 using Kachuwa.Web.Razor;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders.Embedded;
 
 namespace Kachuwa.Web.Razor
 {
-    public static class RazorServiceExtensions
-    {
-        public static IServiceCollection RegisterKachuwaRazorProvider(this IServiceCollection services,IConfigurationRoot configuration)
-        {
-            services.Configure<RazorViewEngineOptions>(opts =>
-            {
-                opts.FileProviders.Add( 
-                    new DatabaseFileProvider(configuration.GetConnectionString("DefaultConnection")));
-            });
-            //services.Configure<RazorViewEngineOptions>(opts =>
-            //{
-            //    opts.FileProviders.Add(
-            //        new DatabaseFileProvider(configuration.GetConnectionString("DefaultConnection")));
-            //});
-            return services;
-        }
-    }
     public class Razor2View : IView
     {
         private readonly IRazorViewEngine _viewEngine;
@@ -246,7 +231,8 @@ namespace Kachuwa.Web.Razor
                 {
                     // If the layout has been previously rendered as part of this view, we're potentially in a layout
                     // rendering cycle.
-                    throw new InvalidOperationException("Resources.FormatLayoutHasCircularReference(previousPage.Path, layoutPage.Path)");
+                    throw new InvalidOperationException(
+                        "Resources.FormatLayoutHasCircularReference(previousPage.Path, layoutPage.Path)");
                 }
 
                 // Notify the previous page that any writes that are performed on it are part of sections being written
