@@ -56,6 +56,10 @@ namespace Kachuwa.Plugin
                 var path = Path.Combine(
                     _hostingEnvironment.ContentRootPath, "Plugins");
 
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
                 var assemblies = Directory
                     .GetFiles(path, "*.dll", SearchOption.AllDirectories)
                     .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)

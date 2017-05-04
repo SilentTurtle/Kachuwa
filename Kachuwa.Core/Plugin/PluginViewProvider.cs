@@ -24,17 +24,21 @@ namespace Kachuwa.Plugin
         {
             throw new NotImplementedException();
         }
-
+        private string[] ignoreFiles = new string[] { "_ViewImports", "_ViewStart", "_Layout" };
         public IFileInfo GetFileInfo(string subpath)
         {
             if (string.IsNullOrEmpty(subpath))
             {
                 return new NotFoundFileInfo(subpath);
             }
-            if (subpath.Contains("_ViewImports") || subpath.Contains("_ViewStart"))
+            if (ignoreFiles.Any(subpath.Contains))
             {
                 return new NotFoundFileInfo(subpath);
             }
+            //if (subpath.Contains("_ViewImports") || subpath.Contains("_ViewStart"))
+            //{
+            //    return new NotFoundFileInfo(subpath);
+            //}
             //plugin/pluginname/home/index
             //plugin/pluginname/shared/index=>//plugin/pluginname/index
             if (subpath.ToLower().Contains("plugin") == false)
