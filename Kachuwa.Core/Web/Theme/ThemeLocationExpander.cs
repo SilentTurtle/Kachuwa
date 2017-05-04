@@ -27,6 +27,7 @@ namespace Kachuwa.Web.Theme
             if (descriptor == null)
             { return viewLocations; }
 
+           object kpageUrl= context.ActionContext.HttpContext.Items["KPageUrl"];
             string theme = context.Values["themename"];
             //only for layout file look up
             IEnumerable<string> themeLocations = new[]
@@ -34,8 +35,10 @@ namespace Kachuwa.Web.Theme
                // $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
                 $"/Themes/{theme}/Views/Shared/{{0}}.cshtml"
             };
+            //default view path must be preserved other wise components wont load
             viewLocations = themeLocations.Concat(viewLocations);
             return viewLocations;
+
             //return viewLocations.Select(f => f.Replace("/Views/", "/" + context.Values["themedir"] +"/"+ context.Values["themename"]+ "/Views/"));
 
         }
