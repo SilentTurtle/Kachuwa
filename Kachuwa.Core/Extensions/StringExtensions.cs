@@ -61,5 +61,9 @@ namespace Kachuwa.Extensions
                 return false;
             }
         }
+        public static string DecodeUrl(this string url)
+        {
+            return url;//Replace("-", " ");
+        }
     }
 }
