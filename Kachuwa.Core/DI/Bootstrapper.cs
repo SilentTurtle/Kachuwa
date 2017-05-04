@@ -12,10 +12,10 @@ namespace Kachuwa.Core.DI
     {
         private readonly IServiceCollection _serviceCollection;
         private readonly IConfigurationRoot _configuration;
-        public Bootstrapper(IServiceCollection serviceCollection, IConfigurationRoot configuration)
+        public Bootstrapper(IServiceCollection serviceCollection,IServiceProvider serviceProvider )
         {
             _serviceCollection = serviceCollection;
-            _configuration = configuration;
+            _configuration = serviceProvider.GetService<IConfigurationRoot>();
             Init();
         }
         public void Init()
