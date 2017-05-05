@@ -25,6 +25,7 @@ namespace Kachuwa.Web.Theme
             service.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new ThemeLocationExpander());
+                options.ViewLocationExpanders.Add(new ComponentViewLocationExpander());
 
             });
             //service.AddSingleton<IThemeConfig>(configuration);
