@@ -12,10 +12,18 @@ namespace Kachuwa.Log
         private readonly ILoggerSetting _loggerSetting;
         private static object _ratesFileLock = new object();
         private string Basedir { get; set; }
+        private string _todaysDate { get; set; }
         public FileBaseLogger(IHostingEnvironment hostingEnvironment, ILoggerSetting loggerSetting)
         {
             _loggerSetting = loggerSetting;
             Basedir = hostingEnvironment.ContentRootPath + "\\Logs\\";
+            _todaysDate = DateTime.Now.ToString("yyyy_MM_dd");
+
+            if (!Directory.Exists(Basedir))
+            {
+                Directory.CreateDirectory(Basedir);
+            }
+            LogFilePath = Basedir + _todaysDate + ".log";
             _init();
         }
 
@@ -23,13 +31,7 @@ namespace Kachuwa.Log
         private List<Log> Logs { get; set; }
         private void _init()
         {
-            var todayDate = DateTime.Now.ToString("yyyy_MM_dd");
-
-            if (!Directory.Exists(Basedir))
-            {
-                Directory.CreateDirectory(Basedir);
-            }
-            LogFilePath = Basedir + todayDate + ".log";
+            _todaysDate = DateTime.Now.ToString("yyyy_MM_dd");
             if (!File.Exists(LogFilePath))
             {
                 using (var stream = File.Create(LogFilePath, 1024, FileOptions.None))
@@ -44,7 +46,7 @@ namespace Kachuwa.Log
                 // long gb = mb / 1024;
                 if (mb >= 5)
                 {
-                    LogFilePath = Basedir + todayDate + "-" + DateTime.Now.ToString("h.mm") + ".log";
+                    LogFilePath = Basedir + _todaysDate + "-" + DateTime.Now.ToString("h.mm") + ".log";
                     using (var stream = File.Create(LogFilePath, 1024, FileOptions.None))
                     {
                     }
@@ -109,7 +111,7 @@ namespace Kachuwa.Log
 
         private void WriteLog(string log, Stream stream)
         {
-            using (StreamWriter writer =new StreamWriter(stream))
+            using (StreamWriter writer = new StreamWriter(stream))
             {
                 writer.WriteLine(log);
             }
