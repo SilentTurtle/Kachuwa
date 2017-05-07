@@ -33,7 +33,6 @@
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Admin\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

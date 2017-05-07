@@ -7,7 +7,8 @@
 
 @*@await Component.InvokeAsync("ContactUsView")*@
 <component name="ContactUsView"></component>
-
+<component name="HtmlContentManage"></component>
+<component name="HtmlContentLoader" params='new{key="test"}'></component>
 <h1>This should be mapped to "/notifications"</h1>
 <input type=text id="textInput" placeholder="Enter your text" />
 <button id="sendButton">Send</button>
@@ -96,7 +97,7 @@
         console.log("Sending through HTTP to a controller:" + message);
 
         $.ajax({
-            url: "http://" + window.location.host + "/Notification/notify?message=" + message,
+            url: "http://" + window.location.host + "/api/v1/notification?message=" + message,
             method: 'GET'
         });
     }

@@ -62,7 +62,7 @@ namespace WebApp.Controllers
     //    }
     //}
     // [Theme("Default")]
-    
+
     public class HomeController : BaseController
     {
         private readonly ILogger _logger;
@@ -74,12 +74,13 @@ namespace WebApp.Controllers
             _logger.Log(LogType.Info, () => "HomePage constructor Initialized");
         }
 
-        [KachuwaCache(Duration = 15)]
+        [KachuwaCache(Duration = 30)]
         public IActionResult Index()
         {
             _logger.Log(LogType.Info, () => "HomePage index Initialized");
-           // return View("Module/ContactUs/Default");
+            // return View("Module/ContactUs/Default");
             //return ViewComponent("PluginOne", new {number = 5});
+            //return ViewComponent("ContactUsView");
             return View();
             //Plugin/PluginOne/Home/index
             //return View("Plugin/PluginOne/pluginone");
@@ -93,10 +94,11 @@ namespace WebApp.Controllers
 
         public IActionResult Contact()
         {
-           // throw new Exception("fuck me");
+            // throw new Exception("fuck me");
             ViewData["Message"] = "Your contact page.";
             //_logger.Log(LogType.Info, () => "HomePage contactpage Initialized");
-            return View();
+           // return View();
+            return ViewComponent("HtmlContentManage");
         }
 
         public IActionResult Error()
