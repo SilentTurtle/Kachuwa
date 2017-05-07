@@ -27,7 +27,7 @@ namespace Kachuwa.Web.Theme
             if (descriptor == null)
             { return viewLocations; }
 
-           object kpageUrl= context.ActionContext.HttpContext.Items["KPageUrl"];
+            object kpageUrl = context.ActionContext.HttpContext.Items["KPageUrl"];
             string theme = context.Values["themename"];
             //only for layout file look up
             IEnumerable<string> themeLocations = new[]

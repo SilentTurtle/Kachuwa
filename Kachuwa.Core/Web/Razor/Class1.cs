@@ -16,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders.Embedded;
 
-namespace Kachuwa.Web.Razor
+namespace Kachuwa.Web
 {
     public class Razor2View : IView
     {
