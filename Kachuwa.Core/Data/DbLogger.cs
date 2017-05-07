@@ -19,10 +19,20 @@ namespace Kachuwa.Data
         private readonly ILoggerSetting _loggerSetting;
         private static object _ratesFileLock = new object();
         private string Basedir { get; set; }
+        private string _todaysDate { get; set; }
+
         public DbLogger(IHostingEnvironment hostingEnvironment, ILoggerSetting loggerSetting)
         {
             _loggerSetting = loggerSetting;
             Basedir = hostingEnvironment.ContentRootPath + "\\DbLogs\\";
+            _todaysDate = DateTime.Now.ToString("yyyy_MM_dd");
+
+            if (!Directory.Exists(Basedir))
+            {
+                Directory.CreateDirectory(Basedir);
+            }
+            LogFilePath = Basedir + _todaysDate + ".log";
+
             _init();
         }
 
@@ -30,13 +40,8 @@ namespace Kachuwa.Data
         private List<Log.Log> Logs { get; set; }
         private void _init()
         {
-            var todayDate = DateTime.Now.ToString("yyyy_MM_dd");
+            _todaysDate = DateTime.Now.ToString("yyyy_MM_dd");
 
-            if (!Directory.Exists(Basedir))
-            {
-                Directory.CreateDirectory(Basedir);
-            }
-            LogFilePath = Basedir + todayDate + ".log";
             if (!File.Exists(LogFilePath))
             {
                 File.Create(LogFilePath, 1024, FileOptions.None);
@@ -49,7 +54,7 @@ namespace Kachuwa.Data
                 // long gb = mb / 1024;
                 if (mb >= 5)
                 {
-                    LogFilePath = Basedir + todayDate + "-" + DateTime.Now.ToString("h.mm") + ".log";
+                    LogFilePath = Basedir + _todaysDate + "-" + DateTime.Now.ToString("h.mm") + ".log";
                     File.Create(LogFilePath, 1024, FileOptions.None);
                 }
             }
