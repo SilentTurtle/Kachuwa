@@ -1,13 +1,15 @@
 ﻿using System.Net;
+using Kachuwa.Log;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Web.API
 {
+    [LogError]
     public class BaseApiController : Controller
     {
         public ApiResponse HttpResponse(int statusCode, string msg, object data)
         {
-            
+
             return new ApiResponse
             {
                 Code = statusCode,
@@ -27,7 +29,7 @@ namespace Kachuwa.Web.API
 
         public ApiResponse ErrorResponse(int statusCode, string msg)
         {
-           
+
             return new ApiResponse
             {
                 Code = statusCode,
