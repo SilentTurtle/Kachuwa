@@ -10,6 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DbLogs\**" />
+    <Compile Remove="Logs\**" />
+    <Compile Remove="Plugins\**" />
+    <Compile Remove="TagHelpers\**" />
+    <Content Remove="DbLogs\**" />
+    <Content Remove="Logs\**" />
+    <Content Remove="Plugins\**" />
+    <Content Remove="TagHelpers\**" />
+    <EmbeddedResource Remove="DbLogs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Plugins\**" />
+    <EmbeddedResource Remove="TagHelpers\**" />
+    <None Remove="DbLogs\**" />
+    <None Remove="Logs\**" />
+    <None Remove="Plugins\**" />
+    <None Remove="TagHelpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Properties\PublishProfiles\KachuwaCore - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +44,11 @@
   <ItemGroup>
     <None Include="Controllers\AccountOldController.cs" />
     <None Include="wwwroot\resources\websocket\WebSocketManager.js" />
+    <None Include="wwwroot\themes\shared\admin\css\styles.css" />
+    <None Include="wwwroot\themes\shared\admin\css\styles.css.map" />
+    <None Include="wwwroot\themes\shared\admin\images\logo.png" />
+    <None Include="wwwroot\themes\shared\admin\images\Tixalaya.png" />
+    <None Include="wwwroot\themes\shared\admin\js\main.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kachuwa.ContactUs\Kachuwa.ContactUs.csproj" />
@@ -33,10 +57,10 @@
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services" />
+    <Folder Include="wwwroot\themes\tenant\" />
   </ItemGroup>
 
 </Project>
