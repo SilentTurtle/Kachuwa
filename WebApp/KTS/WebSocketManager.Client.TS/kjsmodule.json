@@ -1,0 +1,4 @@
+{
+
+  "websocketmanger": "./KTS/WebSocketManager.Client.TS/src/Connection"
+}

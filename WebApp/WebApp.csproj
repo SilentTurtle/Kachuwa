@@ -9,6 +9,10 @@
     <ApplicationInsightsResourceId>/subscriptions/95dfaff4-6bb5-476b-a09d-01ebe19d8bad/resourcegroups/TestInsiths/providers/microsoft.insights/components/TestInsiths</ApplicationInsightsResourceId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="DbLogs\**" />
     <Compile Remove="Logs\**" />
@@ -30,6 +34,7 @@
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\KachuwaCore - Web Deploy.pubxml" />
+    <None Remove="run-webpack-with-details.bat" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
@@ -51,7 +56,6 @@
     <None Include="wwwroot\themes\shared\admin\js\main.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kachuwa.ContactUs\Kachuwa.ContactUs.csproj" />
     <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
     <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />

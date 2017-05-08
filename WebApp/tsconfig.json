@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "sourceMap": true
+    },
+    "files": [
+        "KTS/Notification/x.ts"
+    ]
+}

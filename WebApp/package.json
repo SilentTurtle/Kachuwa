@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "name": "kachuwaframework",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.2",
+    "tinymce": "^4.5.6",
+    "merge-json": "0.1.0-b.3"
+
+  },
+  "dependencies": {
+    "aspnet-webpack": "^1.0.3",
+    "typescript": "^2.0.0",
+    "webpack": "^1.13.3"
+  }
+}

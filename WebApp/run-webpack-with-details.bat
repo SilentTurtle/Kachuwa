@@ -1,0 +1,2 @@
+webpack --display-error-details 
+
