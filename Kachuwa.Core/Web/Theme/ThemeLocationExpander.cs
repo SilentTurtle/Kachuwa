@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Web.Theme
 {
-    public class ThemeLocationExpander : IViewLocationExpander
+    public class ThemeLocationExpander : IKachuwaViewLocationExpander
     {
 
 
@@ -14,16 +14,22 @@ namespace Kachuwa.Web.Theme
         {
             //TODO:: for multitenat setup
             var theme = (IThemeConfig)context.ActionContext.HttpContext.Items["Theme"];
-            //var value = new Random().Next(0, 1);
-            // var theme = value == 0 ? "Theme1" : "Theme2";
             context.Values["themedir"] = "Themes";//theme.Directory;
 
-            // var resolver= context.ActionContext.HttpContext.RequestServices.GetService<IThemeResolver>();
+            var themeconfig = context.ActionContext.HttpContext.RequestServices.GetService<IThemeConfig>();
             //temporary for single site
-            object themeName =null;
-            context.ActionContext.RouteData.Values.TryGetValue("Theme", out themeName);
-            themeName = themeName == null ? "Default" : themeName;
-            context.Values["themename"] = themeName.ToString();// theme.FrontendThemeName;
+            string themeName = "";
+            var area = context.ActionContext.RouteData.Values["area"];
+            if (area != null)
+            {
+                themeName = themeconfig.BackendThemeName;
+            }
+            else
+            {
+                themeName = themeconfig.FrontendThemeName;
+            }
+
+            context.Values["themename"] = themeName;
         }
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
@@ -35,7 +41,6 @@ namespace Kachuwa.Web.Theme
             if (descriptor == null)
             {
                 return viewLocations;
-
             }
 
             object kpageUrl = context.ActionContext.HttpContext.Items["KPageUrl"];

@@ -20,7 +20,7 @@ namespace Kachuwa.Web.Theme
             //);
             ThemeManager.Instance.SetThemeResolver(new DefaultThemeResolver());
         }
-        public static IServiceCollection RegisterThemeService(this IServiceCollection service, Action<IThemeConfig> configuration)
+        public static IServiceCollection RegisterThemeService(this IServiceCollection service, ThemeConfiguration configuration)
         {
             service.Configure<RazorViewEngineOptions>(options =>
             {
@@ -28,7 +28,7 @@ namespace Kachuwa.Web.Theme
                 options.ViewLocationExpanders.Add(new ComponentViewLocationExpander());
 
             });
-            //service.AddSingleton<IThemeConfig>(configuration);
+            service.TryAddSingleton<IThemeConfig>(configuration);
             service.TryAddSingleton<IThemeResolver, DefaultThemeResolver>();
             return service;
         }

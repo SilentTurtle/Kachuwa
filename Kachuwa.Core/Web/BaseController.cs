@@ -14,13 +14,10 @@ namespace Kachuwa.Web
     {
         public readonly ModelService ModelService = new ModelService();
 
-
         public RedirectResult RedirectToAnother(string url)
         {
             return base.Redirect(url);
         }
-
-        
        
        // protected override void OnActionExecuting(ActionExecutingContext filterContext)
         //{

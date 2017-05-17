@@ -10,11 +10,7 @@ namespace Kachuwa.Web
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            //if (context.Values.ContainsKey(_componentKey))
-            //{
-            //    var component = context.Values[_componentKey];
-            //    if (!string.IsNullOrWhiteSpace(component))
-            //    {
+            
             var componentViewLocation = new string[]
             {
                 "{0}.cshtml"
@@ -22,19 +18,11 @@ namespace Kachuwa.Web
             };
             viewLocations = componentViewLocation.Concat(viewLocations);
             return viewLocations;
-            //    }
-            //}
-            //return viewLocations;
+           
         }
 
         public void PopulateValues(ViewLocationExpanderContext context)
         {
-            //var controller = context.ActionContext.ActionDescriptor.DisplayName;
-            //var moduleName = controller.Split('.')[2];
-            //if (moduleName != "WebHost")
-            //{
-            //    context.Values[_moduleKey] = moduleName;
-            //}
         }
     }
 }

@@ -32,6 +32,9 @@ namespace Kachuwa.Core.Extensions
             IServiceProvider serviceProvider)
         {
             services.AddHttpContextAccessor();
+            
+            //registering service for later use
+            services.AddSingleton(services);
             services.TryAddSingleton<ILoggerSetting, DefaultLoggerSetting>();
             services.TryAddSingleton<ILogProvider, DefaultLogProvider>();
             services.TryAddSingleton<ILogger, FileBaseLogger>();
@@ -63,12 +66,12 @@ namespace Kachuwa.Core.Extensions
             
             services.RegisterKachuwaWeb();
 
-            services.RegisterThemeService(config =>
+            services.RegisterThemeService(new ThemeConfiguration()
             {
-                config.Directory = "~/Themes";
-                config.FrontendThemeName = "Default";
-                config.BackendThemeName = "Default";
-                config.ThemeResolver = new DefaultThemeResolver();
+                Directory = "~/Themes",
+                FrontendThemeName = "Default",
+                BackendThemeName = "Admin",
+                ThemeResolver = new DefaultThemeResolver()
             });
             //services.Configure<ApplicationInsightsSettings>(options => configuration.GetSection("ApplicationInsights").Bind(options));
 

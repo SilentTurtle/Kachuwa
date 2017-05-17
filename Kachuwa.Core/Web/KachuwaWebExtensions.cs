@@ -19,10 +19,11 @@ namespace Kachuwa.Web
 
             services.TryAddSingleton<IViewRenderService, ViewRenderService>();
             services.TryAddSingleton<IPageService, PageService>();
-            var logger = services.BuildServiceProvider().GetService<ILogger>();
-            var pageService = services.BuildServiceProvider().GetService<IPageService>();
-            var cacheService = services.BuildServiceProvider().GetService<ICacheService>();
-            var ctxaccessor = services.BuildServiceProvider().GetService<IHttpContextAccessor>();
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger>();
+            var pageService = serviceProvider.GetService<IPageService>();
+            var cacheService = serviceProvider.GetService<ICacheService>();
+            var ctxaccessor = serviceProvider.GetService<IHttpContextAccessor>();
             services.Configure<RazorViewEngineOptions>(opts =>
             {
                 opts.FileProviders.Add(

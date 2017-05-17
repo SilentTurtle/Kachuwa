@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Kachuwa.Data.Crud;
 
 namespace Kachuwa.Data
@@ -29,6 +31,42 @@ namespace Kachuwa.Data
         //    }
         //}
 
+        public virtual T Query(string sql,object param=null)
+        {
+            using (var db = (DbConnection)DbFactory.GetConnection())
+            {
+                db.Open();
+                var result= db.Query<T>(sql, param);
+                return result.FirstOrDefault();
+            }
+        }
+        public virtual async Task<T> QueryAsync(string sql, object param = null)
+        {
+            using (var db = (DbConnection)DbFactory.GetConnection())
+            {
+                await db.OpenAsync();
+                var result = await db.QueryAsync<T>(sql, param);
+                return result.FirstOrDefault();
+
+            }
+        }
+        public virtual IEnumerable<T> QueryList(string sql, object param = null)
+        {
+            using (var db = (DbConnection)DbFactory.GetConnection())
+            {
+                db.Open();
+                return db.Query<T>(sql, param);
+            }
+        }
+        public virtual async Task<IEnumerable<T>> QueryListAsync(string sql, object param = null)
+        {
+            using (var db = (DbConnection)DbFactory.GetConnection())
+            {
+                await db.OpenAsync();
+                return await db.QueryAsync<T>(sql, param);
+
+            }
+        }
         public virtual T Get(object id)
         {
             using (var db = (DbConnection)DbFactory.GetConnection())
