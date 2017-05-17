@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Reflection;
 
 namespace Kachuwa.Web.Module
@@ -10,5 +11,6 @@ namespace Kachuwa.Web.Module
         List<string> SupportedVersions { get; set; }
         string Author { get; set; }
         Assembly Assembly { get; set; }
+        bool IsInstalled { get; set; }
     }
 }

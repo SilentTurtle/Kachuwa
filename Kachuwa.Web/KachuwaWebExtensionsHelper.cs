@@ -11,8 +11,11 @@ namespace Kachuwa.Web
     {
         public static IServiceCollection RegisterKachuwaWebServices(this IServiceCollection services)
         {
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<ISmsSender, SmsSender>();
+            
+            services.AddSingleton<IScriptRunner, SQLScriptRunner>();
+            services.AddSingleton<IModuleManager, ModuleManager>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<ISmsSender, SmsSender>();
             //var ctxaccessor = services.BuildServiceProvider().GetService<IHttpContextAccessor>();
             //var ctx = new ContextResolver(ctxaccessor);
             //services.AddSingleton(ctx);
