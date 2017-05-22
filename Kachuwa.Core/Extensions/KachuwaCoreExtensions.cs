@@ -69,7 +69,7 @@ namespace Kachuwa.Core.Extensions
             services.RegisterThemeService(new ThemeConfiguration()
             {
                 Directory = "~/Themes",
-                FrontendThemeName = "Default",
+                FrontendThemeName = "M2",
                 BackendThemeName = "Admin",
                 ThemeResolver = new DefaultThemeResolver()
             });
