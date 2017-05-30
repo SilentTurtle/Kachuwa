@@ -12,14 +12,13 @@ namespace Kachuwa.Web.Module
 {
     public class ModuleViewProvider : IFileProvider
     {
-
-        private  ConcurrentDictionary<string, Assembly> ModulesAssemblies { get; set; }
+        private readonly IModuleManager _moduleManager;
         private string _baseNamespace;
         private static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars()
             .Where(c => c != '/' && c != '\\').ToArray();
-        public ModuleViewProvider(ConcurrentDictionary<string, Assembly> assemblies)
+        public ModuleViewProvider(IModuleManager moduleManager)
         {
-            ModulesAssemblies = assemblies;
+            _moduleManager = moduleManager;
         }
         public IDirectoryContents GetDirectoryContents(string subpath)
         {
@@ -36,25 +35,31 @@ namespace Kachuwa.Web.Module
             {
                 return new NotFoundFileInfo(subpath);
             }
-           
+
             //module/pluginname/home/index
             //module/pluginname/shared/index=>//module/pluginname/index
-            if (subpath.ToLower().Contains("module") == false || subpath.ToLower().StartsWith("/area")|| subpath.ToLower().Contains("admin"))
+            if (subpath.ToLower().Contains("module") == false || subpath.ToLower().StartsWith("/area") || subpath.ToLower().Contains("admin"))
             {
                 return new NotFoundFileInfo(subpath);
             }
             subpath = subpath.Substring(subpath.IndexOf("Module", StringComparison.Ordinal) + 6);
             int firstIndex = subpath.IndexOfNth("/", 1);
             int secondIndex = subpath.IndexOfNth("/", 2);
-            string pluginName = subpath.Substring(firstIndex + 1, secondIndex - 1);
-            Assembly moduleAssembly = null;
-            ModulesAssemblies.TryGetValue(pluginName, out moduleAssembly);
-            if (moduleAssembly == null)
+            string moduleName = subpath.Substring(firstIndex + 1, secondIndex - 1);
+
+            var module = _moduleManager.FindAsync(moduleName).GetAwaiter().GetResult();
+
+            if (module == null)
                 return new NotFoundFileInfo(subpath);
+            if (!module.IsInstalled)
+            {
+                return new NotFoundFileInfo(subpath);
+            }
+            Assembly moduleAssembly = module.Assembly;
             //project name as base namespace
             _baseNamespace = moduleAssembly.GetName().Name;// _assbly.GetTypes()[0].Namespace;
             //pluginname/viewname
-            subpath = subpath.Replace(pluginName, subpath.Count(f => f == '/') <= 2 ? "Views/Shared" : "Views");
+            subpath = subpath.Replace(moduleName, subpath.Count(f => f == '/') <= 2 ? "Views/Shared" : "Views");
             var builder = new StringBuilder(_baseNamespace.Length + subpath.Length);
             builder.Append(_baseNamespace);
 

@@ -19,7 +19,7 @@ namespace Kachuwa.Web
         {
             await NotificationsMessageHandler.InvokeClientMethodToAllAsync("receiveMessage", message);
         }
-       [HttpPost]
+        [HttpPost]
         public async Task NotifyTo(NotifyUserModel model)
         {
 
@@ -32,5 +32,5 @@ namespace Kachuwa.Web
             public string SocketId { get; set; }
         }
     }
-   
+
 }

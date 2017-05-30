@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,12 +11,14 @@ namespace Kachuwa.Web.Module
         private readonly IServiceCollection _services;
         private readonly ModuleContainer _moduleContainer;
         private readonly IScriptRunner _scriptRunner;
+        private readonly IModuleService _moduleService;
 
-        public ModuleManager(IServiceCollection services, ModuleContainer moduleContainer, IScriptRunner scriptRunner)
+        public ModuleManager(IServiceCollection services, ModuleContainer moduleContainer, IScriptRunner scriptRunner,IModuleService moduleService)
         {
             _services = services;
             _moduleContainer = moduleContainer;
             _scriptRunner = scriptRunner;
+            _moduleService = moduleService;
         }
         public async Task<bool> InstallAsync(IModule module)
         {
@@ -24,6 +27,20 @@ namespace Kachuwa.Web.Module
                 string script = module.Assembly.GetDbInstallScript();
                 var status= await _scriptRunner.Run(script);
                 module.IsInstalled = status;
+                if (status)
+                {
+                    var moduleinfo = new ModuleInfo
+                    {
+                        Name = module.Name,
+                        IsInstalled = true,
+                        Author = module.Author,
+                        Version = module.Version,
+                        IsActive = true,
+                        Description = ""
+                    };
+                    moduleinfo.AutoFill();
+                    await _moduleService.Service.InsertAsync<int>(moduleinfo);
+                }
                 return status;
             }
             return false;
@@ -31,7 +48,28 @@ namespace Kachuwa.Web.Module
 
         public async Task<bool> UnInstallAsync(IModule module)
         {
-            return true;
+            if (module.IsInstalled)
+            {
+                string script = module.Assembly.GetDbUnInstallScript();
+                var status = await _scriptRunner.Run(script);
+                module.IsInstalled = status;
+                if (status)
+                {
+                    var moduleinfo = new ModuleInfo
+                    {
+                        Name = module.Name,
+                        IsInstalled = false,
+                        Author = module.Author,
+                        Version = module.Version,
+                        IsActive = true,
+                        Description = ""
+                    };
+                    moduleinfo.AutoFill();
+                    await _moduleService.Service.UpdateAsync(moduleinfo,"Where Name=@Name",new{Name=moduleinfo.Name});
+                }
+                return status;
+            }
+            return false;
         }
 
         public async Task<IModule> FindAsync(string moduleName)

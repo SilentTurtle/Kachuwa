@@ -15,40 +15,46 @@ namespace Kachuwa.Web.Module
     {
         private readonly IServiceCollection _services;
         private readonly ILogger _logger;
-        public ConcurrentDictionary<string, Assembly> ModulesAssemblies { get; set; }
 
-        public ModuleRegistrar(IServiceCollection services,ILogger logger)
+        public ModuleRegistrar(IServiceCollection services, ILogger logger)
         {
             _services = services;
             _logger = logger;
-            ModulesAssemblies=new ConcurrentDictionary<string, Assembly>();
             Register();
         }
         public bool Register()
         {
             try
             {
+                var serviceProvider = _services.BuildServiceProvider();
+                var moduleService = serviceProvider.GetService<IModuleService>();
 
-           
+
                 var assesmblies = AppDomain.CurrentDomain.GetAssemblies();
                 var modules = new List<IModule>();
                 foreach (var assembly in assesmblies)
                 {
                     var instances = from t in assembly.GetTypes()
-                        where TypeExtensions.GetInterfaces(t).Contains(typeof(IModule))
-                              && t.GetConstructor(Type.EmptyTypes) != null
-                        select Activator.CreateInstance(t) as IModule;
+                                    where TypeExtensions.GetInterfaces(t).Contains(typeof(IModule))
+                                          && t.GetConstructor(Type.EmptyTypes) != null
+                                    select Activator.CreateInstance(t) as IModule;
 
                     modules.AddRange(instances);
                 }
+                var installedModules = moduleService.Service.GetList("Where IsInstalled=1",new{});
+                if (installedModules.Any())
+                {
+                    foreach (var installed in installedModules)
+                    {
+                        modules.Find(e => e.Name.ToLower() == installed.Name.ToLower()).IsInstalled = true;
+                    }
+                }
                 _services.TryAddSingleton(new ModuleContainer(modules));
                 _logger.Log(LogType.Trace, () => $"Total {modules.Count} Modules Found.");
-                foreach (var instance in modules)
-                {
-                    ModulesAssemblies.TryAdd(instance.Name, instance.Assembly);
-                }
-                var modulesFileProvider = new ModuleViewProvider(ModulesAssemblies);
-               
+                serviceProvider = _services.BuildServiceProvider();
+                var moduleManager = serviceProvider.GetService<IModuleManager>();
+                var modulesFileProvider = new ModuleViewProvider(moduleManager);
+
                 _services.Configure<RazorViewEngineOptions>(options =>
                 {
                     options.FileProviders.Add(modulesFileProvider);
@@ -59,7 +65,7 @@ namespace Kachuwa.Web.Module
             }
             catch (Exception e)
             {
-                _logger.Log(LogType.Error, () => $"Razor engine module adding error.",e);
+                _logger.Log(LogType.Error, () => $"Razor engine module adding error.", e);
                 throw;
             }
         }

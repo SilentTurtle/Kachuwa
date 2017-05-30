@@ -67,7 +67,11 @@ namespace Kachuwa.Web.Module
                     context.Response.StatusCode = 404;
                     return;
                 }
-
+                if (!moduleAssembly.IsInstalled)
+                {
+                    context.Response.StatusCode = 404;
+                    return;
+                }
                 var provider = new EmbeddedFileProvider(moduleAssembly.Assembly);
                 var resourceFilepath = path.Replace("/module/", "");
                 //since embedded resource is case sensitive and we need to resources folders file in lowercase

@@ -13,6 +13,7 @@ namespace Kachuwa.Web
         {
             
             services.AddSingleton<IScriptRunner, SQLScriptRunner>();
+            services.AddSingleton<IModuleService, ModuleService>();
             services.AddSingleton<IModuleManager, ModuleManager>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ISmsSender, SmsSender>();
