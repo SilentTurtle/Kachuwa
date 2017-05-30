@@ -20,6 +20,12 @@ namespace Kachuwa.Web.Theme
             //);
             ThemeManager.Instance.SetThemeResolver(new DefaultThemeResolver());
         }
+        /// <summary>
+        /// Register Themes services with out tenant 
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection RegisterThemeService(this IServiceCollection service, ThemeConfiguration configuration)
         {
             service.Configure<RazorViewEngineOptions>(options =>
@@ -29,6 +35,23 @@ namespace Kachuwa.Web.Theme
 
             });
             service.TryAddSingleton<IThemeConfig>(configuration);
+            service.TryAddSingleton<IThemeResolver, DefaultThemeResolver>();
+            return service;
+        }
+
+        /// <summary>
+        /// Regiser themes services for adaptation of tenant
+        /// </summary>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        public static IServiceCollection RegisterThemeService(this IServiceCollection service)
+        {
+            service.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new ThemeLocationExpander());
+                options.ViewLocationExpanders.Add(new ComponentViewLocationExpander());
+
+            });
             service.TryAddSingleton<IThemeResolver, DefaultThemeResolver>();
             return service;
         }

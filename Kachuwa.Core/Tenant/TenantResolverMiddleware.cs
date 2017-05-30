@@ -25,7 +25,7 @@ namespace Kachuwa.Tenant
             _logger.Log(LogType.Trace, () => string.Format("Resolved tenant. Current tenant: {0}", tenant.Name));
 
             var currentTenant = new CurrentTenant(tenant);
-            context.Items["Tenant"] = currentTenant;
+            context.Items[TenantConstant.TenantContextKey] = currentTenant;
 
             await _next(context);
         }

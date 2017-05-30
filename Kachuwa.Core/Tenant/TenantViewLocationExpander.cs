@@ -37,7 +37,6 @@ namespace Kachuwa.Tenant
                 viewLocations = themeLocations.Concat(viewLocations);
             }
 
-
             return viewLocations;
         }
 

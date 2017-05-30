@@ -11,10 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Kachuwa.Caching;
+using Kachuwa.Configuration;
 using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Plugin;
 using Kachuwa.Storage;
+using Kachuwa.Tenant;
 using Kachuwa.Web;
 using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Builder;
@@ -31,8 +33,14 @@ namespace Kachuwa.Core.Extensions
         public static IServiceCollection RegisterKachuwaCoreServices(this IServiceCollection services,
             IServiceProvider serviceProvider)
         {
+            var configuration = serviceProvider.GetService<IConfigurationRoot>();
+            // Add functionality to inject IOptions<T>
+            services.AddOptions();// Add our Config object so it can be injected
+            services.Configure<KachuwaAppConfig>(configuration.GetSection("KachuwaAppConfig"));
+            //to access kachuwa app config
+            //IOptions<KachuwaAppConfig> settings or Configuration.GetValue<string>("KachuwaAppConfig:AppName");  
+
             services.AddHttpContextAccessor();
-            
             //registering service for later use
             services.AddSingleton(services);
             services.TryAddSingleton<ILoggerSetting, DefaultLoggerSetting>();
@@ -63,16 +71,17 @@ namespace Kachuwa.Core.Extensions
             {
                 
             });
-            
+           
+            services.RegisterTenantService();
             services.RegisterKachuwaWeb();
 
-            services.RegisterThemeService(new ThemeConfiguration()
-            {
-                Directory = "~/Themes",
-                FrontendThemeName = "Default",
-                BackendThemeName = "Admin",
-                ThemeResolver = new DefaultThemeResolver()
-            });
+            ////services.RegisterThemeService(new ThemeConfiguration()
+            ////{
+            ////    Directory = "~/Themes",
+            ////    FrontendThemeName = "Default",
+            ////    BackendThemeName = "Admin",
+            ////    ThemeResolver = new DefaultThemeResolver()
+            ////});
             //services.Configure<ApplicationInsightsSettings>(options => configuration.GetSection("ApplicationInsights").Bind(options));
 
             //enable socket
@@ -93,6 +102,7 @@ namespace Kachuwa.Core.Extensions
         }
         public static IApplicationBuilder UseKachuwaCore(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
+            app.UseTenant();
             //TODO cache middle ware causing problem
             app.UseMiddleware<CacheMiddleware>();
             app.UseKSockets(serviceProvider);

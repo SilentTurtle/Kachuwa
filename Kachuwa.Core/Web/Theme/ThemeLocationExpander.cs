@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Kachuwa.Tenant;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ namespace Kachuwa.Web.Theme
         public void PopulateValues(ViewLocationExpanderContext context)
         {
             //TODO:: for multitenat setup
-            var theme = (IThemeConfig)context.ActionContext.HttpContext.Items["Theme"];
+            var tenant = (CurrentTenant)context.ActionContext.HttpContext.Items[TenantConstant.TenantContextKey];
             context.Values["themedir"] = "Themes";//theme.Directory;
 
             var themeconfig = context.ActionContext.HttpContext.RequestServices.GetService<IThemeConfig>();
@@ -22,11 +23,11 @@ namespace Kachuwa.Web.Theme
             var area = context.ActionContext.RouteData.Values["area"];
             if (area != null)
             {
-                themeName = themeconfig.BackendThemeName;
+                themeName = tenant.Info.ThemeConfig.BackendThemeName; //themeconfig.BackendThemeName;
             }
             else
             {
-                themeName = themeconfig.FrontendThemeName;
+                themeName = tenant.Info.ThemeConfig.FrontendThemeName; //themeconfig.FrontendThemeName;
             }
 
             context.Values["themename"] = themeName;
@@ -43,13 +44,13 @@ namespace Kachuwa.Web.Theme
                 return viewLocations;
             }
 
-            object kpageUrl = context.ActionContext.HttpContext.Items["KPageUrl"];
             string theme = context.Values["themename"];
+            var currentTenant = (CurrentTenant)context.ActionContext.HttpContext.Items[TenantConstant.TenantContextKey];
             //only for layout file look up
             IEnumerable<string> themeLocations = new[]
             {
-               // $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
-                $"/Themes/{theme}/Views/Shared/{{0}}.cshtml",
+                   // $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
+                   $"/Themes/{currentTenant.Info.Name}/{theme}/Views/Shared/{{0}}.cshtml",
                    $"/Themes/Shared/{theme}/Views/Shared/{{0}}.cshtml"
             };
             //default view path must be preserved other wise components wont load

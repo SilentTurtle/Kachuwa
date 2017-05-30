@@ -7,28 +7,26 @@ namespace Kachuwa.Tenant
 {
     public class TenantResolver : ITenantResolver
     {
-        IEnumerable<Tenant> _tenants = new List<Tenant>(new[]
+        private readonly ITenantService _tenantService;
+
+        public TenantResolver(ITenantService tenantService)
         {
-            new Tenant("") {
-                Name = "Tenant 1",
-                Hostnames = new[] { "localhost:6000", "localhost:6001" }
-            },
-            new Tenant("") {
-                Name = "Tenant 2",
-                Hostnames = new[] { "localhost:6002" }
-            }
-        });
+            _tenantService = tenantService;
+        }
 
         public async Task<Tenant> ResolveAsync(HttpContext context)
         {
-            var tenant = _tenants.FirstOrDefault(t =>
-                t.Hostnames.Any(h => h.Equals(context.Request.Host.Value.ToLower())));
+
+            //TODO 
+            var tenants = await _tenantService.GetTenantsAsync();
+            var tenant = tenants.FirstOrDefault(t =>
+                  t.Hostnames.Any(h => h.Equals(context.Request.Host.Value.ToLower())));
             if (tenant != null)
             {
                 return tenant;
             }
 
-            return null;
+            return tenants.First();
         }
     }
 }

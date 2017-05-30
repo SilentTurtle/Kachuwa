@@ -2,19 +2,23 @@ using Microsoft.AspNetCore.Http;
 
 namespace Kachuwa.Tenant
 {
+    public static class TenantConstant
+    {
+        public  const string TenantContextKey = "KachuwaCurrentTenant";
+    }
     public static class TenantHttpContextExtensions
     {
-        private const string TenantContextKey = "KachuwaCurrentTenant";
+       
 
         public static void SetCurrentTenant(this HttpContext context,CurrentTenant currentTenant)
         {
-            context.Items[TenantContextKey] = currentTenant;
+            context.Items[TenantConstant.TenantContextKey] = currentTenant;
         }
 
         public static CurrentTenant GetCurrentTenant(this HttpContext context)
         {
             object tenantContext;
-            if (context.Items.TryGetValue(TenantContextKey, out tenantContext))
+            if (context.Items.TryGetValue(TenantConstant.TenantContextKey, out tenantContext))
             {
                 return tenantContext as CurrentTenant;
             }
