@@ -62,7 +62,16 @@ namespace Kachuwa.Identity.ClaimFactory
                     identity.RemoveClaim(usernameClaim);
                     identity.AddClaim(new Claim(JwtClaimTypes.PreferredUserName, username));
                 }
-
+             
+                if (!identity.HasClaim(x => x.Type == ClaimTypes.Role))
+                {
+                   var roles= await UserManager.GetRolesAsync(user);
+                    foreach (var role in roles)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                    }
+                    
+                }
                 if (!identity.HasClaim(x => x.Type == JwtClaimTypes.Name))
                 {
                     identity.AddClaim(new Claim(JwtClaimTypes.Name, username));
