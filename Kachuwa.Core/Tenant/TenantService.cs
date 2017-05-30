@@ -14,26 +14,40 @@ namespace Kachuwa.Tenant
         private IEnumerable<Tenant> _tenants = new List<Tenant>(new[]
          {
             new Tenant("") {
-                Name = "Tenant 1",
-                Hostnames = new[] { "localhost:8888", "localhost:8889" }
+                Name = "entrancestudies.com",
+                Hostnames = new[] { "entrancestudies.com" }
                 ,ThemeConfig = new ThemeConfiguration()
                 {
                     BackendThemeName = "Admin",
-                    FrontendThemeName = "Default",
+                    FrontendThemeName = "M2",
                     Directory = "Themes",
                     ThemeResolver = new DefaultThemeResolver()
                 }
             },
             new Tenant("") {
-                Name = "Tenant 2",
-                Hostnames = new[] { "localhost:9000" }
+                Name = "science.entrancestudies.com",
+                Hostnames = new[] { "science.entrancestudies.com" }
                    ,ThemeConfig = new ThemeConfiguration()
                 {
                     BackendThemeName = "Admin",
-                    FrontendThemeName = "Theme2",
+                    FrontendThemeName = "M2",
                     Directory = "Themes",
                     ThemeResolver = new DefaultThemeResolver()
-                }
+                },
+                CategoryId = 2
+            }
+            ,
+            new Tenant("") {
+                Name = "management.entrancestudies.com",
+                Hostnames = new[] { "science.entrancestudies.com" }
+                   ,ThemeConfig = new ThemeConfiguration()
+                {
+                    BackendThemeName = "Admin",
+                    FrontendThemeName = "M2",
+                    Directory = "Themes",
+                    ThemeResolver = new DefaultThemeResolver()
+                },
+                CategoryId = 2
             }
         });
 

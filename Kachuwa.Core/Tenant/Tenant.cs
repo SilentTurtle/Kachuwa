@@ -15,6 +15,7 @@ namespace Kachuwa.Tenant
         public IThemeConfig ThemeConfig { get; set; }
 
         public string ConnectionString { get; private set; }
+        public int CategoryId { get; set; }
 
     }
 }
