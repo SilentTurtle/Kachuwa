@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Identity.Models
 {
@@ -31,7 +32,7 @@ namespace Kachuwa.Identity.Models
         {
             UserName = userName;
         }
-
+        [Key]
         public virtual TKey Id { get; set; }
         public virtual string UserName { get; set; }
         public virtual string Email { get; set; }

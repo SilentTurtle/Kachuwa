@@ -21,16 +21,21 @@ namespace Kachuwa.Web.Theme
             //temporary for single site
             string themeName = "";
             var area = context.ActionContext.RouteData.Values["area"];
-            if (area != null)
-            {
-                themeName = tenant.Info.ThemeConfig.BackendThemeName; //themeconfig.BackendThemeName;
-            }
-            else
-            {
-                themeName = tenant.Info.ThemeConfig.FrontendThemeName; //themeconfig.FrontendThemeName;
-            }
 
-            context.Values["themename"] = themeName;
+            //no context when loading partial views
+            if (tenant != null)
+            {
+                if (area != null)
+                {
+                    themeName = tenant.Info.ThemeConfig.BackendThemeName; //themeconfig.BackendThemeName;
+                }
+                else
+                {
+                    themeName = tenant.Info.ThemeConfig.FrontendThemeName; //themeconfig.FrontendThemeName;
+                }
+
+                context.Values["themename"] = themeName;
+            }
         }
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {

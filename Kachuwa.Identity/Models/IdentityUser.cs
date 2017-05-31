@@ -5,8 +5,8 @@ namespace Kachuwa.Identity.Models
     [Table("IdentityUser")]
     public class IdentityUser:KachuwaIdentityUser
     {
-        [Key]
-        public new long Id { get; set; }
+        
+        //public new long Id { get; set; }
 
         //public string Username { get; set; }
 
