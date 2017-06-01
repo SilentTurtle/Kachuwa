@@ -1,52 +1,44 @@
 using System.Collections.Generic;
 using System.Linq;
+using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Tenant
 {
     public class TenantViewLocationExpander : IViewLocationExpander
     {
-        private const string THEME_KEY = "theme", TENANT_KEY = "tenant";
-
         public void PopulateValues(ViewLocationExpanderContext context)
         {
-          //  context.Values[THEME_KEY]
-            //    = context.ActionContext.HttpContext.GetTenant()?.Theme;
+            var tenant = (CurrentTenant)context.ActionContext.HttpContext.Items[TenantConstant.TenantContextKey];
+            string tenantName = tenant.Info.Name;
+            var area = context.ActionContext.RouteData.Values["area"];
 
-            context.Values[TENANT_KEY]
-                = context.ActionContext.HttpContext.GetTenant()?.Name.Replace(" ", "-");
+            //no context when loading partial views
+            if (tenantName != null)
+            {
+                context.Values["CurrentTenant"] = tenantName;
+            }
         }
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            string theme = null;
-            if (context.Values.TryGetValue(THEME_KEY, out theme))
+            string tenantName = null;
+            if (context.Values.TryGetValue("CurrentTenant", out tenantName))
             {
-                IEnumerable<string> themeLocations = new[]
+                IEnumerable<string> tenantviewLocation = new[]
                 {
-                    $"/Themes/{theme}/{{1}}/{{0}}.cshtml",
-                    $"/Themes/{theme}/Shared/{{0}}.cshtml"
+                    $"/Views/{tenantName}/{{1}}/{{0}}.cshtml",
+                    $"/Views/{tenantName}/Shared/{{0}}.cshtml"
                 };
 
-                string tenant;
-                if (context.Values.TryGetValue(TENANT_KEY, out tenant))
-                {
-                    themeLocations = ExpandTenantLocations(tenant, themeLocations);
-                }
+                //TODO::Area view location
 
-                viewLocations = themeLocations.Concat(viewLocations);
+                viewLocations = tenantviewLocation.Concat(viewLocations);
             }
 
             return viewLocations;
         }
 
-        private IEnumerable<string> ExpandTenantLocations(string tenant, IEnumerable<string> defaultLocations)
-        {
-            foreach (var location in defaultLocations)
-            {
-                yield return location.Replace("{0}", $"{{0}}_{tenant}");
-                yield return location;
-            }
-        }
     }
 }
