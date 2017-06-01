@@ -72,4 +72,19 @@ CREATE TABLE dbo.IdentityUserToken
 --	ON dbo.IdentityUserToken 					(UserId, LoginProvider)
 --	include (Name)
 
-
+CREATE TABLE dbo.AppUser
+(		AppUserId					bigint primary key identity(1,1),
+		IdentityUserId				bigint not null,
+		FirstName					nvarchar(256) not null,
+        	LastName					nvarchar(256) not null,
+        Bio							nvarchar(2000),
+        Email						nvarchar(256) not null,
+        Address						nvarchar(256) not null,      
+        PhoneNumber					nvarchar(256)  null,        
+        DOB							nvarchar(256)  null,
+        ProfilePicture				nvarchar(256)  null,		 
+		IsActive                                bit NOT NULL Default(1),
+		IsDeleted                               bit NOT NULL Default(0),
+		AddedOn                                 datetime NOT NULL Default(GETDATE()),
+		AddedBy                                 national character varying(256)
+);
