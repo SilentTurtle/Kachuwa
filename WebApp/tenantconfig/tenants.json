@@ -3,7 +3,7 @@
     "$type": "Kachuwa.Tenant.Tenant, Kachuwa.Core",
     "Name": "mysitename.com",
     "Hostnames": [
-      "mysitename.com"
+      "mysitename.com","localhost"
     ],
     "ThemeConfig": {
       "$type": "Kachuwa.Web.Theme.ThemeConfiguration, Kachuwa.Core",
