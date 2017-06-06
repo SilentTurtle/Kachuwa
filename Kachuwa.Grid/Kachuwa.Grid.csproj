@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Documentation.md" />
     <None Remove="resources\css\kgridstyle.css" />
   </ItemGroup>
 

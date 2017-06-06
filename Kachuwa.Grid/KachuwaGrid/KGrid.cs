@@ -65,7 +65,9 @@ namespace Kachuwa.KGrid
             Columns = new KachuwaGridColumns<T>(this);
             Rows = new KachuwaGridRows<T>(this);
             Commands = new KachuwaGridCommands<T>(this);
-            Pager=new KachuwaPager(100,1);
+           var row = Rows.FirstOrDefault();
+           int rowTotal=row==null?0: row.GetRowTotal();
+            Pager = new KachuwaPager(rowTotal, 1);
         }
         public String NoDataText { get; set; }
       

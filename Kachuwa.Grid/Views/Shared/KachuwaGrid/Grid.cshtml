@@ -25,7 +25,7 @@
                     </th>
 
                 }
-                <th style="width: 20%;">
+                <th style="width: 15%;">
 
                 </th>
 
@@ -48,7 +48,7 @@
                                 @column.ValueFor(row)
                             </td>
                         }
-                        <td style="width: 20%;">
+                        <td style="width: 15%;">
                             @foreach (IKachuwaGridCommand command in Model.Commands)
                             {
                                 <a href="#" class="command-link @command.CssClasses"
@@ -59,8 +59,6 @@
                                     </span>
                                 </a>
 
-
-
                             }
                         </td>
 
@@ -70,18 +68,14 @@
             else if (Model.NoDataText != null)
             {
                 <tr>
-                    <td class="mvc-grid-empty" colspan="@Model.Columns.Count()">
+                    <td></td>
+                    @{ var totalCols = Model.Columns.Count() + 1;}
+                    <td class="kachuwa-grid-emptyrow" colspan="@totalCols">
                         @Model.NoDataText
                     </td>
                 </tr>
             }
         </tbody>
-        @*@if (Model.FooterPartialViewName)
-            {  @Html.Partial("KachuwaGrid/_Pager", Model.Pager)
-                <tfoot>
-                    @Html.Partial(Model.FooterPartialViewName, Model)
-                </tfoot>
-            }*@
     </table>
     @if (Model.Pager != null)
     {

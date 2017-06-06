@@ -29,6 +29,21 @@ namespace Kachuwa.KGrid
             return value;
 
         }
+        public static int GetRowTotal(this IKachuwaGridRow<Object> row)
+        {
+            int value = 0;
+            foreach (var prop in row.Model.GetType().GetProperties())
+            {
+
+                if (prop.Name.ToLower()=="rowtotal")
+                {
+                    value = (int)prop.GetValue(row.Model);
+                   
+                }
+            }
+            return value;
+
+        }
 
         public static IKachuwaGridColumn<TModel> RenderedAs<TModel>(this IKachuwaGridColumn<TModel> column, Func<TModel, Object> value)
         {
