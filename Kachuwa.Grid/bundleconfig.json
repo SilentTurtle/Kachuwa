@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "resources/css/kgridstyle.min.css",
+    "inputFiles": [
+      "resources/css/kgridstyle.css"
+    ]
+  }
+]
