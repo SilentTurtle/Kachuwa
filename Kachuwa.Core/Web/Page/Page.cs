@@ -11,7 +11,6 @@ namespace Kachuwa.Web
         public long PageId { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public string Location { get; set; }
         public string Content { get; set; }
         public bool IsPublished { get; set; }
         [Hide]

@@ -1,0 +1,93 @@
+﻿@using Kachuwa.KGrid;
+@model IKachuwaGrid
+
+
+@section cssStyles {
+
+    <link href="/module/KachuwaGrid/resources/css/kgridstyle.css" rel="stylesheet" />
+}
+
+<link href="/module/KachuwaGrid/resources/css/kgridstyle.css" rel="stylesheet" />
+
+<div id="@Model.Name" class="kachuwa-grid">
+    <table class="table @Model.CssClasses">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                @foreach (IKachuwaGridColumn column in Model.Columns)
+                {
+
+                    <th class=" @column.CssClasses"
+                        data-name="@column.Name">
+                        <span class="kachuwa-grid-header">@column.Title</span>
+                    </th>
+
+                }
+                <th style="width: 15%;">
+
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Rows.Any())
+            {
+                foreach (IKachuwaGridRow<Object> row in Model.Rows)
+                {
+                    <tr class="@row.CssClasses">
+
+                        <td>
+                            <input type="checkbox" value="@row.GetPriamaryKey()" class="kachuwa-grid-item" />
+                        </td>
+
+                        @foreach (IKachuwaGridColumn column in Model.Columns)
+                        {
+                            <td class="@column.CssClasses">
+                                @column.ValueFor(row)
+                            </td>
+                        }
+                        <td style="width: 15%;">
+                            @foreach (IKachuwaGridCommand command in Model.Commands)
+                            {
+                                <a href="#" class="command-link @command.CssClasses"
+                                   command="@command.Command"
+                                   onclick="@command.ClientCallback">
+                                    <span class="fa-stack">
+                                        <i class="@command.IconClass "></i>
+                                    </span>
+                                </a>
+
+                            }
+                        </td>
+
+                    </tr>
+                }
+            }
+            else if (Model.NoDataText != null)
+            {
+                <tr>
+                    <td></td>
+                    @{ var totalCols = Model.Columns.Count() + 1;}
+                    <td class="kachuwa-grid-emptyrow" colspan="@totalCols">
+                        @Model.NoDataText
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Pager != null)
+    {
+        <div class="col-md-12">
+            @await Component.InvokeAsync("KachuwaPagination", Model.Pager)
+        </div>
+
+    }
+</div>
+
+
+
+@section scripts{
+    
+}

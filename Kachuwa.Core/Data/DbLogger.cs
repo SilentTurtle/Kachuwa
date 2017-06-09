@@ -76,12 +76,12 @@ namespace Kachuwa.Data
                     DateTime = DateTime.Now.ToString(),
                     Status = messageFunc(),
                     Error = obj == null
-                        ? ""
-                        : JsonConvert.SerializeObject(obj, Formatting.None,
-                            new JsonSerializerSettings()
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                            })
+                        ? "": ((Exception)obj).Source
+                    //: JsonConvert.SerializeObject(obj, Formatting.None,
+                    //    new JsonSerializerSettings()
+                    //    {
+                    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    //    })
                 };
                 string json = JsonConvert.SerializeObject(log);
 

@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Kachuwa.KGrid;
 using Kachuwa.Log;
 using Kachuwa.Web.Razor;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Kachuwa.Web.TagHelpers
@@ -10,6 +12,7 @@ namespace Kachuwa.Web.TagHelpers
     public class PaginationTagHelper : TagHelper
     {
         private readonly IViewRenderService _viewRender;
+        private readonly IViewComponentHelper _componentHelper;
         private readonly ILogger _logger;
 
 
@@ -25,9 +28,9 @@ namespace Kachuwa.Web.TagHelpers
         [HtmlAttributeName("api")]
         public string Api { get; set; }
 
-        public PaginationTagHelper(IViewRenderService viewRender, ILogger logger)
+        public PaginationTagHelper(IViewComponentHelper componentHelper, ILogger logger)
         {
-            _viewRender = viewRender;
+            _componentHelper = componentHelper;
             _logger = logger;
         }
 
@@ -36,10 +39,9 @@ namespace Kachuwa.Web.TagHelpers
             try
             {
                 output.TagName = "div";
-                var pager = new Pager(RowTotal, Page, PageSize);
+                var pager = new KachuwaPager(RowTotal, Page, PageSize);
                 pager.Api = Api;
-                string pagination=await _viewRender.RenderToStringAsync("", "_Pagination", pager);
-                output.Content.AppendHtml(pagination);
+                output.Content.AppendHtml(await _componentHelper.InvokeAsync("KachuwaPagination", pager));
             }
             catch (Exception e)
             {

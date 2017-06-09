@@ -37,7 +37,7 @@ namespace Kachuwa.Caching
             {
 
                 GetServices(context);
-                var requestUrl = context.HttpContext.Request.GetEncodedUrl();
+                var requestUrl = context.HttpContext.Request.Host.Value.ToLower()+"-"+ context.HttpContext.Request.GetEncodedUrl();
                 var cacheKey = requestUrl.ToMd5();
                 var contentType = CacheService.Get<string>(cacheKey + "_contentType");
                 var statusCode = CacheService.Get<string>(cacheKey + "_statusCode");
@@ -96,7 +96,7 @@ namespace Kachuwa.Caching
             {
 
                 GetServices(context);
-                var cacheKey = context.HttpContext.Request.GetEncodedUrl().ToMd5();
+                var cacheKey = context.HttpContext.Request.Host.Value.ToLower()+"-"+ context.HttpContext.Request.GetEncodedUrl().ToMd5();
                 var httpResponse = context.HttpContext.Response;
                 var responseStream = httpResponse.Body;
                 responseStream.Seek(0, SeekOrigin.Begin);

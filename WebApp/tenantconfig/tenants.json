@@ -1,0 +1,20 @@
+[
+  {
+    "$type": "Kachuwa.Tenant.Tenant, Kachuwa.Core",
+    "Name": "mysitename.com",
+    "Hostnames": [
+      "mysitename.com","localhost"
+    ],
+    "ThemeConfig": {
+      "$type": "Kachuwa.Web.Theme.ThemeConfiguration, Kachuwa.Core",
+      "Directory": "Themes",
+      "FrontendThemeName": "Default",
+      "BackendThemeName": "Admin",
+      "LayoutName": "_Layout",
+      "ThemeResolver": {
+        "$type": "Kachuwa.Web.Theme.DefaultThemeResolver, Kachuwa.Core"
+      }
+    },
+    "ConnectionString": ""
+  }
+]

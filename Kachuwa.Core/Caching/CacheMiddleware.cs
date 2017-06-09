@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace Kachuwa.Caching
 {
+    //TODO:: Tenant Support
+    /// <summary>
+    /// Cache Middle cache every view responses
+    /// </summary>
     public class CacheMiddleware
     {
         protected RequestDelegate NextMiddleware;

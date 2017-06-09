@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 
-namespace Kachuwa.Web
+namespace Kachuwa.KGrid
 {
-    public class Pager
+    public class KachuwaPager
     {
-        public Pager(int totalItems, int? page, int pageSize = 10)
+        public KachuwaPager(int totalItems, int? page, int pageSize = 10)
         {
             // calculate total, start and end pages
             var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
@@ -33,8 +33,8 @@ namespace Kachuwa.Web
             EndPage = endPage;
         }
         public int TotalItems { get; private set; }
-        public int CurrentPage { get; private set; }
-        public int PageSize { get; private set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
         public int TotalPages { get; private set; }
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
