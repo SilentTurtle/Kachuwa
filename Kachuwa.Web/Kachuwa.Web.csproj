@@ -22,6 +22,7 @@
     <PackageReference Include="IdentityServer4" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Mustache" Version="1.0.1" />
+	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
 
   <ItemGroup>
