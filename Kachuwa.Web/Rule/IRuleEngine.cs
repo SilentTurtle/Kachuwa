@@ -4,40 +4,23 @@ using System.Text;
 
 namespace Kachuwa.Web.Rule
 {
+    public interface IRuleActions<T>
+    {
+        string Name { get; }
+        T OnModel { get; set; }
+
+    }
+
+    public class OrderRuleActions
+    {
+        
+    }
     public interface IRuleEngine
     {
         string Name { get; set; }
         string Version { get; set; }
-        bool Validate(Rule rule);
+        Func<T, bool> CompileRule<T>(RuleCondition r);
+        Func<T, bool> CompileRules<T>(IList<RuleCondition> rules);
 
-    }
-
-    public class Rule
-    {
-        
-    }
-    
-    public class RuleEngineAttribute : Attribute
-    {
-        public RuleEngineAttribute(string ruleName)
-        {
-            RuleName = ruleName;
-        }
-
-        public string RuleName { get; set; }
-
-        public bool IsDefault { get; set; }
-
-        public bool NoCustomRuleCode { get; set; }
-    }
-
-    public class TicketRuleEngine: IRuleEngine
-    {
-        public string Name { get; set; }
-        public string Version { get; set; }
-        public bool Validate(Rule rule)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
