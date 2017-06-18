@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Kachuwa.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +9,11 @@ using Microsoft.Extensions.Logging;
 using Kachuwa.Core.Extensions;
 using Kachuwa.Log.Insight;
 using Kachuwa.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApp
 {
@@ -34,8 +40,15 @@ namespace WebApp
             var serviceProvider=services.BuildServiceProvider();
             services.RegisterKachuwaCoreServices(serviceProvider);
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                options.SerializerSettings.Formatting = Formatting.Indented;
+            });
+            //enable directory browsing
+            //services.AddDirectoryBrowser();
            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +71,28 @@ namespace WebApp
             }
            
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"Themes")),
+                RequestPath = new PathString("/themes")
+            });
+            // app.UseDirectoryBrowser(new DirectoryBrowserOptions()
+            // {
+            //     FileProvider = new PhysicalFileProvider(
+            //Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "images")),
+            //     RequestPath = new PathString("/MyImages")
+            // });
+            //app.UseStaticFiles(); // For the wwwroot folder
+
+            app.UseFileServer(new FileServerOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
+                RequestPath = new PathString("/dev/logs"),
+                EnableDirectoryBrowsing = true,
+                
+            });
             app.UseIdentity();
             app.UseIdentityServer();
             app.UseStaticHttpContext();
