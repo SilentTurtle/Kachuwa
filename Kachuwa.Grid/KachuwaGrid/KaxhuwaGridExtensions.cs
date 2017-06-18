@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Kachuwa.Data;
 using Kachuwa.Data.Crud.Attribute;
+using Kachuwa.Form;
+using Microsoft.SqlServer.Server;
+using Mustache;
 
 namespace Kachuwa.KGrid
 {
@@ -90,8 +93,31 @@ namespace Kachuwa.KGrid
         {
             return new KachuwaHtmlGrid<T>(html, new KachuwaGrid<T>(source)) { PartialViewName = partialViewName };
         }
-       
 
-       
+        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html) where T : class
+        {
+            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>());
+        }
+        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html,T modalObj) where T : class
+        {
+            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>(modalObj));
+        }
+        public static string Render<T>(this IKachuwaHtmlForm<T> form) where T : class
+        {
+            var res = RenderForm(form);
+            return res;
+        }
+
+        private static string RenderForm(Object obj) 
+        {
+            string template =
+                "<div id=\"{{Name}}\" class=\"kachuwa-form\">< form name =\"{{Name}}\" class=\"{{CssClasses}}\"></form></div>";
+
+            FormatCompiler compiler = new FormatCompiler();
+            Generator generator = compiler.Compile(template);
+            string result = generator.Render(obj);
+            return result;
+        }
+
     }
 }

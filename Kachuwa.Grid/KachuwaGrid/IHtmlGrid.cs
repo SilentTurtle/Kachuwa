@@ -6,7 +6,7 @@ namespace Kachuwa.KGrid
     public interface IHtmlGrid<T> : IHtmlContent
     {
         IKachuwaGrid<T> Grid { get; }
-        String PartialViewName { get; set; }
+        string PartialViewName { get; set; }
         IHtmlGrid<T> Pagination(Action<KachuwaPager> builder);
         IHtmlGrid<T> Build(Action<IKachuwaGridColumnsOf<T>> builder);
         //IHtmlGrid<T> ProcessWith(IGridProcessor<T> processor);
@@ -18,10 +18,10 @@ namespace Kachuwa.KGrid
         //IHtmlGrid<T> Sortable(Boolean isSortable);
         //IHtmlGrid<T> Sortable();
 
-        IHtmlGrid<T> RowCss(Func<T, String> cssClasses);
-        IHtmlGrid<T> Css(String cssClasses);
-        IHtmlGrid<T> Empty(String text);
-        IHtmlGrid<T> Named(String name);
+        IHtmlGrid<T> RowCss(Func<T, string> cssClasses);
+        IHtmlGrid<T> Css(string cssClasses);
+        IHtmlGrid<T> Empty(string text);
+        IHtmlGrid<T> Named(string name);
 
         //IHtmlGrid<T> Pageable(Action<IGridPager<T>> builder);
         // IHtmlGrid<T> Pageable();

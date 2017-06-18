@@ -9,7 +9,7 @@ namespace Kachuwa.KGrid
     {
         public IKachuwaGrid<T> Grid { get; set; }
         public IHtmlHelper Html { get; set; }
-        public String PartialViewName { get; set; }
+        public string PartialViewName { get; set; }
 
         public KachuwaHtmlGrid(IHtmlHelper html, IKachuwaGrid<T> grid)
         {
@@ -41,25 +41,25 @@ namespace Kachuwa.KGrid
       
        
 
-        public virtual IHtmlGrid<T> RowCss(Func<T, String> cssClasses)
+        public virtual IHtmlGrid<T> RowCss(Func<T, string> cssClasses)
         {
             Grid.Rows.CssClasses = cssClasses;
 
             return this;
         }
-        public virtual IHtmlGrid<T> Css(String cssClasses)
+        public virtual IHtmlGrid<T> Css(string cssClasses)
         {
             Grid.CssClasses = cssClasses;
 
             return this;
         }
-        public virtual IHtmlGrid<T> Empty(String text)
+        public virtual IHtmlGrid<T> Empty(string text)
         {
             Grid.NoDataText = text;
 
             return this;
         }
-        public virtual IHtmlGrid<T> Named(String name)
+        public virtual IHtmlGrid<T> Named(string name)
         {
             Grid.Name = name;
 

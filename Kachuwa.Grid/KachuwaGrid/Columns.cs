@@ -15,10 +15,10 @@ namespace Kachuwa.KGrid
 {
     public interface IKachuwaGridColumn
     {
-        String Name { get; set; }
-        String Format { get; set; }
-        String CssClasses { get; set; }
-        Boolean IsEncoded { get; set; }
+        string Name { get; set; }
+        string Format { get; set; }
+        string CssClasses { get; set; }
+        bool IsEncoded { get; set; }
         IHtmlContent Title { get; set; }
         IHtmlContent ValueFor(IKachuwaGridRow<Object> row);
     }
@@ -45,10 +45,10 @@ namespace Kachuwa.KGrid
 
     public abstract class BaseKachuwaGridColumn<T, TValue> : IKachuwaGridColumn<T>
     {
-        public String Name { get; set; }
-        public String Format { get; set; }
-        public String CssClasses { get; set; }
-        public Boolean IsEncoded { get; set; }
+        public string Name { get; set; }
+        public string Format { get; set; }
+        public string CssClasses { get; set; }
+        public bool IsEncoded { get; set; }
         public IHtmlContent Title { get; set; }
         public IKachuwaGrid<T> Grid { get; set; }
         public Func<T, Object> RenderValue { get; set; }
@@ -95,7 +95,7 @@ namespace Kachuwa.KGrid
                 }
                 else
                 {
-                    value = String.Format(Format, value);
+                    value = string.Format(Format, value);
                 }
             }
             if (IsEncoded)

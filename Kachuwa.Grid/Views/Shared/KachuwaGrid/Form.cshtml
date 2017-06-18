@@ -1,0 +1,229 @@
+﻿@using Kachuwa.Form;
+@model Kachuwa.Form.IForm
+
+
+
+<div id="@Model.Name" class="kachuwa-form">
+
+    <form name="@Model.Name" class="@Model.CssClasses">
+        @foreach (Kachuwa.Form.IFormSection formSection in Model.Sections)
+            {
+
+            <section name="@formSection.Name" class="@formSection.CssClasses">
+
+
+                @if (!string.IsNullOrEmpty(formSection.Heading))
+                {
+                    <h2>@formSection.Heading</h2>
+                }
+                @if (!string.IsNullOrEmpty(formSection.SubHeading))
+                {
+                    <h4>@formSection.SubHeading</h4>
+                }
+                @if (!string.IsNullOrEmpty(formSection.HelpLine))
+                {
+                    <p>@formSection.HelpLine</p>
+                }
+
+                @foreach (var row in formSection.Rows)
+                {
+                    <div class="@row.CssClasses">
+
+                        @{ int ColumnNo = row.Columns.Count();}
+                        @foreach (var column in row.Columns)
+                        {
+                            if (ColumnNo > 1)
+                            {
+                                <div class="@column.CssClasses">
+                                    @foreach (var control in column.Controls)
+                                    {
+                                        if (control.InputType != FormInputControl.Hidden)
+                                        {
+                                            <label for="@control.Id">@control.DisplayName</label>
+                                        }
+
+
+                                        switch (control.InputType)
+                                        {
+                                            case FormInputControl.Hidden:
+                                                <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" />
+                                                break;
+                                            case FormInputControl.CheckBox:
+                                                <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                                      name="@control.Name"
+                                                      checked="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.CheckBoxList:
+                                                break;
+                                            case FormInputControl.Color:
+                                                <input type="color" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)"
+                                                        />
+                                                break;
+                                            case FormInputControl.Date:
+                                                <input type="date" class="datepicker @control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.DateTime:
+                                                <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.Editor:
+                                                break;
+                                            case FormInputControl.Email:
+                                                <input type="email" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.File:
+                                                break;
+                                            case FormInputControl.Image:
+                                                break;
+                                            case FormInputControl.Number:
+                                                <input type="number" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.Password:
+                                                <input type="password" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.Radio:
+                                                <input type="radio" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" checked="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.RadioList:
+                                                break;
+                                            case FormInputControl.Select:
+                                                <select class="@control.CssClasses" name="@control.Name"></select>
+                                                break;
+                                            case FormInputControl.Telephone:
+                                                <input type="tel" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.Url:
+                                                <input type="url" class="@control.CssClasses" id="@control.Id"
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                break;
+                                            case FormInputControl.TextArea:
+                                                <textarea  class="@control.CssClasses" name="@control.Name" id="@control.Id" ></textarea>
+                                                break;
+                                            case 0:
+                                                <input type="text" class="@control.CssClasses" id="@control.Id"
+                                                       value="@control.ValueFor(Model.FormModel)" 
+                                                       placeholder="@control.PlaceHolder" />
+                                                break;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(control.Help))
+                                        {
+                                            <small class="form-text text-muted control-help">@control.Help</small>
+                                        }
+
+
+                                    }
+                                </div>
+
+                            }
+                            else
+                            {
+                                foreach (var control in column.Controls)
+                                {
+                                    if (control.InputType != FormInputControl.Hidden)
+                                    {
+                                        <label for="@control.Id">@control.DisplayName</label>
+                                    }
+
+                                    switch (control.InputType)
+                                    {
+                                        case FormInputControl.Hidden:
+                                            <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" />
+                                            break;
+                                        case FormInputControl.CheckBox:
+                                            <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name"
+                                                   checked="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.CheckBoxList:
+                                            break;
+                                        case FormInputControl.Color:
+                                            <input type="color" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.Date:
+                                            <input type="date" class="datepicker @control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.DateTime:
+                                            <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.Editor:
+                                            break;
+                                        case FormInputControl.Email:
+                                            <input type="email" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.File:
+                                            break;
+                                        case FormInputControl.Image:
+                                            break;
+                                        case FormInputControl.Number:
+                                            <input type="number" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.Password:
+                                            <input type="password" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.Radio:
+                                            <input type="radio" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" checked="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.RadioList:
+                                            break;
+                                        case FormInputControl.Select:
+                                            <select class="@control.CssClasses" name="@control.Name" id="@control.Id">
+                                                @control.RenderControlSource()
+                                            </select>
+                                            break;
+                                        case FormInputControl.Telephone:
+                                            <input type="tel" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.Url: 
+                                            <input type="url" class="@control.CssClasses" id="@control.Id"
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            break;
+                                        case FormInputControl.TextArea:
+                                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"></textarea>
+                                            break;
+                                        case 0:
+                                            <input type="text" class="@control.CssClasses" 
+                                                   id="@control.Id"  value="@control.ValueFor(Model.FormModel)" 
+                                                   placeholder="@control.PlaceHolder" />
+                                            break;
+                                    }
+                                    if (!string.IsNullOrEmpty(control.Help))
+                                    {
+                                        <small class="form-text text-muted control-help">@control.Help</small>
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    </div>
+                            }
+
+            </section>
+                            }
+
+    </form>
+
+</div>
+
+
+
+@section scripts{
+
+}

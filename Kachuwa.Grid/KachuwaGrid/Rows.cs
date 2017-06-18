@@ -14,7 +14,7 @@ namespace Kachuwa.KGrid
     }
     public interface IKachuwaGridRow<out T>
     {
-        String CssClasses { get; set; }
+        string CssClasses { get; set; }
         T Model { get; }
     }
     public interface IKachuwaGridRows<out T> : IEnumerable<IKachuwaGridRow<T>>
@@ -23,7 +23,7 @@ namespace Kachuwa.KGrid
 
     public interface IKachuwaGridRowsOf<T> : IKachuwaGridRows<T>
     {
-        Func<T, String> CssClasses { get; set; }
+        Func<T, string> CssClasses { get; set; }
         IKachuwaGrid<T> Grid { get; }
     }
     public interface IKachuwaGridRows
@@ -32,7 +32,7 @@ namespace Kachuwa.KGrid
     }
     public class KachuwaGridRow<T> : IKachuwaGridRow<T>
     {
-        public String CssClasses { get; set; }
+        public string CssClasses { get; set; }
         public T Model { get; set; }
 
         public KachuwaGridRow(T model)
@@ -43,7 +43,7 @@ namespace Kachuwa.KGrid
     public class KachuwaGridRows<T> : IKachuwaGridRowsOf<T>
     {
         public IEnumerable<IKachuwaGridRow<T>> CurrentRows { get; set; }
-        public Func<T, String> CssClasses { get; set; }
+        public Func<T, string> CssClasses { get; set; }
         public IKachuwaGrid<T> Grid { get; set; }
 
         public KachuwaGridRows(IKachuwaGrid<T> grid)

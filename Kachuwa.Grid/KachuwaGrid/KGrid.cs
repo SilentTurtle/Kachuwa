@@ -15,9 +15,9 @@ namespace Kachuwa.KGrid
 {
     public interface IKachuwaGrid
     {
-        String Name { get; set; }
-        String NoDataText { get; set; }
-        String CssClasses { get; set; }
+        string Name { get; set; }
+        string NoDataText { get; set; }
+        string CssClasses { get; set; }
         ViewContext ViewContext { get; set; }
         IQueryCollection Query { get; set; }
 
@@ -39,10 +39,10 @@ namespace Kachuwa.KGrid
     public class KachuwaGrid<T> : IKachuwaGrid<T> where T : class
     {
        
-        public String Name { get; set; }
+        public string Name { get; set; }
        
-        public String CssClasses { get; set; }
-        public String FooterPartialViewName { get; set; }
+        public string CssClasses { get; set; }
+        public string FooterPartialViewName { get; set; }
 
         public IQueryable<T> Source { get; set; }
         public IQueryCollection Query { get; set; }
@@ -69,7 +69,7 @@ namespace Kachuwa.KGrid
            int rowTotal=row==null?0: row.GetRowTotal();
             Pager = new KachuwaPager(rowTotal, 1);
         }
-        public String NoDataText { get; set; }
+        public string NoDataText { get; set; }
       
         IKachuwaGridCommands<IKachuwaGridCommand> IKachuwaGrid.Commands => Commands;
         public IKachuwaGridCommandsOf<T> Commands { get; set; }

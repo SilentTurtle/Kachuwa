@@ -17,13 +17,13 @@ namespace Kachuwa.KGrid
 
     public interface IKachuwaGridCommand
     {
-        String Name { get; set; }
-        String Command { get; set; }
-        String CssClasses { get; set; }
-        String IconClass { get; set; }
-        String ClientCallback { get; set; }
-        String Controller { get; set; }
-        String Action { get; set; }
+        string Name { get; set; }
+        string Command { get; set; }
+        string CssClasses { get; set; }
+        string IconClass { get; set; }
+        string ClientCallback { get; set; }
+        string Controller { get; set; }
+        string Action { get; set; }
     }
     public interface IKachuwaGridCommand<T> : IKachuwaGridCommand
     {
@@ -38,21 +38,21 @@ namespace Kachuwa.KGrid
     {
         IKachuwaGrid<T> Grid { get; set; }
 
-        IKachuwaGridCommand<T> Add(String name, String command, String callback);
-        IKachuwaGridCommand<T> Add(String name, String command, String callback, String iconClass);
-        IKachuwaGridCommand<T> Add(String name, String command, String callback, String iconClass, String controller, String action);
+        IKachuwaGridCommand<T> Add(string name, string command, string callback);
+        IKachuwaGridCommand<T> Add(string name, string command, string callback, string iconClass);
+        IKachuwaGridCommand<T> Add(string name, string command, string callback, string iconClass, string controller, string action);
     }
 
 
     public abstract class BaseKachuwaGridCommand<T> : IKachuwaGridCommand<T>
     {
-        public String Name { get; set; }
-        public String Command { get; set; }
-        public String CssClasses { get; set; }
-        public String IconClass { get; set; }
-        public String ClientCallback { get; set; }
-        public String Controller { get; set; }
-        public String Action { get; set; }
+        public string Name { get; set; }
+        public string Command { get; set; }
+        public string CssClasses { get; set; }
+        public string IconClass { get; set; }
+        public string ClientCallback { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
         public IKachuwaGrid<T> Grid { get; set; }
         public Func<T, Object> RenderValue { get; set; }
         //  public Func<T, TValue> ExpressionValue { get; set; }
@@ -66,7 +66,7 @@ namespace Kachuwa.KGrid
     public class KachuwaGridCommand<T> : BaseKachuwaGridCommand<T> where T : class
     {
 
-        public KachuwaGridCommand(IKachuwaGrid<T> grid, String name, String command, String callback)
+        public KachuwaGridCommand(IKachuwaGrid<T> grid, string name, string command, string callback)
         {
             Grid = grid;
             Name = name;
@@ -74,7 +74,7 @@ namespace Kachuwa.KGrid
             ClientCallback = callback;
 
         }
-        public KachuwaGridCommand(IKachuwaGrid<T> grid, String name, String command, String callback, String iconClass)
+        public KachuwaGridCommand(IKachuwaGrid<T> grid, string name, string command, string callback, string iconClass)
         {
             Grid = grid;
             Name = name;
@@ -83,7 +83,7 @@ namespace Kachuwa.KGrid
             IconClass = iconClass;
 
         }
-        public KachuwaGridCommand(IKachuwaGrid<T> grid, String name, String command, String callback, String iconClass, String controller, String action)
+        public KachuwaGridCommand(IKachuwaGrid<T> grid, string name, string command, string callback, string iconClass, string controller, string action)
         {
             Grid = grid;
             Name = name;
@@ -134,7 +134,7 @@ namespace Kachuwa.KGrid
             return GetEnumerator();
         }
 
-        public IKachuwaGridCommand<T> Add(String name, String command, String callback)
+        public IKachuwaGridCommand<T> Add(string name, string command, string callback)
         {
             IKachuwaGridCommand<T> column = new KachuwaGridCommand<T>(Grid, name, command, callback);
             Add(column);
@@ -142,7 +142,7 @@ namespace Kachuwa.KGrid
             return column;
         }
 
-        public IKachuwaGridCommand<T> Add(String name, String command, String callback, String iconClass)
+        public IKachuwaGridCommand<T> Add(string name, string command, string callback, string iconClass)
         {
             IKachuwaGridCommand<T> column = new KachuwaGridCommand<T>(Grid, name, command, callback, iconClass);
             Add(column);
@@ -150,7 +150,7 @@ namespace Kachuwa.KGrid
             return column;
         }
 
-        public IKachuwaGridCommand<T> Add(String name, String command, String callback, String iconClass, String controller, String action)
+        public IKachuwaGridCommand<T> Add(string name, string command, string callback, string iconClass, string controller, string action)
         {
             IKachuwaGridCommand<T> column = new KachuwaGridCommand<T>(Grid, name, command, callback, iconClass, controller, action);
 
