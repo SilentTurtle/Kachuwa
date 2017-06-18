@@ -22,7 +22,7 @@ namespace Kachuwa.Form
 
         FormInputControl InputType { get; set; }
         string DisplayName { get; set; }
-        IEnumerable<object> DataSource { get; set; }
+        IEnumerable<FormInputItem> DataSource { get; set; }
         IHtmlContent RenderControlSource();
         //IHtmlContent RenderDataSource(object model);
 
@@ -33,7 +33,6 @@ namespace Kachuwa.Form
         LambdaExpression Expression { get; }
         Func<T, Object> RenderValue { get; set; }
 
-       // Expression<Func<object, FormInputItem>> DataSourceExpression { get; set; } 
 
 
     }
@@ -45,16 +44,17 @@ namespace Kachuwa.Form
         IForm<T> Form { get; }
 
         IFormInput<T> Add(string name, string classes);//final forms
-        IFormInput<T> Add<TValue>(string classes,Expression<Func<T, TValue>> constraint);
+        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint);
         IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl);
+        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource);
 
-   
+
     }
 
     public enum FormInputControl
     {
-       TextBox, Password, Select, Radio, CheckBox, RadioList, CheckBoxList,
-        Number, File,Image,Email,Url,Telephone,Date,DateTime,Color,TextArea,Editor,Hidden,Template
+        TextBox, Password, Select, Radio, CheckBox, RadioList, CheckBoxList,
+        Number, File, Image, Email, Url, Telephone, Date, DateTime, Color, TextArea, Editor, Hidden, Template
     }
 
     public abstract class BaseFormInput<T, TValue> : IFormInput<T>
@@ -77,10 +77,8 @@ namespace Kachuwa.Form
         public Expression<Func<T, TValue>> Expression { get; set; }
 
 
-        public IEnumerable<object> DataSource { get; set; }
+        public IEnumerable<FormInputItem> DataSource { get; set; }
         public abstract IHtmlContent RenderControlSource();
-        public Expression<Func<T, FormInputItem>> DataSourceExpression { get; set; }
-        public Func<T, FormInputItem> DataSourceExpressionValue { get; set; }
     }
 
     public class FormInput<T, TValue> : BaseFormInput<T, TValue> where T : class
@@ -94,8 +92,8 @@ namespace Kachuwa.Form
             // Expression = expression;
             //ExpressionValue = expression.Compile();
             // Controls=new 
-           DisplayName= Name;
-          
+            DisplayName = Name;
+
 
         }
         public FormInput(IForm<T> form,
@@ -139,28 +137,41 @@ namespace Kachuwa.Form
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
         }
+        public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
+          FormInputControl inputType, IEnumerable<FormInputItem> dataSource)
+        {
+            Form = form;
+            CssClasses = classes;
+            Expression = expression;
+            ExpressionValue = expression.Compile();
+            DisplayName = ExpressionHelper.GetExpressionText(expression);
+            InputType = inputType;
+            Name = DisplayName;
+            Id = this.Form.Name + "_" + this.Name;
+            DataSource = dataSource;
+        }
 
 
 
         public override IHtmlContent RenderControlSource()
         {
+            StringBuilder sb = new StringBuilder();
 
             if (this.DataSource == null)
                 return null;
             else
             {
-                List<FormInputItem> itemsources=new List<FormInputItem>();
                 foreach (var item in this.DataSource)
                 {
-                   var sourceItem= DataSourceExpressionValue(item as T);
-                    itemsources.Add(sourceItem);
+                    if (this.InputType == FormInputControl.Select)
+                        sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
                 }
             }
 
-            Object value = null;
+            Object value = sb.ToString();
             if (value == null) return HtmlString.Empty;
-            if (value is IHtmlContent)
-                return value as IHtmlContent;
+            //if (value is IHtmlContent)
+            //    return value as IHtmlContent;
             return new HtmlString(value.ToString());
         }
         private Object GetValueFor(object model)
@@ -171,7 +182,7 @@ namespace Kachuwa.Form
                     return RenderValue(model as T);
 
                 return ExpressionValue(model as T);
-              
+
             }
             catch (NullReferenceException)
             {
@@ -236,7 +247,7 @@ namespace Kachuwa.Form
 
         public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint)
         {
-            IFormInput<T> inputControl = new FormInput<T, TValue>(Form,constraint, classes);
+            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes);
             Add(inputControl);
 
             return inputControl;
@@ -244,12 +255,18 @@ namespace Kachuwa.Form
 
         public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl)
         {
-            IFormInput<T> inputControl = new FormInput<T, TValue>(Form,constraint, classes, formControl);
+            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl);
+            Add(inputControl);
+            return inputControl;
+        }
+        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource)
+        {
+            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl, datasource);
             Add(inputControl);
             return inputControl;
         }
 
-      
+
     }
 
 }

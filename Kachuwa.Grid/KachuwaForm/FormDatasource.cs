@@ -5,12 +5,12 @@ namespace Kachuwa.Form
 {
     public class FormDatasource
     {
-        private ConcurrentDictionary<string,IEnumerable<object>> _sources
+        private ConcurrentDictionary<string,IEnumerable<FormInputItem>> _sources
         {
             get;
             set;
-        }=new ConcurrentDictionary<string, IEnumerable<object>>();
-        public IEnumerable<object> GetSource(string key)
+        }=new ConcurrentDictionary<string, IEnumerable<FormInputItem>>();
+        public IEnumerable<FormInputItem> GetSource(string key)
         {
             if(_sources.ContainsKey(key))
                 return _sources[key];
@@ -20,7 +20,7 @@ namespace Kachuwa.Form
             }
         }
 
-        public bool SetSource(string key, IEnumerable<object> objects)
+        public bool SetSource(string key, IEnumerable<FormInputItem> objects)
         {
             if (!_sources.ContainsKey(key))
             {
