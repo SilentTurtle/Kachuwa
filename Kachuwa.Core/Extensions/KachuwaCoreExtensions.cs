@@ -108,12 +108,15 @@ namespace Kachuwa.Core.Extensions
             app.UseKSockets(serviceProvider);
             app.UseMvc(routes =>
             {
+               
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",
-                    defaults: new {area= "Admin",controller = "Dashboard", action = "Index"});
+                    defaults: new { area = "Admin", controller = "Dashboard", action = "Index" });
+
                 routes.MapRoute(
                     name: "default2",
                     template: "{pageUrl}",
@@ -123,6 +126,16 @@ namespace Kachuwa.Core.Extensions
 
 
             });
+            // yes, demo code
+            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            //app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            //{
+            //    Authority = "https://demo.identityserver.io",
+
+            //    ApiName = "api",
+            //    ApiSecret = "secret"
+            //});
             return app;
 
         }
