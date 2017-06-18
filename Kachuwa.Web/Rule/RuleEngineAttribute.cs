@@ -6,7 +6,7 @@ namespace Kachuwa.Web.Rule
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class RuleEngineAttribute : Attribute,IActionFilter
     {
-        public RuleEngineAttribute(IRuleActions)
+        public RuleEngineAttribute(string ruleName)
         {
             RuleName = ruleName;
         }
@@ -23,7 +23,7 @@ namespace Kachuwa.Web.Rule
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            context.
+          
             throw new NotImplementedException();
         }
     }

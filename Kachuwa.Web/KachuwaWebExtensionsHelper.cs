@@ -27,6 +27,15 @@ namespace Kachuwa.Web
         public static IApplicationBuilder UseKachuwaWeb(this IApplicationBuilder app)
         {
             app.UseMiddleware<ModuleResourceMiddleware>();
+            
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions()
+            {
+                Authority = "http://kachuwaframework.com",
+                ApiName = "",
+                ApiSecret = "",
+                RequireHttpsMetadata = false
+                
+            });
             return app;
         }
     }
