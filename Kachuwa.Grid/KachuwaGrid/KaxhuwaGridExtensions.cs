@@ -94,13 +94,18 @@ namespace Kachuwa.KGrid
             return new KachuwaHtmlGrid<T>(html, new KachuwaGrid<T>(source)) { PartialViewName = partialViewName };
         }
 
-        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html) where T : class
+        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html,string name) where T : class, new()
         {
-            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>());
+            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>(name));
         }
-        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html,T modalObj) where T : class
+        public static KachuwaHtmlForm<T> CreateKachuwaForm<T>(this IHtmlHelper html,string name,T modalObj) where T : class, new()
         {
-            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>(modalObj));
+            return new KachuwaHtmlForm<T>(html, new KachuwaForm<T>(name,modalObj));
+        }
+        public static T SetFormHeading<T>(this T form, string heading) where T : IForm<T>
+        {
+            form.Heading = heading;
+            return form;
         }
         public static string Render<T>(this IKachuwaHtmlForm<T> form) where T : class
         {

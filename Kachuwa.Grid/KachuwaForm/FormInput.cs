@@ -192,7 +192,8 @@ namespace Kachuwa.Form
         public override IHtmlContent ValueFor(object model)
         {
             Object value = GetValueFor(model);
-            if (value == null) return HtmlString.Empty;
+            if (value == null)
+                return HtmlString.Empty;
             if (value is IHtmlContent)
                 return value as IHtmlContent;
             //if (Format != null)

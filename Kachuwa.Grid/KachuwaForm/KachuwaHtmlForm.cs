@@ -15,11 +15,12 @@ namespace Kachuwa.Form
 {
     public interface IForm
     {
-        String Name { get; set; }
+        string Name { get; set; }
         bool VerticalForm { get; set; }
-        String Heading { get; set; }
-        String SubHeading { get; set; }
-        String CssClasses { get; set; }
+        string Heading { get; set; }
+        string Action { get; set; }
+        string SubHeading { get; set; }
+        string CssClasses { get; set; }
 
         Boolean RequestAntiFrogeryToken { get; set; }
         ViewContext ViewContext { get; set; }
@@ -31,7 +32,8 @@ namespace Kachuwa.Form
 
         IFormSections<IFormSection> Sections { get; }
 
-        object FormModel { get;  }
+        object FormModel { get; }
+        string CancelUrl { get; set; }
 
     }
 
@@ -45,12 +47,12 @@ namespace Kachuwa.Form
         new IFormSectionsOf<T> Sections { get; }
     }
 
-    public class KachuwaForm<T> : IForm<T> where T : class
+    public class KachuwaForm<T> : IForm<T> where T : class, new()
     {
         public IForm<T> Form { get; set; }
-        public String Name { get; set; }
-
-        public String CssClasses { get; set; }
+        public string Name { get; set; } = "";
+        public string Action { get; set; } = "";
+        public string CssClasses { get; set; } = "";
 
         public T Model { get; set; }
         public IFormCollection FormCollections { get; set; }
@@ -61,37 +63,24 @@ namespace Kachuwa.Form
         //public IKachuwaGridColumnsOf<T> Columns { get; set; }
 
         IFormSections<IFormSection> IForm.Sections => Sections;
-
+        public string CancelUrl { get; set; } = "#";
 
         public IFormSectionsOf<T> Sections { get; set; }
         public object FormModel => Model;
 
-        public KachuwaForm()
+        public KachuwaForm(string formName)
         {
-            //Processors = new List<IGridProcessor<T>>();
-            //Model = model;
-            // Columns = new KachuwaGridColumns<T>(this);
-            // Rows = new FormRows<T>(this);
-            //Commands = new KachuwaGridCommands<T>(this);
+            Name = formName;
+            Sections = new FormSections<T>(this);
+            Model = new T();
+        }
+        public KachuwaForm(string formName, T model)
+        {
+            Name = formName;
+            Model = model ?? new T();
             Sections = new FormSections<T>(this);
 
-
         }
-        public KachuwaForm(T model)
-        {
-            Model = model;
-            //Processors = new List<IGridProcessor<T>>();
-            //Model = model;
-            // Columns = new KachuwaGridColumns<T>(this);
-            // Rows = new FormRows<T>(this);
-            //Commands = new KachuwaGridCommands<T>(this);
-            Sections = new FormSections<T>(this);
-
-
-        }
-        // public String NoDataText { get; set; }
-
-        // IKachuwaGridCommands<IKachuwaGridCommand> IKachuwaGrid.Commands => Commands;
         public IKachuwaGridCommandsOf<T> Commands { get; set; }
         public Boolean RequestAntiFrogeryToken { get; set; }
 
@@ -107,13 +96,7 @@ namespace Kachuwa.Form
         public Boolean VerticalForm { get; set; }
         public string Heading { get; set; }
         public string SubHeading { get; set; }
-
-        //public virtual IForm<T> CreateSection(Action<IFormSectionsOf<T>> builder)
-        //{
-        //    builder(Form.Sections);
-
-        //    return this;
-        //}
+      
     }
 
     public interface IKachuwaHtmlForm<T> : IHtmlContent
@@ -124,8 +107,7 @@ namespace Kachuwa.Form
     {
         public IForm<T> Form { get; set; }
         public IHtmlHelper Html { get; set; }
-        public String PartialViewName { get; set; }
-
+        public string PartialViewName { get; set; }
         public KachuwaHtmlForm(IHtmlHelper html, IForm<T> form)
         {
             Form = form;
@@ -135,7 +117,36 @@ namespace Kachuwa.Form
             Html = html;
 
         }
+        public virtual KachuwaHtmlForm<T> SetHeading(string heading)
+        {
+            Form.Heading = heading;
 
+            return this;
+        }
+        public virtual KachuwaHtmlForm<T> SetSubHeading(string subHeading)
+        {
+            Form.SubHeading = subHeading;
+
+            return this;
+        }
+        public virtual KachuwaHtmlForm<T> SetClasses(string classes)
+        {
+            Form.CssClasses = classes;
+
+            return this;
+        }
+        public virtual KachuwaHtmlForm<T> CancelUrl(string url)
+        {
+            Form.CancelUrl = url;
+
+            return this;
+        }
+        public virtual KachuwaHtmlForm<T> ActionUrl(string actionUrl)
+        {
+            Form.Action = actionUrl;
+
+            return this;
+        }
 
         public virtual IKachuwaHtmlForm<T> CreateSection(Action<IFormSectionsOf<T>> builder)
         {
@@ -158,19 +169,19 @@ namespace Kachuwa.Form
 
         //    return this;
         //}
-        //public virtual IForm<T> Css(String cssClasses)
+        //public virtual IForm<T> Css(string cssClasses)
         //{
         //    Grid.CssClasses = cssClasses;
 
         //    return this;
         //}
-        //public virtual IHtmlGrid<T> Empty(String text)
+        //public virtual IHtmlGrid<T> Empty(string text)
         //{
         //    Grid.NoDataText = text;
 
         //    return this;
         //}
-        //public virtual IHtmlGrid<T> Named(String name)
+        //public virtual IHtmlGrid<T> Named(string name)
         //{
         //    Grid.Name = name;
 
@@ -198,7 +209,16 @@ namespace Kachuwa.Form
         //}
         public void WriteTo(TextWriter writer, HtmlEncoder encoder)
         {
-            Html.Partial(PartialViewName, Form).WriteTo(writer, encoder);
+            try
+            {
+                Html.Partial(PartialViewName, Form).WriteTo(writer, encoder);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
         }
 
 

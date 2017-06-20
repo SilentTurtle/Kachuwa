@@ -39,6 +39,12 @@ namespace Kachuwa.Form
 
             return input;
         }
+        public static T SetDisplayName<T>(this T input, string name) where T : IFormInput
+        {
+            input.DisplayName = name;
+
+            return input;
+        }
         public static T SetPlaceHolder<T>(this T input, string placeholder) where T : IFormInput
         {
             input.PlaceHolder = placeholder;

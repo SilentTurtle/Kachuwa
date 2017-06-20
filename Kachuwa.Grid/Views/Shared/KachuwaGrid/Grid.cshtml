@@ -1,4 +1,5 @@
 ﻿@using Kachuwa.KGrid;
+@using Newtonsoft.Json
 @model IKachuwaGrid
 
 
@@ -36,7 +37,8 @@
             {
                 foreach (IKachuwaGridRow<Object> row in Model.Rows)
                 {
-                    <tr class="@row.CssClasses">
+                    <tr class="@row.CssClasses"
+                        @*data-item="@JsonConvert.SerializeObject(row.Model)"*@>
 
                         <td>
                             <input type="checkbox" value="@row.GetPriamaryKey()" class="kachuwa-grid-item" />
@@ -51,13 +53,29 @@
                         <td style="width: 15%;">
                             @foreach (IKachuwaGridCommand command in Model.Commands)
                             {
-                                <a href="#" class="command-link @command.CssClasses"
-                                   command="@command.Command"
-                                   onclick="@command.ClientCallback">
-                                    <span class="fa-stack">
-                                        <i class="@command.IconClass "></i>
-                                    </span>
-                                </a>
+                                if (command.ClientCallback == "")
+                                {
+                                    <a href="@command.ValueFor(row)" class="command-link @command.CssClasses"
+                                       command="@command.Command">
+                                        <span class="fa-stack">
+                                            <i class="@command.IconClass "></i>
+                                        </span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    string callback = command.ClientCallback + "(this," + command.ValueFor(row) + ")";
+
+                                    <a href="#" class="command-link @command.CssClasses"
+                                       command="@command.Command"
+                                       callbackApi="@command.ClientCallbackUrl"
+                                       onclick="@callback">
+                                        <span class="fa-stack">
+                                            <i class="@command.IconClass "></i>
+                                        </span>
+                                    </a>
+                                }
+
 
                             }
                         </td>
@@ -74,7 +92,7 @@
                         @Model.NoDataText
                     </td>
                 </tr>
-            }
+                        }
         </tbody>
     </table>
     @if (Model.Pager != null)
@@ -87,7 +105,8 @@
 </div>
 
 
+<script src="/module/kachuwagrid/resources/js/kachuwagrid.js"></script>
 
 @section scripts{
-    
+
 }
