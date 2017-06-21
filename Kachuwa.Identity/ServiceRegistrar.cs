@@ -8,6 +8,8 @@ using Kachuwa.Identity.Extensions;
 using Microsoft.Extensions.Configuration;
 using Kachuwa.Identity.IdentityConfig;
 using Kachuwa.Identity.IdSrv;
+using Kachuwa.Identity.Service;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kachuwa.Identity
 {
@@ -37,6 +39,8 @@ namespace Kachuwa.Identity
                 .AddInMemoryApiResources(Resources.GetApiResources())
                 .AddInMemoryClients(IdentityConfig.Clients.Get())
                 .AddAspNetIdentity<IdentityUser>();
+
+            serviceCollection.TryAddSingleton<IAppUserService,AppUserService>();
         }
 
         public void Update(IServiceCollection serviceCollection)
