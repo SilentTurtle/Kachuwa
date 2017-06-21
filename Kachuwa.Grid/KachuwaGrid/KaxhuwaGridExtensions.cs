@@ -16,17 +16,25 @@ namespace Kachuwa.KGrid
 {
     public static class KaxhuwaGridExtensions
     {
-        public static int GetPriamaryKey(this IKachuwaGridRow<Object> row)
+        public static object GetPriamaryKey(this IKachuwaGridRow<Object> row)
         {
-            int value = 0;
+            object value = 0;
             var Name = "";
             foreach (var prop in row.Model.GetType().GetProperties())
-            { 
+            {
 
                 if (prop.GetCustomAttribute<Kachuwa.Data.Crud.Attribute.KeyAttribute>() != null)
                 {
-                    value=(int) prop.GetValue(row.Model);
-                    Name = prop.Name;
+                    System.TypeCode typeCode = System.Type.GetTypeCode(prop.PropertyType);
+                    if (typeCode == TypeCode.Int64)
+                    {
+                        value = (long)prop.GetValue(row.Model);
+                    }
+                    else
+                    {
+                        value = (int)prop.GetValue(row.Model);
+                    }
+
                 }
             }
             return value;

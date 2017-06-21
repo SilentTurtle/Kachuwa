@@ -54,11 +54,12 @@ namespace Kachuwa.Form
 
         }
 
-        public FormColumn(IForm<T> form, string name, Action<IFormInputsOf<T>> formcontrolsBuilder)
+        public FormColumn(IForm<T> form, string name, string classes, Action<IFormInputsOf<T>> formcontrolsBuilder)
         {
             Form = form;
             Name = name;
             Controls = new FormInputs<T>(Form);
+            CssClasses = classes;
             formcontrolsBuilder(Controls);
 
 
@@ -96,7 +97,7 @@ namespace Kachuwa.Form
         public IFormColumn<T> Add(string name, string classes, Action<IFormInputsOf<T>> formcontrolsBuilder)
         {
 
-            IFormColumn<T> column = new FormColumn<T>(Form, name, formcontrolsBuilder);
+            IFormColumn<T> column = new FormColumn<T>(Form, name, classes, formcontrolsBuilder);
             Add(column);
             return column;
         }

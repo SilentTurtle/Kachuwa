@@ -201,7 +201,7 @@
                                 break;
                             case FormInputControl.Select:
                                 <select class="@control.CssClasses" name="@control.Name" id="@control.Id">
-                                    @control.RenderControlSource()
+                                    @control.RenderControlSource(Model.FormModel)
                                 </select>
                                 break;
                             case FormInputControl.Telephone:

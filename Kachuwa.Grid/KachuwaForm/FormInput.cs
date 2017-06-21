@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -23,7 +24,7 @@ namespace Kachuwa.Form
         FormInputControl InputType { get; set; }
         string DisplayName { get; set; }
         IEnumerable<FormInputItem> DataSource { get; set; }
-        IHtmlContent RenderControlSource();
+        IHtmlContent RenderControlSource(object model);
         //IHtmlContent RenderDataSource(object model);
 
     }
@@ -78,7 +79,7 @@ namespace Kachuwa.Form
 
 
         public IEnumerable<FormInputItem> DataSource { get; set; }
-        public abstract IHtmlContent RenderControlSource();
+        public abstract IHtmlContent RenderControlSource(object model);
     }
 
     public class FormInput<T, TValue> : BaseFormInput<T, TValue> where T : class
@@ -153,7 +154,7 @@ namespace Kachuwa.Form
 
 
 
-        public override IHtmlContent RenderControlSource()
+        public override IHtmlContent RenderControlSource(object model)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -161,11 +162,74 @@ namespace Kachuwa.Form
                 return null;
             else
             {
-                foreach (var item in this.DataSource)
+                var controlValue = GetValueFor(model);
+
+                if (this.InputType == FormInputControl.Select)
+                    sb.AppendFormat("<option value='{0}'>{1}</option>", "0", "Select...");
+
+                if (controlValue == null)
                 {
-                    if (this.InputType == FormInputControl.Select)
-                        sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+
+                    foreach (var item in this.DataSource)
+                    {
+                        if (this.InputType == FormInputControl.Select)
+                        {
+                            sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+                        }
+                    }
                 }
+                else
+                {
+                    System.TypeCode typeCode = System.Type.GetTypeCode(controlValue.GetType());
+
+                    foreach (var item in this.DataSource)
+                    {
+
+                        if (this.InputType == FormInputControl.Select)
+                        {
+                            //if col value is int
+                            if (typeCode == TypeCode.Int32)
+                            {
+                                if (controlValue.ToString() == item.Id.ToString())
+                                {
+                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
+                                        item.Id, item.Label);
+                                }
+                                else
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+                                }
+                            }//value is string
+                            else if (typeCode == TypeCode.String)
+                            {
+                                if (controlValue.ToString() == item.Label.ToString())
+                                {
+                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
+                                        item.Id, item.Label);
+                                }
+                                else
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+                                }
+                            }//value is int array
+                            else if (typeCode == TypeCode.Object)
+                            {
+                                var x = controlValue as int[];
+                                if (x.Contains(item.Id))
+                                {
+                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
+                                        item.Id, item.Label);
+                                }
+                                else
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
             }
 
             Object value = sb.ToString();
