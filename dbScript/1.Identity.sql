@@ -52,8 +52,8 @@ CREATE TABLE dbo.IdentityUserLogin
 
 CREATE TABLE dbo.IdentityUserRole
 (
-	UserId								bigint NOT NULL references dbo.IdentityRole,
-	RoleId								bigint NOT NULL references dbo.IdentityUser
+	UserId								bigint NOT NULL references dbo.IdentityUser,
+	RoleId								bigint NOT NULL references dbo.IdentityRole
 );
 --ok
 --drop index dbo.IdentityUserRole.idx_usr_lgn 
@@ -79,7 +79,7 @@ CREATE TABLE dbo.AppUser
         LastName								nvarchar(256) not null,
         Bio										nvarchar(2000),
         Email									nvarchar(256) not null,
-        Address									nvarchar(256) not null,      
+        Address									nvarchar(256)  null,      
         PhoneNumber								nvarchar(256)  null,        
         DOB										nvarchar(256)  null,
         ProfilePicture							nvarchar(256)  null,		 
