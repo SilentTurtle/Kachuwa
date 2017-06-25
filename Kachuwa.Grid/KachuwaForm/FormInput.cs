@@ -55,7 +55,7 @@ namespace Kachuwa.Form
     public enum FormInputControl
     {
         TextBox, Password, Select, Radio, CheckBox, RadioList, CheckBoxList,
-        Number, File, Image, Email, Url, Telephone, Date, DateTime, Color, TextArea, Editor, Hidden, Template
+        Number, File, Image, Email, Url, Telephone, Date, DateTime, Color, TextArea, Editor, Hidden,Tag, Template, Switch
     }
 
     public abstract class BaseFormInput<T, TValue> : IFormInput<T>

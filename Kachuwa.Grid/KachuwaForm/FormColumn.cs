@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using Microsoft.AspNetCore.Html;
 
 namespace Kachuwa.Form
 {
@@ -12,6 +13,7 @@ namespace Kachuwa.Form
         string CssClasses { get; set; }
 
         IFormInputs<IFormInput> Controls { get;  }
+        string ColumnFormat { get; set; } 
 
     }
     public interface IFormColumn<T> : IFormColumn
@@ -29,6 +31,7 @@ namespace Kachuwa.Form
         IForm<T> Form { get; }
 
         IFormColumn<T> Add(string name, string classes, Action<IFormInputsOf<T>> formControls);//final forms
+        IFormColumn<T> Add(string name, string classes,string columnFormat, Action<IFormInputsOf<T>> formControls);//final forms
     }
 
     public abstract class BaseFormColumn<T> : IFormColumn<T>
@@ -39,7 +42,7 @@ namespace Kachuwa.Form
         public LambdaExpression Expression { get; }
         public Func<T, Object> RenderValue { get; set; }
         public IFormInputsOf<T> Controls { get; set; }
-
+        public string ColumnFormat { get; set; } = "{0}";
         IFormInputs<IFormInput> IFormColumn.Controls => Controls;
     }
 
@@ -58,6 +61,18 @@ namespace Kachuwa.Form
         {
             Form = form;
             Name = name;
+            Controls = new FormInputs<T>(Form);
+            CssClasses = classes;
+            formcontrolsBuilder(Controls);
+
+
+            //rowsBuilder.BeginInvoke(new FormRows<T>(form);
+        }
+        public FormColumn(IForm<T> form, string name, string classes,string format, Action<IFormInputsOf<T>> formcontrolsBuilder)
+        {
+            Form = form;
+            Name = name;
+            ColumnFormat = format;
             Controls = new FormInputs<T>(Form);
             CssClasses = classes;
             formcontrolsBuilder(Controls);
@@ -102,7 +117,13 @@ namespace Kachuwa.Form
             return column;
         }
 
+        public IFormColumn<T> Add(string name, string classes,string columnFormat, Action<IFormInputsOf<T>> formcontrolsBuilder)
+        {
 
+            IFormColumn<T> column = new FormColumn<T>(Form, name, classes, columnFormat, formcontrolsBuilder);
+            Add(column);
+            return column;
+        }
         public IFormRowsOf<T> Rows { get; }
       
     }

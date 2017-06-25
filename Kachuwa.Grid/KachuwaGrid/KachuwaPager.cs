@@ -4,6 +4,7 @@ namespace Kachuwa.KGrid
 {
     public class KachuwaPager
     {
+       
         public KachuwaPager(int totalItems, int? page, int pageSize = 10)
         {
             // calculate total, start and end pages
@@ -29,6 +30,35 @@ namespace Kachuwa.KGrid
             CurrentPage = currentPage;
             PageSize = pageSize;
             TotalPages = totalPages;
+            StartPage = startPage;
+            EndPage = endPage;
+        }
+
+        public void Reset()
+        {
+            // calculate total, start and end pages
+            var totalPages = (int)Math.Ceiling((decimal)TotalItems / (decimal)PageSize);
+            var currentPage = CurrentPage==0 ? 1: CurrentPage;
+            var startPage = currentPage - 5;
+            var endPage = currentPage + 4;
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 10)
+                {
+                    startPage = endPage - 9;
+                }
+            }
+
+           // TotalItems = totalItems;
+            CurrentPage = currentPage;
+           // PageSize = pageSize;
+            //TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;
         }

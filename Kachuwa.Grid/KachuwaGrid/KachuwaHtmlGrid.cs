@@ -23,7 +23,7 @@ namespace Kachuwa.KGrid
           public virtual IHtmlGrid<T> Pagination(Action<KachuwaPager> builder)
         {
             builder(Grid.Pager);
-
+            Grid.Pager.Reset();
             return this;
         }
         public virtual IHtmlGrid<T> Build(Action<IKachuwaGridColumnsOf<T>> builder)
@@ -38,8 +38,13 @@ namespace Kachuwa.KGrid
 
         //    return this;
         //}
-      
-       
+
+        public virtual IHtmlGrid<T> UseCard()
+        {
+            Grid.UseCardView = true;
+
+            return this;
+        }
 
         public virtual IHtmlGrid<T> RowCss(Func<T, string> cssClasses)
         {

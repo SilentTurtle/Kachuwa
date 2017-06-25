@@ -26,6 +26,7 @@ namespace Kachuwa.KGrid
         IKachuwaGridCommands<IKachuwaGridCommand> Commands { get; }
 
         KachuwaPager Pager { get; set; }
+        bool UseCardView { get; set; }
     }
 
     public interface IKachuwaGrid<T> : IKachuwaGrid
@@ -57,6 +58,7 @@ namespace Kachuwa.KGrid
 
         public IKachuwaGridRowsOf<T> Rows { get; set; }
         public KachuwaPager Pager { get; set; }
+        public bool UseCardView { get; set; } = false;
 
         public KachuwaGrid(IEnumerable<T> source)
         {
@@ -67,7 +69,7 @@ namespace Kachuwa.KGrid
             Commands = new KachuwaGridCommands<T>(this);
            var row = Rows.FirstOrDefault();
            int rowTotal=row==null?0: row.GetRowTotal();
-            Pager = new KachuwaPager(rowTotal, 1);
+           Pager = new KachuwaPager(rowTotal, 1);
         }
         public string NoDataText { get; set; }
       

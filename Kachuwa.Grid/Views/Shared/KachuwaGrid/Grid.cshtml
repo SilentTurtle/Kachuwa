@@ -1,6 +1,14 @@
 ﻿@using Kachuwa.KGrid;
+@using Kachuwa.Web
 @using Newtonsoft.Json
 @model IKachuwaGrid
+@{
+    var query = this.Context.Request.Query["query"];
+    if (string.IsNullOrEmpty(query))
+    {
+        query = "";
+    }
+}
 
 
 @section cssStyles {
@@ -11,90 +19,119 @@
 <link href="/module/KachuwaGrid/resources/css/kgridstyle.css" rel="stylesheet" />
 
 <div id="@Model.Name" class="kachuwa-grid">
-    <table class="table @Model.CssClasses">
-        <thead>
-            <tr>
-                <th>
+    @if (!Model.UseCardView)
+    {
 
-                </th>
-                @foreach (IKachuwaGridColumn column in Model.Columns)
-                {
 
-                    <th class=" @column.CssClasses"
-                        data-name="@column.Name">
-                        <span class="kachuwa-grid-header">@column.Title</span>
+        <div class="kachuwa-filters">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+
+                <form method="get" class="">
+                    <div class="searchbar navbar-form ">
+                        <div class="form-group">
+                            <input type="text" value="@query" placeholder="search..." name="query" class="form-control" />
+
+                        </div>
+                        <button type="submit" command="search" class="btn btn-default">
+                            <span class="fa  fa-search"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table @Model.CssClasses">
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    @foreach (IKachuwaGridColumn column in Model.Columns)
+               {
+
+            <th class=" @column.CssClasses"
+                data-name="@column.Name">
+                <span class="kachuwa-grid-header">@column.Title</span>
+            </th>
+
+               }
+                    <th style="width: 15%;">
+
                     </th>
 
-                }
-                <th style="width: 15%;">
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Rows.Any())
+           {
+               foreach (IKachuwaGridRow<Object> row in Model.Rows)
+               {
+            <tr class="@row.CssClasses"
+                @*data-item="@JsonConvert.SerializeObject(row.Model)"*@>
 
-                </th>
+                <td>
+                    <input type="checkbox" value="@row.GetPriamaryKey()" class="kachuwa-grid-item" />
+                </td>
+
+                @foreach (IKachuwaGridColumn column in Model.Columns)
+                       {
+                    <td class="@column.CssClasses">
+                        @column.ValueFor(row)
+                    </td>
+                       }
+                <td style="width: 15%;">
+                    @foreach (IKachuwaGridCommand command in Model.Commands)
+                           {
+                               if (command.ClientCallback == "")
+                               {
+                        <a href="@command.ValueFor(row)" class="command-link @command.CssClasses"
+                           command="@command.Command">
+                            <span class="fa-stack">
+                                <i class="@command.IconClass "></i>
+                            </span>
+                        </a>
+                               }
+                               else
+                               {
+                                   string callback = command.ClientCallback + "(this," + command.ValueFor(row) + ")";
+
+                        <a href="#" class="command-link @command.CssClasses"
+                           command="@command.Command"
+                           callbackApi="@command.ClientCallbackUrl"
+                           onclick="@callback">
+                            <span class="fa-stack">
+                                <i class="@command.IconClass "></i>
+                            </span>
+                        </a>
+                               }
+
+
+                           }
+                </td>
 
             </tr>
-        </thead>
-        <tbody>
-            @if (Model.Rows.Any())
-            {
-                foreach (IKachuwaGridRow<Object> row in Model.Rows)
-                {
-                    <tr class="@row.CssClasses"
-                        @*data-item="@JsonConvert.SerializeObject(row.Model)"*@>
+               }
+           }
+           else if (Model.NoDataText != null)
+           {
+            <tr>
+                <td></td>
+                @{ var totalCols = Model.Columns.Count() + 1; }
+                <td class="kachuwa-grid-emptyrow" colspan="@totalCols">
+                    @Model.NoDataText
+                </td>
+            </tr>
+           }
+            </tbody>
+        </table>
 
-                        <td>
-                            <input type="checkbox" value="@row.GetPriamaryKey()" class="kachuwa-grid-item" />
-                        </td>
+                    }
+                    else
+                    {
 
-                        @foreach (IKachuwaGridColumn column in Model.Columns)
-                        {
-                            <td class="@column.CssClasses">
-                                @column.ValueFor(row)
-                            </td>
-                        }
-                        <td style="width: 15%;">
-                            @foreach (IKachuwaGridCommand command in Model.Commands)
-                            {
-                                if (command.ClientCallback == "")
-                                {
-                                    <a href="@command.ValueFor(row)" class="command-link @command.CssClasses"
-                                       command="@command.Command">
-                                        <span class="fa-stack">
-                                            <i class="@command.IconClass "></i>
-                                        </span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    string callback = command.ClientCallback + "(this," + command.ValueFor(row) + ")";
-
-                                    <a href="#" class="command-link @command.CssClasses"
-                                       command="@command.Command"
-                                       callbackApi="@command.ClientCallbackUrl"
-                                       onclick="@callback">
-                                        <span class="fa-stack">
-                                            <i class="@command.IconClass "></i>
-                                        </span>
-                                    </a>
-                                }
-
-
-                            }
-                        </td>
-
-                    </tr>
-                }
-            }
-            else if (Model.NoDataText != null)
-            {
-                <tr>
-                    <td></td>
-                    @{ var totalCols = Model.Columns.Count() + 1;}
-                    <td class="kachuwa-grid-emptyrow" colspan="@totalCols">
-                        @Model.NoDataText
-                    </td>
-                </tr>
-                        }
-        </tbody>
-    </table>
+                    }
     @if (Model.Pager != null)
     {
         <div class="col-md-12">
