@@ -7,18 +7,30 @@ namespace Kachuwa.Web.Rule
     [Table("Rule")]
     public class Rule
     {
-        [Key]
+        [Kachuwa.Data.Crud.Attribute.Key]
         public int RuleId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; }
+
         public string Description { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Required]
         public int ActivateRuleOn { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public string RuleAction { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
         public string Value { get; set; }
+
         public bool AllowNextRule { get; set; }
+
         public DateTime ActiveFrom { get; set; }
+
         public DateTime ActiveTill { get; set; }
+
         public bool IsActive { get; set; }
 
         [AutoFill(false)]
+        [IgnoreUpdate]
         public bool IsDeleted { get; set; }
 
         [AutoFill(IsDate = true)]
@@ -28,8 +40,8 @@ namespace Kachuwa.Web.Rule
         [AutoFill(GetCurrentUser = true)]
         [IgnoreUpdate]
         public string AddedBy { get; set; }
+
         [IgnoreAll]
         public int RowTotal { get; set; }
-
     }
 }

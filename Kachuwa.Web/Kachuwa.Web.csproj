@@ -13,13 +13,13 @@
     <Folder Include="Security\" />
     <Folder Include="Payment\" />
     <Folder Include="Templating\" />
-    <Folder Include="Image\" />
     <Folder Include="State\" />
     <Folder Include="EmailTemplate\" />
     <Folder Include="Job\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
     <PackageReference Include="IdentityServer4" Version="1.5.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />

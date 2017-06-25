@@ -1,5 +1,6 @@
 using Kachuwa.Log;
 using Kachuwa.Web.Module;
+using Kachuwa.Web.Rule;
 using Kachuwa.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,8 @@ namespace Kachuwa.Web
     {
         public static IServiceCollection RegisterKachuwaWebServices(this IServiceCollection services)
         {
-            
+
+            services.AddSingleton<IRuleService, RuleService>();
             services.AddSingleton<IScriptRunner, SQLScriptRunner>();
             services.AddSingleton<IModuleService, ModuleService>();
             services.AddSingleton<IModuleManager, ModuleManager>();
