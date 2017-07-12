@@ -54,13 +54,15 @@ namespace Kachuwa.Identity.ClaimFactory
 
                 var principal = await base.CreateAsync(user);
                 var identity = principal.Identities.First();
-
+             
                 var username = await UserManager.GetUserNameAsync(user);
                 var usernameClaim = identity.FindFirst(claim => claim.Type == Options.ClaimsIdentity.UserNameClaimType && claim.Value == username);
                 if (usernameClaim != null)
                 {
                     identity.RemoveClaim(usernameClaim);
                     identity.AddClaim(new Claim(JwtClaimTypes.PreferredUserName, username));
+                    var userId = await UserManager.GetUserIdAsync(user);
+                    identity.AddClaim(new Claim("IdUid", userId));
                 }
              
                 if (!identity.HasClaim(x => x.Type == ClaimTypes.Role))
