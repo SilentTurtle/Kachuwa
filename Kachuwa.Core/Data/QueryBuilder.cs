@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,8 @@ using Dapper;
 using Kachuwa.Data.Crud;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
+using EditableAttribute = Kachuwa.Data.Crud.Attribute.EditableAttribute;
+using KeyAttribute = Kachuwa.Data.Crud.Attribute.KeyAttribute;
 
 namespace Kachuwa.Data
 {

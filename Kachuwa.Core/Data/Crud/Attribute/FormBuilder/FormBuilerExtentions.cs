@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Kachuwa.Web;
 
 namespace Kachuwa.Data.Crud.FormBuilder
 {
@@ -22,7 +23,7 @@ namespace Kachuwa.Data.Crud.FormBuilder
 
                         //TODO:: fetch username
                         // customAtt.DefaultValue = UserHelper.UserName;
-
+                        customAtt.DefaultValue = "Admin";// ContextResolver.Context.User.Identity.Name;
                     }
                     else
                         customAtt.DefaultValue = customAtt.IsDate ? DateTime.Now : customAtt.DefaultValue;

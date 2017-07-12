@@ -27,7 +27,19 @@ namespace Kachuwa.Web
         }
         public void AddSocket(WebSocket socket)
         {
-            _sockets.TryAdd(CreateConnectionId(), socket);
+            string connectionId = CreateConnectionId();
+            _sockets.TryAdd(connectionId, socket);
+
+            var webuser=new WebUser();
+            var context = ContextResolver.Context;
+            string ua= context.Request.Headers["User-Agent"].ToString();
+            webuser.Browser=new UserAgent(ua).Browser.ToString();
+            webuser.ConnectionId = connectionId;
+            // webuser.UserId = context.User.Identity.GetIdentityUserId();
+            webuser.SessionId = context.Session.Id;
+
+
+
         }
 
         public async Task RemoveSocket(string id)
