@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
-using Kachuwa.Tenant;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Web.Theme
@@ -32,17 +31,17 @@ namespace Kachuwa.Web.Theme
         {
             var context=ContextResolver.Context;
             var theme = (IThemeConfig)context.Items["Theme"];
-            var currentTenant = (CurrentTenant)context.Items[TenantConstant.TenantContextKey];
-            
-            //temporary for single site
-            if (theme != null)
-            {
-                return $"{currentTenant.Info.Name}/{theme}";//theme.ToString();
-            }
-            else
-            {
-                return $"{currentTenant.Info.Name}/{currentTenant.Info.ThemeConfig.FrontendThemeName}";
-            }
+            //var currentTenant = (CurrentTenant)context.Items[TenantConstant.TenantContextKey];
+            return theme.FrontendThemeName;
+            ////temporary for single site
+            //if (theme != null)
+            //{
+            //    return $"{theme}";//theme.ToString();
+            //}
+            //else
+            //{
+            //    return $"";
+            //}
             
         }
     }

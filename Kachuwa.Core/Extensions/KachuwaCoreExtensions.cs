@@ -16,7 +16,6 @@ using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Plugin;
 using Kachuwa.Storage;
-using Kachuwa.Tenant;
 using Kachuwa.Web;
 using Kachuwa.Web.Theme;
 using Microsoft.AspNetCore.Builder;
@@ -72,9 +71,9 @@ namespace Kachuwa.Core.Extensions
                 
             });
            
-            services.RegisterTenantService();
+         
             services.RegisterKachuwaWeb();
-
+            services.RegisterThemeService(new ThemeConfiguration());
             ////services.RegisterThemeService(new ThemeConfiguration()
             ////{
             ////    Directory = "~/Themes",
@@ -102,7 +101,7 @@ namespace Kachuwa.Core.Extensions
         }
         public static IApplicationBuilder UseKachuwaCore(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            app.UseTenant();
+            //app.UseTenant();
             //TODO cache middle ware causing problem
             //app.UseMiddleware<CacheMiddleware>();
             app.UseKSockets(serviceProvider);

@@ -5,7 +5,7 @@
         public ThemeConfiguration()
         {
             FrontendThemeName = "Default";
-            BackendThemeName = "Novoli";
+            BackendThemeName = "Admin";
             LayoutName = "_Layout";
             ThemeResolver = new DefaultThemeResolver();
         }
