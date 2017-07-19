@@ -37,6 +37,7 @@ md $loggerPath
                 Write-Host "Building $projectFileAbsPath"
                 dotnet msbuild $projectFileAbsPath /verbosity:quiet /nologo /target:build /p:Configuration=Release "/flp1:logfile=$loggerPath\msbuild.log;Verbosity=Normal;Append;" "/flp2:logfile=$loggerPath\errors.txt;errorsonly;Append;"
                 #& $devenv $projectFileAbsPath /Rebuild
+                #/p:PrecompileBeforePublish=true /p:UseMerge=true /p:SingleAssemblyName=AppCode /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\"
                 
                 if($LASTEXITCODE -eq 0)
                 {

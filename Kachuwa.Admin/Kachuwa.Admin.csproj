@@ -24,10 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
-    <ProjectReference Include="..\Kachuwa.Grid\Kachuwa.Grid.csproj" />
     <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
-    <ProjectReference Include="..\Modules\Kachuwa.HtmlContent\Kachuwa.HtmlContent.csproj" />
   </ItemGroup>
 
   <ItemGroup>

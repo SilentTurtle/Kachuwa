@@ -216,7 +216,6 @@ namespace Kachuwa.InsightConsole
             {
                 Console.ForegroundColor = receiving ? ConsoleColor.Green : ConsoleColor.Gray;
                 //Console.WriteLine("{0} ", receiving ? "Received" : "Sent");
-
                 if (verbose)
                     Console.WriteLine(encoder.GetString(buffer));
 
