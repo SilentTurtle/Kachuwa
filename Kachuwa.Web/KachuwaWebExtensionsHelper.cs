@@ -4,7 +4,10 @@ using Kachuwa.Web.Rule;
 using Kachuwa.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kachuwa.Web
 {
@@ -19,6 +22,11 @@ namespace Kachuwa.Web
             services.AddSingleton<IModuleManager, ModuleManager>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ISmsSender, SmsSender>();
+            services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
+            //****for testing******//
+            //services.TryAddSingleton<IRazorViewEngine, RazorViewEngine2>();
+            //services.TryAddSingleton<IView,Razor2View>();
+
             //var ctxaccessor = services.BuildServiceProvider().GetService<IHttpContextAccessor>();
             //var ctx = new ContextResolver(ctxaccessor);
             //services.AddSingleton(ctx);

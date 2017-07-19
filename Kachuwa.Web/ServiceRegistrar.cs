@@ -8,14 +8,22 @@ using Kachuwa.Identity.Extensions;
 using Microsoft.Extensions.Configuration;
 using Kachuwa.Identity.IdentityConfig;
 using Kachuwa.Identity.IdSrv;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace Kachuwa.Web
 {
-    public class ServiceRegistrar : IServiceRegistrar
+    public class WebServiceRegistrar : IServiceRegistrar
     {
         public void Register(IServiceCollection serviceCollection, IConfigurationRoot configuration)
         {
             serviceCollection.RegisterKachuwaWebServices();
+            var embeddedAssembly = new EmbeddedFileProvider(typeof(WebServiceRegistrar).GetTypeInfo().Assembly);
+            serviceCollection.Configure<RazorViewEngineOptions>(opts =>
+            {
+                opts.FileProviders.Add(embeddedAssembly);
+            });
         }
 
         public void Update(IServiceCollection serviceCollection)

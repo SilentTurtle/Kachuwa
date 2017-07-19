@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Views\Shared\_Pagination.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="API\Extension\" />
     <Folder Include="API\Version\" />
     <Folder Include="API\Provider\" />
@@ -12,7 +16,6 @@
     <Folder Include="Model\" />
     <Folder Include="Security\" />
     <Folder Include="Payment\" />
-    <Folder Include="Templating\" />
     <Folder Include="State\" />
     <Folder Include="EmailTemplate\" />
     <Folder Include="Job\" />
