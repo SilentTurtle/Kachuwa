@@ -11,7 +11,9 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
         <link href="~/themes/shared/admin/css/styles.css" rel="stylesheet" />
+       
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -37,13 +39,13 @@
                     </div>
                     <span class="menu-label">Menu</span>
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#"><i class="material-icons md-18">home</i>Overview</a></li>
+                        <li class="active"><a href="#"><i class="material-icons md-18">home</i>Dashboard</a></li>
                         <!-- Dropdown-->
-                        <li class="panel panel-default" id="dropdown">
+                        @*<li class="panel panel-default" id="dropdown">
                             <a data-toggle="collapse" href="#dropdown-lvl1">
                                 <i class="material-icons md-18">theaters</i>Theater Management<span class="caret text-right"></span>
                             </a>
-                            <!-- Dropdown level 1 -->
+                             Dropdown level 1 
                             <div id="dropdown-lvl1" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <ul class="nav navbar-nav">
@@ -56,7 +58,13 @@
                         </li>
                         <li><a href="#"><i class="material-icons md-18">event_seat</i>Event Management</a></li>
                         <li><a href="#"><i class="material-icons md-18">local_activity</i>Ticketing Rules</a></li>
-                        <li><a href="#"><i class="material-icons md-18">local_pizza</i>Food Court</a></li>
+                        <li><a href="#"><i class="material-icons md-18">local_pizza</i>Food Court</a></li>*@
+                        <li><a asp-area="Admin" asp-controller="Page" asp-action="Index"><i class="material-icons md-18">settings</i>Page</a></li>
+                        <li><a asp-area="Admin" asp-controller="Module" asp-action="Index"><i class="material-icons md-18">settings</i>Modules</a></li>
+                        <li><a href="#"><i class="material-icons md-18">settings</i>Plugins</a></li>
+                        <li><a href="#"><i class="material-icons md-18">settings</i>Theme</a></li>
+                        <li><a href="#"><i class="material-icons md-18">settings</i>Permission</a></li>
+                        <li><a href="#"><i class="material-icons md-18">settings</i>User</a></li>
                         <li><a href="#"><i class="material-icons md-18">settings</i>Settings</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -73,21 +81,22 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="">
                         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <img src="https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg" alt="">John Doe
+                          
+                            <img src="" class="img-circle" alt="BT">
+                             @User.Identity.Name
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-usermenu pull-right">
                             <li><a href="javascript:;"> Profile</a></li>
 
                             <li><a href="javascript:;">Help</a></li>
-                            <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                            <li><a href="/account/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                         </ul>
                     </li>
                     <li role="presentation" class="dropdown">
                         <a href="javascript:;" class="icon-anchor dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                             <i class="material-icons ">notifications</i>
                             <span class="badge">6</span>
-                        </a>
                         </a>
                         <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                             <li>
@@ -159,9 +168,10 @@
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/chart.js/dist/chart.js"></script>
-   
-    <script src="http://benpickles.github.io/peity/jquery.peity.min.js"></script>
+
+    <script src="~/resources/peity/jquery.peity.min.js"></script>
     <script src="~/themes/shared/admin/js/main.js"></script>
+    <script src="~/resources/holderjs/holder.min.js"></script>
     <script type="text/javascript">
         var linechart = document.getElementById("linechart");
         var linechart = new Chart(linechart, {

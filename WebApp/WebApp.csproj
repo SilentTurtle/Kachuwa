@@ -18,18 +18,26 @@
     <Compile Remove="Logs\**" />
     <Compile Remove="Plugins\**" />
     <Compile Remove="TagHelpers\**" />
+    <Compile Remove="tenantconfig\**" />
+    <Compile Remove="Test\**" />
     <Content Remove="DbLogs\**" />
     <Content Remove="Logs\**" />
     <Content Remove="Plugins\**" />
     <Content Remove="TagHelpers\**" />
+    <Content Remove="tenantconfig\**" />
+    <Content Remove="Test\**" />
     <EmbeddedResource Remove="DbLogs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <EmbeddedResource Remove="Plugins\**" />
     <EmbeddedResource Remove="TagHelpers\**" />
+    <EmbeddedResource Remove="tenantconfig\**" />
+    <EmbeddedResource Remove="Test\**" />
     <None Remove="DbLogs\**" />
     <None Remove="Logs\**" />
     <None Remove="Plugins\**" />
     <None Remove="TagHelpers\**" />
+    <None Remove="tenantconfig\**" />
+    <None Remove="Test\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,9 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\themes\tenant\" />
   </ItemGroup>
 
 </Project>

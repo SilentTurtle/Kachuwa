@@ -7,6 +7,9 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/resources/toast/jquery.toast.min.css" rel="stylesheet" />
+        <link href="~/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/resources/animate/animate.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -16,7 +19,7 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -36,7 +39,7 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <div class="container ">
         @RenderBody()
         <hr />
         <footer>
@@ -46,7 +49,11 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+     
+        <script src="~/resources/toast/jquery.toast.min.js"></script>
+      
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -64,5 +71,6 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>

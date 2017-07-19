@@ -10,6 +10,7 @@ using Kachuwa.Core.Extensions;
 using Kachuwa.Log.Insight;
 using Kachuwa.Web;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -37,7 +38,7 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
-            var serviceProvider=services.BuildServiceProvider();
+            var serviceProvider = services.BuildServiceProvider();
             services.RegisterKachuwaCoreServices(serviceProvider);
             // Add framework services.
             services.AddMvc().AddJsonOptions(options =>
@@ -47,29 +48,29 @@ namespace WebApp
             });
             //enable directory browsing
             //services.AddDirectoryBrowser();
-           
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, 
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider,
             IHostingEnvironment env, ILoggerFactory loggerFactory,
             IOptions<ApplicationInsightsSettings> applicationInsightsSettings)
         {
-           
+
             loggerFactory.UseKachuwaInsight(applicationInsightsSettings, serviceProvider);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                 //app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {
                 app.UseDeveloperExceptionPage();
                 //app.UseExceptionHandler("/Home/Error");
             }
-           
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
@@ -85,13 +86,23 @@ namespace WebApp
             // });
             //app.UseStaticFiles(); // For the wwwroot folder
 
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            provider.Mappings[".log"] = "text/plain";
+            provider.Mappings[".txt"] = "text/plain";
             app.UseFileServer(new FileServerOptions()
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
                 RequestPath = new PathString("/dev/logs"),
                 EnableDirectoryBrowsing = true,
-                
+                StaticFileOptions =
+                {
+                    DefaultContentType = "text/plain",
+                    ContentTypeProvider = provider
+
+                }
+
             });
             app.UseIdentity();
             app.UseIdentityServer();

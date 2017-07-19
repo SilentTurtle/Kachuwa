@@ -5,8 +5,10 @@
 <h1>Home</h1>
 <p>@DateTime.Now.ToString()</p>
 
+<component name="BannerLoader" params='new{key="landingbanner"}'></component>
 @*@await Component.InvokeAsync("ContactUsView")*@
 <component name="ContactUsView"></component>
+
 <component name="HtmlContentManage"></component>
 <component name="HtmlContentLoader" params='new{key="test"}'></component>
 <h1>This should be mapped to "/notifications"</h1>
@@ -138,3 +140,10 @@
         </dl>
                     }
                 }
+
+
+
+@*@await Html.PartialAsync("_Pagination",new Pager(15,1))*@
+
+
+<pagination pageSize='10' rowTotal="50" page="1"></pagination>

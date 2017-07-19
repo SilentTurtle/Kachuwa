@@ -15,5 +15,8 @@
     "aspnet-webpack": "^1.0.3",
     "typescript": "^2.0.0",
     "webpack": "^1.13.3"
+  },
+  "scripts":{
+	"build":"webpack --display-error-details "
   }
 }

@@ -2,13 +2,10 @@
 @{
     ViewData["Title"] = "Register";
 }
-
-<h2>@ViewData["Title"].</h2>
-
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
     <h4>Create a new account.</h4>
     <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -34,9 +31,12 @@
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-default">Register</button>
         </div>
+        <div class="col-md-offset-2 col-md-10">
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+        </div>
     </div>
 </form>
-
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
