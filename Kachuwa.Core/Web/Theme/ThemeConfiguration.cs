@@ -4,7 +4,7 @@
     {
         public ThemeConfiguration()
         {
-            FrontendThemeName = "Blog";
+            FrontendThemeName = "Default";
             BackendThemeName = "Admin";
             LayoutName = "_Layout";
             ThemeResolver = new DefaultThemeResolver();

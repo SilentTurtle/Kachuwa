@@ -73,7 +73,12 @@ namespace Kachuwa.Core.Extensions
            
          
             services.RegisterKachuwaWeb();
-            services.RegisterThemeService(new ThemeConfiguration());
+            services.RegisterThemeService(config =>
+            {
+                config.FrontendThemeName = "Default";
+                config.BackendThemeName = "Admin";
+                config.LayoutName = "_layout";
+            });
             ////services.RegisterThemeService(new ThemeConfiguration()
             ////{
             ////    Directory = "~/Themes",
@@ -103,7 +108,7 @@ namespace Kachuwa.Core.Extensions
         {
             //app.UseTenant();
             //TODO cache middle ware causing problem
-            //app.UseMiddleware<CacheMiddleware>();
+            app.UseMiddleware<CacheMiddleware>();
             app.UseKSockets(serviceProvider);
             app.UseMvc(routes =>
             {

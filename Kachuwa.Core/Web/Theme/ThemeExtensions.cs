@@ -26,7 +26,7 @@ namespace Kachuwa.Web.Theme
         /// <param name="service"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection RegisterThemeService(this IServiceCollection service, ThemeConfiguration configuration)
+        public static IServiceCollection RegisterThemeService(this IServiceCollection service, Action<IThemeConfig> configuration)
         {
             service.Configure<RazorViewEngineOptions>(options =>
             {
@@ -34,7 +34,9 @@ namespace Kachuwa.Web.Theme
                 options.ViewLocationExpanders.Add(new ComponentViewLocationExpander());
 
             });
-            service.TryAddSingleton<IThemeConfig>(configuration);
+            var themeConfig = new ThemeConfiguration();
+            configuration(themeConfig);
+            service.TryAddSingleton<IThemeConfig>(themeConfig);
             service.TryAddSingleton<IThemeResolver, DefaultThemeResolver>();
             return service;
         }
