@@ -46,16 +46,8 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Controllers\AccountOldController.cs" />
-    <None Include="wwwroot\resources\websocket\WebSocketManager.js" />
-    <None Include="wwwroot\themes\shared\admin\css\styles.css" />
-    <None Include="wwwroot\themes\shared\admin\css\styles.css.map" />
-    <None Include="wwwroot\themes\shared\admin\images\logo.png" />
-    <None Include="wwwroot\themes\shared\admin\images\Tixalaya.png" />
-    <None Include="wwwroot\themes\shared\admin\js\main.js" />
-  </ItemGroup>
-  <ItemGroup>
+    <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Admin\Kachuwa.Admin.csproj" />
     <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
     <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
     <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
