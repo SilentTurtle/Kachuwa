@@ -20,7 +20,13 @@ namespace Kachuwa.Web.Theme
             var area = context.ActionContext.RouteData.Values["area"];
 
             //no context when loading partial views
-            
+            string controllerActionTheme = "";
+            if (context.ActionContext.RouteData.Values["Theme"] != null)
+            {
+                controllerActionTheme = context.ActionContext.RouteData.Values["Theme"].ToString();
+            }
+            if (string.IsNullOrEmpty(controllerActionTheme))
+            {
                 if (area != null)
                 {
                     themeName = themeconfig.BackendThemeName;
@@ -30,8 +36,15 @@ namespace Kachuwa.Web.Theme
                     themeName = themeconfig.FrontendThemeName;
                 }
 
-                context.Values["themename"] = themeName;
-            
+            }
+            else
+            {
+                themeName = controllerActionTheme;
+            }
+           
+
+            context.Values["themename"] = themeName;
+
         }
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
