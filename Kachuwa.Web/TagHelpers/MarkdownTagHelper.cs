@@ -14,9 +14,20 @@ namespace Kachuwa.Web.TagHelpers
         public ModelExpression Source { get; set; }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-           
+
+         
+            if (Source != null)
+            {
+                Text = Source.Model.ToString();
+            }
+            else
+            {
+                Text = output.GetChildContentAsync().Result.GetContent();
+            }
+
+            string result = CommonMark.CommonMarkConverter.Convert(Text);
             output.TagName = "div";
-            output.Content.SetHtmlContent("");
+            output.Content.SetHtmlContent(result);
             output.TagMode = TagMode.StartTagAndEndTag;
         }
     }
