@@ -22,7 +22,7 @@
                             <div class="panel-body">
                                 @(Html.CreateKachuwaForm<Page>("pageForm", Model)
                                       .SetHeading("")
-                                      .ActionUrl("/admin/page/new")
+                                      .ActionUrl("/admin/page/edit")
                                       .CancelUrl("/admin/page")
                                       .CreateSection(section =>
                                       {
@@ -53,7 +53,7 @@
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
-                                                      controls.Add("form-control", x => x.Content, FormInputControl.Editor);
+                                                      controls.Add("form-control", x => x.Content, FormInputControl.Editor).Encode(false);
 
                                                   });
                                               });
@@ -84,7 +84,7 @@
                                                           .SetDisplayName("Is Published");
                                                   });
                                               });
-                                          }).SetHeading("Add New").SetHelpLine("Create a new page");
+                                          }).SetHeading("Edit Page").SetHelpLine("Edit your page");
 
 
                                       })

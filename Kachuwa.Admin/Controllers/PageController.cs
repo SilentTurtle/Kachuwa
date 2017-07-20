@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Admin.Controllers
 {
-    [Authorize()]
+    
     [Area("Admin")]
     public class PageController : BaseController
     {
@@ -17,7 +18,7 @@ namespace Kachuwa.Admin.Controllers
         {
             _pageService = pageService;
         }
-        #region Seat Type Crud
+        #region PAge Crud
         [Route("admin/page/page/{page?}")]
         [Route("admin/page")]//default make it at last
         public async Task<IActionResult> Index([FromRoute]int page = 1, [FromQuery]string query = "")
@@ -43,6 +44,7 @@ namespace Kachuwa.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Url= model.Url.TrimStart(new char[] {'/'});
                 model.AutoFill();
                 if (model.PageId == 0)
                     await _pageService.CrudService.InsertAsync<int>(model);
@@ -70,6 +72,7 @@ namespace Kachuwa.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Url = model.Url.TrimStart(new char[] { '/' });
                 model.AutoFill();
                 if (model.PageId == 0)
                     await _pageService.CrudService.InsertAsync<int>(model);
@@ -84,7 +87,7 @@ namespace Kachuwa.Admin.Controllers
         }
 
         [HttpPost]
-        [Route("admin/delete")]
+        [Route("admin/page/delete")]
         public async Task<JsonResult> Delete(int id)
         {
             var result = await _pageService.CrudService.DeleteAsync(id);

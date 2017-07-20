@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Admin.Controllers
 {
-    [Authorize()]
+    [Area("Admin")]
     public class PermissionController : BaseController
     {
         public async Task<IActionResult> Index()

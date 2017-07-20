@@ -34,7 +34,7 @@
                                       {
                                           commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/page/edit", model => model.PageId);
                                           commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
-                                          "/admin/page/delete");
+                                              "/admin/page/delete");
 
                                       }).Css("table-hover")
                                       .Empty("No Page's added yet.")
@@ -44,7 +44,7 @@
                                           pager.Api = "/admin/page";
                                       })
 
-                                )
+                                      )
 
                             </div>
                         </div>
@@ -55,4 +55,6 @@
     </div>
 
 </section>
+    
+
 
