@@ -1,13 +1,13 @@
 {
-  "name": "asp.net",
+  "name": "kachuwa-framework",
   "private": true,
   "dependencies": {
-    "bootstrap": "3.3.7",
-    "jquery": "2.2.0",
-    "jquery-validation": "1.14.0",
-    "jquery-validation-unobtrusive": "3.2.6",
-    "chart.js": "2.5.0",
-    "components-font-awesome": "*",
-    "mustache": "*" 
+    //"bootstrap": "3.3.7",
+    //"jquery": "2.2.0",
+    //"jquery-validation": "1.14.0",
+    //"jquery-validation-unobtrusive": "3.2.6",
+    //"chart.js": "2.5.0",
+    //"components-font-awesome": "*",
+    //"mustache": "*" 
   }
 }

@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - WebApp</title>
 
     <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/resources/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
         <link href="~/resources/toast/jquery.toast.min.css" rel="stylesheet" />
         <link href="~/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
         <link href="~/resources/animate/animate.css" rel="stylesheet" />
@@ -47,30 +47,13 @@
         </footer>
     </div>
 
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-        <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
-     
+
+        <script src="~/resources/jquery/dist/jquery.min.js"></script>
+        <script src="~/resources/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/resources/jquery-validation/dist/additional-methods.js"></script>
         <script src="~/resources/toast/jquery.toast.min.js"></script>
-      
-    </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-    </environment>
 
     @RenderSection("Scripts", required: false)
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/resources/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
