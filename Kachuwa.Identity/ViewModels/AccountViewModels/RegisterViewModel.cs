@@ -44,9 +44,6 @@ namespace Kachuwa.Identity.ViewModels
         [Required(ErrorMessage = "Address is required.")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "College is required.")]
-        public string College { get; set; }
-
         [Required(ErrorMessage = "Phone number is required.")]
         public string PhoneNumber { get; set; }
     }
