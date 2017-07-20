@@ -7,5 +7,7 @@ namespace Kachuwa.Web
     {
         CrudService<Page> CrudService { get; set; }
         Task<bool> CheckPageExist(string url);
+
+        string GetPageNamespaces(bool includeMasterLayout);
     }
 }

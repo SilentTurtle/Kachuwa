@@ -15,9 +15,10 @@ namespace Kachuwa.Web
         [Required]
         public string Url { get; set; }
         public string Content { get; set; }
+        public bool UseMasterLayout { get; set; }
         public bool IsPublished { get; set; }
        
-        [IgnoreAll]
+        [AutoFill(IsDate = true)]
         public DateTime LastModified { get; set; }
        
         [IgnoreAll]

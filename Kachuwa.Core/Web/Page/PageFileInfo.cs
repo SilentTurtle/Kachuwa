@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Kachuwa.Caching;
 using Kachuwa.Extensions;
@@ -74,7 +75,10 @@ namespace Kachuwa.Web
                     view2.LastRequested = DateTime.UtcNow;
                     _pageService.CrudService.Update(view2);
                     //("Where Location=@Loaction", new { Location = viewPath });
-                    _viewContent = Encoding.UTF8.GetBytes(view2.Content);
+                    
+                    string headerNamespaces = _pageService.GetPageNamespaces(view2.UseMasterLayout);
+                    _viewContent = Encoding.UTF8.GetBytes(headerNamespaces +view2.Content);
+                   
                     _lastModified = Convert.ToDateTime(view2.LastRequested);
                 }
 

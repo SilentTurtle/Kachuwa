@@ -108,7 +108,7 @@ namespace Kachuwa.Core.Extensions
         {
             //app.UseTenant();
             //TODO cache middle ware causing problem
-            app.UseMiddleware<CacheMiddleware>();
+            //app.UseMiddleware<CacheMiddleware>();
             app.UseKSockets(serviceProvider);
             app.UseMvc(routes =>
             {
