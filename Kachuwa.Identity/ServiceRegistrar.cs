@@ -1,14 +1,12 @@
 ﻿using Kachuwa.Core.DI;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Kachuwa.Identity.Models;
 using Kachuwa.Identity.Extensions;
 using Microsoft.Extensions.Configuration;
-using Kachuwa.Identity.IdentityConfig;
-using Kachuwa.Identity.IdSrv;
 using Kachuwa.Identity.Service;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kachuwa.Identity
@@ -19,6 +17,8 @@ namespace Kachuwa.Identity
         {
             serviceCollection.ConfigureIdentityCryptography(configuration.GetSection("DapperIdentityCryptography"));
             //      .ConfigureDapperIdentityCryptography(Configuration.GetSection("DapperIdentityCryptography"));
+
+            serviceCollection.TryAddSingleton<IAppUserService, AppUserService>();
 
             serviceCollection.AddIdentity<IdentityUser, IdentityRole>(x =>
             {
@@ -32,15 +32,11 @@ namespace Kachuwa.Identity
                 <Kachuwa.Identity.ClaimFactory.KachuwaClaimsPrincipalFactory<IdentityUser, IdentityRole>>()
                 .AddDefaultTokenProviders();
 
-            serviceCollection.AddIdentityServer()
-                .AddTemporarySigningCredential()
-                .AddInMemoryPersistedGrants()
-                .AddInMemoryIdentityResources(Resources.GetIdentityResources())
-                .AddInMemoryApiResources(Resources.GetApiResources())
-                .AddInMemoryClients(IdentityConfig.Clients.Get())
-                .AddAspNetIdentity<IdentityUser>();
 
-            serviceCollection.TryAddSingleton<IAppUserService,AppUserService>();
+            serviceCollection.AddKachuwaIdentitySever(serviceCollection.BuildServiceProvider().GetService<IHostingEnvironment>());
+
+
+
         }
 
         public void Update(IServiceCollection serviceCollection)

@@ -16,6 +16,17 @@ namespace Kachuwa.Identity.IdentityConfig
         {
             return new List<Client>
             {
+                  new Client
+                {
+                    ClientId = "selftClient",
+                    ClientSecrets =
+                    {
+                        new Secret("kachuwasecret".Sha256())
+                    },
+
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = { "openid", "profile", "roles", "api1","read","write" },
+                },
                 ///////////////////////////////////////////
                 // Console Client Credentials Flow Sample
                 //////////////////////////////////////////
@@ -285,7 +296,8 @@ namespace Kachuwa.Identity.IdentityConfig
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-
+                  new IdentityResource("dataeventrecordsscope",new []{ "role", "admin", "user", "dataEventRecords", "dataEventRecords.admin" , "dataEventRecords.user" } ),
+       
                 // custom identity resource with some consolidated claims
                 new IdentityResource("custom.profile", new[] { JwtClaimTypes.Name, JwtClaimTypes.Email, "location" })
             };
@@ -294,9 +306,26 @@ namespace Kachuwa.Identity.IdentityConfig
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new[]
-            {
-                // simple version with ctor
-                new ApiResource("api1")
+            { 
+            
+                new ApiResource("dataEventRecords")
+                {
+                    ApiSecrets =
+                    {
+                        new Secret("dataEventRecordsSecret".Sha256())
+                    },
+                    Scopes =
+                    {
+                        new Scope
+                        {
+                            Name = "dataeventrecordsscope",
+                            DisplayName = "Scope for the dataEventRecords ApiResource"
+                        }
+                    },
+                    UserClaims = { "role", "admin", "user", "dataEventRecords", "dataEventRecords.admin", "dataEventRecords.user" }
+                },
+            // simple version with ctor
+            new ApiResource("api1")
                 {
                     // this is needed for introspection when using reference tokens
                     ApiSecrets = { new Secret("secret".Sha256()) }
