@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using IdentityServer4.AccessTokenValidation;
 using Kachuwa.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,9 +13,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Kachuwa.Core.Extensions;
+using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Web;
+using Kachuwa.Web.Middleware;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -39,15 +49,40 @@ namespace WebApp
         {
             services.AddSingleton(Configuration);
             var serviceProvider = services.BuildServiceProvider();
+
+
+            //var guestPolicy = new AuthorizationPolicyBuilder()
+            //// .RequireAuthenticatedUser()
+            // .RequireClaim("scope", "dataEventRecords")
+            // .Build();
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("dataEventRecordsAdmin", policyAdmin =>
+            //    {
+            //        policyAdmin.RequireClaim("role", "dataEventRecords.admin");
+            //    });
+            //    options.AddPolicy("dataEventRecordsUser", policyUser =>
+            //    {
+            //        policyUser.RequireClaim("role", "dataEventRecords.user");
+            //    });
+
+            //});
             services.RegisterKachuwaCoreServices(serviceProvider);
             // Add framework services.
-            services.AddMvc().AddJsonOptions(options =>
+            services.AddMvc(options =>
+            {
+                //options.Filters.Add(new AuthorizeFilter(guestPolicy));
+
+            }).AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 options.SerializerSettings.Formatting = Formatting.Indented;
             });
             //enable directory browsing
             //services.AddDirectoryBrowser();
+
+
 
 
         }
@@ -57,6 +92,7 @@ namespace WebApp
             IHostingEnvironment env, ILoggerFactory loggerFactory,
             IOptions<ApplicationInsightsSettings> applicationInsightsSettings)
         {
+
 
             loggerFactory.UseKachuwaInsight(applicationInsightsSettings, serviceProvider);
 
@@ -104,8 +140,34 @@ namespace WebApp
                 }
 
             });
+
             app.UseIdentity();
             app.UseIdentityServer();
+            app.UseMiddleware<WebTokenMiddleware>();
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //IdentityServerAuthenticationOptions identityServerValidationOptions = new IdentityServerAuthenticationOptions
+            //{
+            //    Authority = "http://localhost:11258/",
+            //    // "http://kachuwaframework.com",//
+            //    AllowedScopes = new List<string> { "dataEventRecords" },
+            //    ApiSecret = "dataEventRecordsSecret",
+            //    ApiName = "dataEventRecords",
+            //    AutomaticAuthenticate = false,
+
+            //    SupportedTokens = SupportedTokens.Both,
+            //    // TokenRetriever = _tokenRetriever,
+            //    // required if you want to return a 403 and not a 401 for forbidden responses
+            //    AutomaticChallenge = true,
+            //    RequireHttpsMetadata = false
+
+            //};
+            //app.UseIdentityServerAuthentication(identityServerValidationOptions);
+
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.Headers.Add("Access-Control-Allow-Origin", "SAMEORIGIN");
+            //    await next();
+            //});
             app.UseStaticHttpContext();
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             //var externalCookieScheme = app.ApplicationServices.GetRequiredService<IOptions<IdentityOptions>>().Value.Cookies.ExternalCookieAuthenticationScheme;
@@ -118,11 +180,14 @@ namespace WebApp
             //});
 
             // app.UseMiddleware<ChatWebSocketMiddleware>();
+            //app.UseMiddleware<HeaderLogMiddleware>();
             app.UseWebSockets();
             //core
             app.UseKachuwaCore(serviceProvider);
             //web
             app.UseKachuwaWeb();
+
         }
     }
+
 }
