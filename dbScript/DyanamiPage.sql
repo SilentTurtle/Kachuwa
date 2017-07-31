@@ -43,4 +43,21 @@ CREATE TABLE dbo.HtmlContent
 );
 CREATE INDEX idx_htc on dbo.HtmlContent(KeyName)
 
+CREATE TABLE dbo.Plugin
+(
+	PluginId								int primary key identity(1,1) not null,
+	PluginType								int not null,
+	Name									nvarchar(256) not null,
+	SystemName								nvarchar(256) not null,
+	Image									nvarchar(256) ,
+	Version									nvarchar(256) not null,
+	Author									nvarchar(256) not null,
+	Description								nvarchar(max),
+	IsInstalled								bit default(0),
+	IsActive								bit default(1) not null,
+	IsDeleted								bit default(0) not null,
+	AddedOn									datetime default(getdate()),
+	AddedBy									nvarchar(256)
+);
+
 
