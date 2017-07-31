@@ -99,11 +99,9 @@
 
 </section>
 @section scripts{
-    <script type="text/javascript">
+    <script type="text/javascript" asp-add-nonce="true">
         (function() {
-
             $(".keychange").keyup(function(event) {
-
                 var name = $(this).val();
                 var dname_without_space = name.replace(/\s\s+/g, ' ');
                 var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
