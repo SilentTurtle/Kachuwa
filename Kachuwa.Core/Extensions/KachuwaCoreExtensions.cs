@@ -110,6 +110,8 @@ namespace Kachuwa.Core.Extensions
 
 
         }
+
+     
         public static IApplicationBuilder UseKachuwaCore(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
 
@@ -140,24 +142,6 @@ namespace Kachuwa.Core.Extensions
 
             });
             app.UseKSockets(serviceProvider);
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                  name: "default",
-                  template: "{pageUrl?}",
-                  defaults: new { controller = "KachuwPage", action = "Index" });
-
-                routes.MapRoute(
-                    name: "default1",
-                    template: "{controller}/{action}/{id?}");
-
-                routes.MapRoute(name: "areaRoute",
-                    template: "{area:exists}/{controller}/{action}/{id?}",
-                    defaults: new { area = "Admin", controller = "Dashboard", action = "Index" });
-              
-
-
-            });
             // yes, demo code
             // app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseCors("corsGlobalPolicy");

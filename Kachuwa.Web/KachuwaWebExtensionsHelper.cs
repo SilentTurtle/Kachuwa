@@ -37,12 +37,38 @@ namespace Kachuwa.Web
             var modules = new ModuleRegistrar(services, logger);
             return services;
         }
-        public static IApplicationBuilder UseKachuwaWeb(this IApplicationBuilder app)
+        public static IApplicationBuilder UseKachuwaWeb(this IApplicationBuilder app,bool useDefaultRoute)
         {
           
             app.UseMiddleware<ModuleResourceMiddleware>();
-          
+            if (useDefaultRoute)
+            {
+                app.UseRoutes();
+            }
             return app;
         }
+        public static IApplicationBuilder UseRoutes(this IApplicationBuilder app)
+        {
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                  name: "default",
+                  template: "{pageUrl?}",
+                  defaults: new { controller = "KachuwPage", action = "Index" });
+
+                routes.MapRoute(
+                    name: "default1",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(name: "areaRoute",
+                    template: "{area:exists}/{controller}/{action}/{id?}",
+                    defaults: new { area = "Admin", controller = "Dashboard", action = "Index" });
+
+
+
+            });
+            return app;
+        }
+
     }
 }
