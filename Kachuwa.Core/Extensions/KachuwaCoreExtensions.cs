@@ -15,6 +15,7 @@ using Kachuwa.Configuration;
 using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Plugin;
+using Kachuwa.Security;
 using Kachuwa.Storage;
 using Kachuwa.Web;
 using Kachuwa.Web.Theme;
@@ -45,22 +46,22 @@ namespace Kachuwa.Core.Extensions
             services.TryAddSingleton<ILoggerSetting, DefaultLoggerSetting>();
             services.TryAddSingleton<ILogProvider, DefaultLogProvider>();
             services.TryAddSingleton<ILogger, FileBaseLogger>();
-         
+
             //removed 
             //services.TryAddSingleton<ILoggerService, FileBaseLogger>();
             services.AddTransient<LogErrorAttribute>();
             var logger = serviceProvider.GetService<ILogger>();
-            IHostingEnvironment hostingEnvironment= serviceProvider.GetService<IHostingEnvironment>();
+            IHostingEnvironment hostingEnvironment = serviceProvider.GetService<IHostingEnvironment>();
             var plugs = new PluginBootStrapper(hostingEnvironment, logger, services);
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
             //services.TryAddSingleton<IViewComponentSelector, Default2ViewComponentSelector>();
             // services.TryAddTransient<IViewComponentHelper, Default2ViewComponentHelper>();
-        
+
             IDatabaseFactory dbFactory = DatabaseFactories.GetFactory(Dialect.SQLServer, serviceProvider);
             services.AddSingleton(dbFactory);
             var asdf = new Bootstrapper(services, serviceProvider);
-           // services.AddSingleton(configuration);
+            // services.AddSingleton(configuration);
 
             // services.TryAddSingleton<ICache, DefaultCache>();
             services.TryAddSingleton<ICacheService, DefaultCacheService>();
@@ -68,10 +69,10 @@ namespace Kachuwa.Core.Extensions
             services.TryAddSingleton<IStorageProvider, LocalStorageProvider>();
             services.RegisterKachuwaStorageService(new DefaultFileOptions()
             {
-                
+
             });
-           
-         
+
+
             services.RegisterKachuwaWeb();
             services.RegisterThemeService(config =>
             {
@@ -79,13 +80,18 @@ namespace Kachuwa.Core.Extensions
                 config.BackendThemeName = "Admin";
                 config.LayoutName = "_layout";
             });
-            ////services.RegisterThemeService(new ThemeConfiguration()
-            ////{
-            ////    Directory = "~/Themes",
-            ////    FrontendThemeName = "Default",
-            ////    BackendThemeName = "Admin",
-            ////    ThemeResolver = new DefaultThemeResolver()
-            ////});
+            //Add Cors support to the service
+            services.AddCors();
+            var policy = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicy();
+
+            policy.Headers.Add("*");
+            policy.Methods.Add("*");
+            policy.Origins.Add("*");
+            policy.SupportsCredentials = true;
+
+            services.AddCors(x => x.AddPolicy("corsGlobalPolicy", policy));
+            services.TryAddSingleton<ICspNonceService, CspNonceService>();
+
             //services.Configure<ApplicationInsightsSettings>(options => configuration.GetSection("ApplicationInsights").Bind(options));
 
             //enable socket
@@ -99,47 +105,63 @@ namespace Kachuwa.Core.Extensions
 
         public static void UseKachuwaInsight(this ILoggerFactory loggerFactory, IOptions<ApplicationInsightsSettings> applicationInsightsSettings, IServiceProvider serviceProvider)
         {
-            
+
             loggerFactory.AddApplicationInsights(applicationInsightsSettings.Value, serviceProvider);
-           
+
 
         }
         public static IApplicationBuilder UseKachuwaCore(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
+
             //app.UseTenant();
             //TODO cache middle ware causing problem
             //app.UseMiddleware<CacheMiddleware>();
+            app.UseSecurityHeadersMiddleware(config =>
+            {
+                config.AddContentTypeOptionsNoSniff();
+               // config.AddContentSecurity("YXjwbSX9P94nhr8M8UdVfon4v1KGwTJDk/dRqx72CwM=");
+                config.AddFrameOptionsDeny();
+                config.AddXssProtectionBlock();
+                // config.AddStrictTransportSecurityMaxAge();
+                config.AddContentSecurity(builder =>
+                {
+                    builder.AddScriptPolicy(script =>
+                    {
+                        script.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] {""});
+                        
+
+                    });
+                    builder.AddStylePolicy(style =>
+                    {
+                        style.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] { "" });
+                    });
+                });
+                config.RemoveServerHeader();
+
+            });
             app.UseKSockets(serviceProvider);
             app.UseMvc(routes =>
             {
-               
+                routes.MapRoute(
+                  name: "default",
+                  template: "{pageUrl?}",
+                  defaults: new { controller = "KachuwPage", action = "Index" });
 
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "default1",
+                    template: "{controller}/{action}/{id?}");
+
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",
                     defaults: new { area = "Admin", controller = "Dashboard", action = "Index" });
-
-                routes.MapRoute(
-                    name: "default2",
-                    template: "{pageUrl}",
-                    defaults: new { controller = "KachuwPage", action = "Index" }
-
-                );
+              
 
 
             });
             // yes, demo code
-            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            // app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("corsGlobalPolicy");
 
-            //app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            //{
-            //    Authority = "https://demo.identityserver.io",
-
-            //    ApiName = "api",
-            //    ApiSecret = "secret"
-            //});
             return app;
 
         }
