@@ -13,9 +13,14 @@ namespace Kachuwa.Web
         }
 
         [KachuwaPage]
-        public async Task<IActionResult> Index(string pageUrl)
+        public async Task<IActionResult> Index(string pageUrl="")
         {
-            if (await PageService.CheckPageExist(pageUrl))
+            //home landing page
+            if (string.IsNullOrEmpty(pageUrl))
+            {
+                return View();
+            }
+            else if (await PageService.CheckPageExist(pageUrl))
             {
                 return View();
             }

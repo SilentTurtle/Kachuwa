@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SEO\Sitemap\Samples\**" />
+    <EmbeddedResource Remove="SEO\Sitemap\Samples\**" />
+    <None Remove="SEO\Sitemap\Samples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Shared\_Seo.cshtml" />
     <EmbeddedResource Include="Views\Shared\_Pagination.cshtml" />
   </ItemGroup>
 
@@ -14,7 +21,6 @@
     <Folder Include="API\Provider\" />
     <Folder Include="Components\" />
     <Folder Include="Model\" />
-    <Folder Include="Security\" />
     <Folder Include="Payment\" />
     <Folder Include="State\" />
     <Folder Include="EmailTemplate\" />
@@ -28,6 +34,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Mustache" Version="1.0.1" />
 	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+	    <PackageReference Include="MXTires.Microdata.Core" Version="0.1.0" />
+	    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

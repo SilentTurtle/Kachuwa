@@ -21,7 +21,7 @@ using Newtonsoft.Json.Linq;
 namespace Kachuwa.Web.API
 {
     [LogError]
-    [Authorize]
+    //[Authorize]
     public class BaseApiController : Controller
     {
         public ApiResponse HttpResponse(int statusCode, string msg, object data)

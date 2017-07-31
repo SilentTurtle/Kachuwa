@@ -1,6 +1,8 @@
 using Kachuwa.Log;
+using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Rule;
+using Kachuwa.Web.Security;
 using Kachuwa.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +25,7 @@ namespace Kachuwa.Web
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ISmsSender, SmsSender>();
             services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
+            services.AddSingleton<ITokenGenerator, TokenGenerator>();
             //****for testing******//
             //services.TryAddSingleton<IRazorViewEngine, RazorViewEngine2>();
             //services.TryAddSingleton<IView,Razor2View>();
@@ -36,16 +39,9 @@ namespace Kachuwa.Web
         }
         public static IApplicationBuilder UseKachuwaWeb(this IApplicationBuilder app)
         {
+          
             app.UseMiddleware<ModuleResourceMiddleware>();
-            
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions()
-            {
-                Authority = "http://kachuwaframework.com",
-                ApiName = "",
-                ApiSecret = "",
-                RequireHttpsMetadata = false
-                
-            });
+          
             return app;
         }
     }

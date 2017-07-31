@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Threading.Tasks;
 using CommonMark;
 
-namespace Kachuwa.Web
+namespace Kachuwa.Web.Extensions
 {
    
     public static class MarkdownHelper

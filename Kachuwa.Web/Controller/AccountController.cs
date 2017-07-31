@@ -520,7 +520,7 @@ namespace Kachuwa.Web
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return Redirect("/");
             }
         }
 

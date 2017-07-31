@@ -1,9 +1,13 @@
 using System.Globalization;
 using Kachuwa.Web.Extensions;
 
-namespace Kachuwa.Web
+namespace Kachuwa.Web.Extensions
 {
-   
+    public enum TitleCase
+    {
+        First,
+        All
+    }
     public static class StringHelper
     {
         public static string Ellipsis(this string content, int length)
