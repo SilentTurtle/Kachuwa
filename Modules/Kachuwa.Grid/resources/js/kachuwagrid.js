@@ -59,65 +59,74 @@
     var kachuwaForm = function () {
 
         var init = function () {
-            $.getScript("/resources/tinymce/tinymce.js",
-                function (data, textStatus, jqxhr) {
-                    console.log(data); // Data returned
-                    console.log(textStatus); // Success
-                    console.log(jqxhr.status); // 200
-                    console.log("tinemcy loaded.");
-                    tinymce.init({
-                        selector: ".editor", //'#txtQuestion',  // change this value according to your HTML
-                        plugins: [
-                            'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-                            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-                            'save table contextmenu directionality emoticons template paste textcolor'
-                        ],
-                        setup: function (ed) {
-                            ed.on('change', function (e) {
-                                $("#" + tinyMCE.activeEditor.id).html(ed.getContent());
-                            });
-                        },
-                        cleanup: false,
-                        valid_elements: '+*[*]',
-                        entity_encoding: "raw",
-                        extended_valid_elements: '@[name|params|source|page|pagesize|rowtotal|api|component],component[name|params],markdown[source],pagination[page|pagesize|rowtotal|api],plugin[component|name|params]',
-                        custom_elements: 'component,markdown,module,pagination,plugin,theme',
-                        // content_css: '/Themes/Shared/M2/css/theme.min.css',
-                        toolbar:
-                            'fontsizeselect | insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
-                        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
-                        file_picker_callback: function (callback, value, meta) {
-                            if (meta.filetype == 'image')
-                                $('#files').click();
-                        }
-                    });
 
-                    $('#files').change(function () {
-                        var fileUpload = $("#files").get(0);
-                        var files = fileUpload.files;
-                        var data = new FormData();
-                        for (var i = 0; i < files.length; i++) {
-                            data.append(files[i].name, files[i]);
-                            data.append("fdr", "editor");
-                        }
-
-                        $.ajax({
-                            url: "/api/v1/file/ajaxupload",
-                            type: "POST",
-                            data: data,
-                            processData: false,
-                            contentType: false,
-                            success: function (response) {
-                                var message = response.Data;
-                                var img = "<img style = 'height:80px;width:80px' src = '" + message.savedFilePath + "' />";
-                                tinyMCE.activeEditor.execCommand("mceInsertContent", true, img);
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                //if fails
-                            }
+            var script = document.createElement('script');
+            script.src = " /resources/tinymce/tinymce.js";
+            script.onload = function () {
+                //do stuff with the script
+                console.log("tinemcy loaded.");
+                tinymce.init({
+                    selector: ".editor", //'#txtQuestion',  // change this value according to your HTML
+                    plugins: [
+                        'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+                        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                        'save table contextmenu directionality emoticons template paste textcolor'
+                    ],
+                    setup: function (ed) {
+                        ed.on('change', function (e) {
+                            $("#" + tinyMCE.activeEditor.id).html(ed.getContent());
                         });
+                    },
+                    cleanup: false,
+                    valid_elements: '+*[*]',
+                    entity_encoding: "raw",
+                    extended_valid_elements: '@[name|params|source|page|pagesize|rowtotal|api|component],component[name|params],markdown[source],pagination[page|pagesize|rowtotal|api],plugin[component|name|params]',
+                    custom_elements: 'component,markdown,module,pagination,plugin,theme',
+                    // content_css: '/Themes/Shared/M2/css/theme.min.css',
+                    toolbar:
+                        'fontsizeselect | insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
+                    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+                    file_picker_callback: function (callback, value, meta) {
+                        if (meta.filetype == 'image')
+                            $('#files').click();
+                    }
+                });
+
+                $('#files').change(function () {
+                    var fileUpload = $("#files").get(0);
+                    var files = fileUpload.files;
+                    var data = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        data.append(files[i].name, files[i]);
+                        data.append("fdr", "editor");
+                    }
+
+                    $.ajax({
+                        url: "/api/v1/file/ajaxupload",
+                        type: "POST",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            var message = response.Data;
+                            var img = "<img style = 'height:80px;width:80px' src = '" + message.savedFilePath + "' />";
+                            tinyMCE.activeEditor.execCommand("mceInsertContent", true, img);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            //if fails
+                        }
                     });
                 });
+            };
+
+            document.head.appendChild(script); //or something of the likes
+            //$.getScript("/resources/tinymce/tinymce.js",
+            //    function (data, textStatus, jqxhr) {
+            //        console.log(data); // Data returned
+            //        console.log(textStatus); // Success
+            //        console.log(jqxhr.status); // 200
+                
+            //    });
             $(".kachuwa-form").find("input:checkbox").on("change",
                 function () {
                     console.log(this);
