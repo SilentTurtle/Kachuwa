@@ -185,7 +185,7 @@ namespace WebApp
             //core
             app.UseKachuwaCore(serviceProvider);
             //web
-            app.UseKachuwaWeb();
+            app.UseKachuwaWeb(true);
 
         }
     }
