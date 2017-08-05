@@ -54,7 +54,8 @@ namespace Kachuwa.Web
                 routes.MapRoute(
                   name: "default",
                   template: "{pageUrl?}",
-                  defaults: new { controller = "KachuwPage", action = "Index" });
+                  defaults: new { controller = "KachuwPage", action = "Index" }
+                  , constraints: new { pageUrl = @"\w+" });
 
                 routes.MapRoute(
                     name: "default1",

@@ -25,6 +25,9 @@ namespace Kachuwa.Web.Model
         public string Url { get; set; }
         [Required]
         public string PageName { get; set; }
+
+        [Image(Allow = ".jpg|.png",IsSingleFile = true)]
+        public string Image { get; set; }
         [Hide]
         public int ProductId { get; set; }
         [AutoFill(true)]
