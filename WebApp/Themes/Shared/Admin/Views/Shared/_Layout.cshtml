@@ -1,60 +1,59 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+   
+    @await Component.InvokeAsync("SEO")
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <link href="~/Themes/Shared/Admin/md/css/materialdesignicons.min.css" rel="stylesheet" />
     <environment names="Development">
-        <link href="~/resources/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-        <link href="~/resources/toast/jquery.toast.min.css" rel="stylesheet" />
-        <link href="~/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
-        <link href="~/resources/animate/animate.css" rel="stylesheet" />
+        <link href="~/resources/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/themes/shared/admin/css/styles.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-       
+
+        <link href="~/themes/shared/admin/css/styles.css" rel="stylesheet" />
     </environment>
+    <link href="~/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/resources/datepicker/datepicker3.css" rel="stylesheet" />
+    <link href="~/resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <link href="~/resources/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet" />
+    @RenderSection("cssStyles", required: false)
     <script src="~/resources/jquery/dist/jquery.min.js"></script>
-    <script src="~/resources/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/resources/jquery-validation/dist/additional-methods.js"></script>
+    <script src="~/resources/jquery-validation/jquery.validate.js"></script>
+
+    <script src="~/resources/moment/moment.js"></script>
+    <script src="~/resources/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/resources/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/resources/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+   
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Default Theme</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
+    <div class="wrapper">
+        <!-- Menu -->
+      <component name="AdminMenu"></component>
+        <div class="side-body">
+            <!-- Top Navigation Menu -->
+            <component name="TopBar"></component>
+            <div class="content-wrapper">
+                @RenderBody()
             </div>
         </div>
-    </nav>
-    <div class="container ">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2017 - WebApp</p>
-        </footer>
-    </div>
-
-
       
-        <script src="~/resources/toast/jquery.toast.min.js"></script>
 
+    </div>
+    <script src="~/Themes/Shared/Admin/js/peity/jquery.peity.min.js"></script>
+    <script src="~/themes/shared/admin/js/main.js"></script>
     @RenderSection("Scripts", required: false)
     <script src="~/resources/bootstrap/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>
