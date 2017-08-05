@@ -1,17 +1,18 @@
-﻿using Kachuwa.Data.Crud.Attribute;
+﻿using System;
+using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Localization
 {
 
-    [Table("Resource")]
-    public class Resource
+    [Table("LocaleResource")]
+    public class LocaleResource
     {
         [Key]
-        public int ResourceId { get; set; }
+        public int LocaleResourceId { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
         public string Culture { get; set; }
-        public string Type { get; set; } = "string";
+        public string GroupName { get; set; } = "string";
 
         [IgnoreAll]
         public int RowTotal { get; set; }

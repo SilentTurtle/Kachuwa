@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using Kachuwa.Caching;
 using Kachuwa.Configuration;
+using Kachuwa.Localization;
 using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Plugin;
@@ -72,7 +73,11 @@ namespace Kachuwa.Core.Extensions
 
             });
 
-
+            services.EnableLocalization(config =>
+            {
+                config.UseDbResources = true;
+                config.UseJsonResources = true;
+            });
             services.RegisterKachuwaWeb();
             services.RegisterThemeService(config =>
             {
@@ -142,6 +147,7 @@ namespace Kachuwa.Core.Extensions
 
             });
             app.UseKSockets(serviceProvider);
+            app.UseLocalization();
             // yes, demo code
             // app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseCors("corsGlobalPolicy");
