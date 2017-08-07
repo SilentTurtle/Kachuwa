@@ -16,7 +16,7 @@ namespace Kachuwa.Identity
 
         public static void AddKachuwaIdentitySever(this IServiceCollection serviceCollection, IHostingEnvironment environment)
         {
-            var cert = new X509Certificate2(Path.Combine(environment.ContentRootPath, "damienbodserver.pfx"), "");
+          //  var cert = new X509Certificate2(Path.Combine(environment.ContentRootPath, "kachuwaframework.pfx"), "");
 
             serviceCollection.AddIdentityServer(config =>
                 {
@@ -31,7 +31,8 @@ namespace Kachuwa.Identity
                     config.IssuerUri = "http://localhost:11258/";// "http://kachuwaframework.com";
 
                 })
-                .AddSigningCredential(cert)
+                //.AddSigningCredential(cert)
+                .AddTemporarySigningCredential()
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Resources.GetIdentityResources())
                 .AddInMemoryApiResources(Resources.GetApiResources())
