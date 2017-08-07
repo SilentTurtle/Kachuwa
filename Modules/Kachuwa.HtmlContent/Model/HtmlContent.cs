@@ -22,6 +22,9 @@ namespace Kachuwa.HtmlContent.Model
         public string Content { get; set; }
 
         public bool IsMarkDown { get; set; }
+
+        [AutoFill(AutoFillProperty.CurrentCulture)]
+        public string Culture { get; set; }
         public bool IsActive { get; set; }
         [Hide]
         public bool IsDeleted { get; set; }
