@@ -25,7 +25,7 @@ namespace Kachuwa.Web
             else
             {//landing home page
                
-                filterContext.HttpContext.Items.Add("KPageUrl", "");
+                filterContext.HttpContext.Items.Add("KPageUrl", "landing");
             }
 
             base.OnActionExecuting(filterContext);
