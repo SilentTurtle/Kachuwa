@@ -143,7 +143,7 @@ namespace WebApp
 
             app.UseIdentity();
             app.UseIdentityServer();
-            app.UseMiddleware<WebTokenMiddleware>();
+           // app.UseMiddleware<WebTokenMiddleware>();
             //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             //IdentityServerAuthenticationOptions identityServerValidationOptions = new IdentityServerAuthenticationOptions
             //{
