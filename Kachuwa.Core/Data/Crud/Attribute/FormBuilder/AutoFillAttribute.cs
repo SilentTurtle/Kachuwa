@@ -14,10 +14,21 @@ namespace Kachuwa.Data.Crud.FormBuilder
         }
         public AutoFillAttribute() : base("hidden")
         {
+            
+        }
 
+        public AutoFillProperty fillBy ;
+        public AutoFillAttribute(AutoFillProperty autofillby) : base("hidden")
+        {
+            fillBy = autofillby;
         }
 
 
         public bool GetCurrentUser = false;
+    }
+
+    public enum AutoFillProperty
+    {
+        CurrentDate,CurrentUser,CurrentCulture
     }
 }

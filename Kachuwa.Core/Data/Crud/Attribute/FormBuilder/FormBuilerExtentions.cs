@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Kachuwa.Web;
+using Microsoft.AspNetCore.Localization;
 
 namespace Kachuwa.Data.Crud.FormBuilder
 {
@@ -17,6 +18,30 @@ namespace Kachuwa.Data.Crud.FormBuilder
                 var customAtt = prop.GetCustomAttribute<AutoFillAttribute>();
                 if (customAtt != null)
                 {
+                    if (customAtt.fillBy != null)
+                    {
+
+
+                        switch (customAtt.fillBy)
+                        {
+                            case AutoFillProperty.CurrentCulture:
+                                var rqf = ContextResolver.Context.Features.Get<IRequestCultureFeature>();
+                                // Culture contains the information of the requested culture
+                                var culture = rqf.RequestCulture.Culture.ToString();
+                                customAtt.DefaultValue = culture;
+                                break;
+                            case AutoFillProperty.CurrentUser:
+                                customAtt.DefaultValue = "Admin";// ContextResolver.Context.User.Identity.Name;
+                                break;
+                            case AutoFillProperty.CurrentDate:
+                                customAtt.DefaultValue = DateTime.Now;
+
+                                break;
+
+                        }
+                      
+                    }
+
                     System.TypeCode typeCode = System.Type.GetTypeCode(prop.PropertyType);
                     if (customAtt.GetCurrentUser)
                     {
@@ -27,6 +52,8 @@ namespace Kachuwa.Data.Crud.FormBuilder
                     }
                     else
                         customAtt.DefaultValue = customAtt.IsDate ? DateTime.Now : customAtt.DefaultValue;
+
+
 
                     var typedDefValue = Convert.ChangeType(customAtt.DefaultValue, prop.PropertyType);
                     if (null != prop && prop.CanWrite)

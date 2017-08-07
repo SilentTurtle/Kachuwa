@@ -24,16 +24,19 @@ namespace Kachuwa.Web
         [IgnoreAll]
         public DateTime LastRequested { get; set; }
 
+        [AutoFill(AutoFillProperty.CurrentCulture)]
+        public string Culture { get; set; }
+
         public bool IsActive { get; set; }
 
         
         [AutoFill(false)]
         public bool IsDeleted { get; set; }
 
-        [AutoFill(IsDate = true)]
+        [AutoFill(AutoFillProperty.CurrentDate)]
         public DateTime AddedOn { get; set; }
 
-        [AutoFill(GetCurrentUser = true)]
+        [AutoFill(AutoFillProperty.CurrentUser)]
         public string AddedBy { get; set; }
         [IgnoreAll]
         public int RowTotal { get; set; }
