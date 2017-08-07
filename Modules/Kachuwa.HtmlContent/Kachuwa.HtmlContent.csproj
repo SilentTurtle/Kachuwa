@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Areas\Admin\Views\HtmlContent\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\HtmlContent\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\HtmlContent\New.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Components\HtmlContentLoader\Default.cshtml" />
     <EmbeddedResource Include="Components\HtmlContentManage\Default.cshtml" />
   </ItemGroup>
@@ -19,6 +28,7 @@
     <ProjectReference Include="..\..\Kachuwa.Core\Kachuwa.Core.csproj" />
     <ProjectReference Include="..\..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
     <ProjectReference Include="..\..\Kachuwa.Web\Kachuwa.Web.csproj" />
+    <ProjectReference Include="..\Kachuwa.Grid\Kachuwa.Grid.csproj" />
   </ItemGroup>
 
 </Project>
