@@ -3,6 +3,7 @@ using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Rule;
 using Kachuwa.Web.Security;
+using Kachuwa.Web.Service;
 using Kachuwa.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,8 @@ namespace Kachuwa.Web
             services.AddSingleton<IModuleManager, ModuleManager>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<ISmsSender, SmsSender>();
+            services.AddSingleton<IMenuService, MenuService>();
+            services.AddSingleton<ISettingService, SettingService>();
             services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
             //****for testing******//

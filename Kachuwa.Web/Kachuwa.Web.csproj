@@ -25,7 +25,6 @@
     <Folder Include="API\Extension\" />
     <Folder Include="API\Version\" />
     <Folder Include="API\Provider\" />
-    <Folder Include="Model\" />
     <Folder Include="Payment\" />
     <Folder Include="State\" />
     <Folder Include="EmailTemplate\" />
