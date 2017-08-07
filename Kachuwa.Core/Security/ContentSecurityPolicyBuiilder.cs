@@ -117,7 +117,7 @@ namespace Kachuwa.Security
             string cspContent = "";
             List<string> keyvalues = new List<string>();
 
-
+            cspNonceService.GenerateNew();
             foreach (var key in CspPolicies.Keys)
             {
                 if (key == "script-scr" || key == "style-src")

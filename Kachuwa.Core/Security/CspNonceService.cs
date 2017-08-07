@@ -6,7 +6,7 @@ namespace Kachuwa.Security
     public class CspNonceService : ICspNonceService
     {
         private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
-        private readonly string _nonce;
+        private  string _nonce;
 
         public CspNonceService(int nonceByteAmount = 32)
         {
@@ -18,6 +18,13 @@ namespace Kachuwa.Security
         public string GetNonce()
         {
             return _nonce;
+        }
+
+        public void GenerateNew()
+        {
+            byte[] nonceBytes = new byte[32];
+            _rng.GetBytes(nonceBytes);
+            _nonce = Convert.ToBase64String(nonceBytes);
         }
     }
 }
