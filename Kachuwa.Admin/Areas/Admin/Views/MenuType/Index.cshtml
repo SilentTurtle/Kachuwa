@@ -1,9 +1,11 @@
 ﻿@using Kachuwa.Web
+@using Kachuwa.Web.Model
 @using Kachuwa.KGrid
-@model IEnumerable<Page>
-@{
-    ViewData["Title"] = "Page";
-}
+@model IEnumerable<MenuType>
+
+ @{
+   ViewData["Title"] = "Menu Type";
+ }
 <section class="container-fluid">
     <div class="row">
         <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -12,10 +14,10 @@
                     <div class="panel-inner">
 
                         <div class="panel-heading clearfix">
-                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Page</h2>
+                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Menu Type</h2>
                             <div class="input-group col-md-9 col-xs-4">
                                 <div class="input-group-btn pull-right">
-                                    <a href="/admin/page/new" class="btn btn-primary"><i class="fa fa-plus"></i>Add</a>
+                                    <a href="/admin/menu/type/new" class="btn btn-primary"><i class="fa fa-plus"></i>Add</a>
                                 </div>
                             </div>
                         </div>
@@ -27,23 +29,23 @@
                                       .Build(columns =>
                                       {
                                           columns.Add(model => model.Name).SetTitle("Name");
-                                          columns.Add(model => model.Url).SetTitle("Url");
+                                          columns.Add(model => model.Description).SetTitle("Description");
 
                                           columns.Add(model => model.IsActive).SetTitle("Is Active");
-                                          columns.Add(model => model.IsPublished).SetTitle("Is Published");
+                                          columns.Add(model => model.AddedOn).SetTitle("Added On");
 
                                       }).AddCommands(commands =>
                                       {
-                                          commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/page/edit", model => model.PageId);
-                                          commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
-                                              "/admin/page/delete");
+                                          commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/menu/type/edit", model => model.MenuTypeId);
+                                          commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.MenuTypeId,
+                                              "/admin/menu/type/delete");
 
                                       }).Css("table-hover")
-                                      .Empty("No Page's added yet.")
+                                      .Empty("No Menu Type's added yet.")
                                       .Pagination(pager =>
                                       {
                                           pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
-                                          pager.Api = "/admin/page/page";
+                                          pager.Api = "/admin/menu/type/page";
                                       })
 
                                       )

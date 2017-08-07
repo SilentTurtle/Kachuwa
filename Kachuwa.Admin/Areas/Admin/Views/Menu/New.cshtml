@@ -1,9 +1,10 @@
 ﻿@using Kachuwa.Form
 @using Kachuwa.KGrid
 @using Kachuwa.Web
-@model Page
+@using Kachuwa.Web.Model
+@model Menu
 @{
-    ViewData["Title"] = "New Page";
+    ViewData["Title"] = "New Menu";
 }
 <section class="container-fluid">
     <div class="row">
@@ -13,7 +14,7 @@
                     <div class="panel-inner">
 
                         <div class="panel-heading clearfix">
-                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Page</h2>
+                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Menu</h2>
                             <div class="input-group col-md-9 col-xs-4">
                                 <div class="input-group-btn pull-right">
 
@@ -23,10 +24,10 @@
                         <div class="panel-collapse" aria-labelledby="headingOne"
                              aria-expanded="true">
                             <div class="panel-body">
-                                @(Html.CreateKachuwaForm<Page>("pageForm", Model)
+                                @(Html.CreateKachuwaForm<Menu>("pageForm", Model)
                                       .SetHeading("")
-                                      .ActionUrl("/admin/page/new")
-                                      .CancelUrl("/admin/page")
+                                      .ActionUrl("/admin/menu/new")
+                                      .CancelUrl("/admin/menu")
                                       .CreateSection(section =>
                                       {
                                           // section.Add("section1", "myclass");
@@ -36,19 +37,31 @@
                                               {
                                                   columns.Add("12strow1stcol", "", controls =>
                                                   {
-                                                      controls.Add("form-control", x => x.PageId, FormInputControl.Hidden);
+                                                      controls.Add("form-control", x => x.MenuId, FormInputControl.Hidden);
                                                   });
                                                   columns.Add("1strow1stcol", "", controls =>
                                                   {
-                                                      controls.Add("form-control keychange", x => x.Name, FormInputControl.TextBox).SetPlaceHolder("Enter Page Name");
+                                                      controls.Add("form-control keychange", x => x.Name, FormInputControl.TextBox)
+                                                          .SetPlaceHolder("Enter Name");
+                                                  });
+                                              });
+
+                                              rows.Add("2strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("2strow1stcol", "colClass", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.SubTitle, FormInputControl.TextBox)
+                                                          .SetPlaceHolder("Enter Sub Title")
+                                                          .SetDisplayName("Sub Title");
                                                   });
                                               });
                                               rows.Add("2strow", "form-group", columns =>
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
-                                                      controls.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox,new {test=1,name="x"});
-
+                                                      controls.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox)
+                                                          .SetPlaceHolder("Enter Url")
+                                                          .SetHelp("enter redirection link when user clicks to menu");
 
                                                   });
                                               });
@@ -56,38 +69,43 @@
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
-                                                      controls.Add("form-control", x => x.Content, FormInputControl.Editor);
-
+                                                      controls.Add("form-control", x => x.GroupName, FormInputControl.TextBox)
+                                                          .SetPlaceHolder("Enter Group Name")
+                                                          .SetDisplayName("Group Name"); ;
                                                   });
                                               });
-                                              rows.Add("third", "form-group", columns =>
+                                              rows.Add("2strow", "form-group", columns =>
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
-                                                      controls.Add("form-control", x => x.UseMasterLayout, FormInputControl.Switch)
-                                                          .SetDisplayName("Use Master Layout");
-
+                                                      controls.Add("form-control", x => x.MenuOrder, FormInputControl.Number)
+                                                          .SetPlaceHolder("Enter Menu Order")
+                                                          .SetDisplayName("Menu Order")
+                                                          .SetHelp("menu order at which menu are displayed according to number");
                                                   });
                                               });
+                                              rows.Add("2strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("2strow1stcol", "colClass", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.IsBackend, FormInputControl.Switch)
+                                                          .SetDisplayName("Is Backend Menu")
+                                                          .SetHelp("select if menu is for admin dashboard");
+                                                  });
+                                              });
+
+
+
                                               rows.Add("third", "form-group", columns =>
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
                                                       controls.Add("form-control", x => x.IsActive, FormInputControl.Switch)
-                                                          .SetDisplayName("Is Active")
-                                                          ;
+                                                          .SetDisplayName("Is Active");
 
                                                   });
                                               });
-                                              rows.Add("third", "form-group", columns =>
-                                              {
-                                                  columns.Add("1strow1stcol", "col-md-12", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.IsPublished, FormInputControl.Switch)
-                                                          .SetDisplayName("Is Published");
-                                                  });
-                                              });
-                                          }).SetHeading("Add New").SetHelpLine("Create a new page");
+                                          }).SetHeading("Add New").SetHelpLine("Create a new menu");
 
 
                                       })
@@ -101,6 +119,7 @@
     </div>
 
 </section>
+
 @section scripts{
     <script type="text/javascript" asp-add-nonce="true">
         (function() {
@@ -141,8 +160,8 @@
             $(".urlchange").keyup(function(event) {
 
                 var fulltxt = $(this).val();
-                var pagename = fulltxt.replace("/", "");
-                var pagenam2 = fulltxt.replace("/", "");
+                var pagename = fulltxt;//.replace("/", "");
+                var pagenam2 = fulltxt;//.replace("/", "");
                 // console.log(pagename);
                 var dname_without_space = pagename.replace(/ /g, "");
                 var dname_with_space = pagenam2.replace(/-/g, " ");
