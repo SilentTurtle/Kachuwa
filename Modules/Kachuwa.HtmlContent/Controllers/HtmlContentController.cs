@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.HtmlContent.Service;
 using Kachuwa.Web;
+using Kachuwa.Web.Model;
+using Kachuwa.Web.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.HtmlContent.Controllers
@@ -10,10 +12,15 @@ namespace Kachuwa.HtmlContent.Controllers
     public class HtmlContentController : BaseController
     {
         private readonly IHtmlContentService _htmlContentService;
+        private readonly ISettingService _settingService;
+        private readonly Setting _webSetting;
 
-        public HtmlContentController(IHtmlContentService  htmlContentService)
+
+        public HtmlContentController(IHtmlContentService  htmlContentService,ISettingService settingService)
         {
             _htmlContentService = htmlContentService;
+            _settingService = settingService;
+            _webSetting = _settingService.CrudService.Get(1);
         }
 
         #region Html Crud
@@ -26,7 +33,7 @@ namespace Kachuwa.HtmlContent.Controllers
             int rowsPerPage = 10;
             //customized viewmodel with join
             var model = await _htmlContentService.HtmlService.GetListPagedAsync(page, rowsPerPage, 1,
-                "Where KeyName like @Query and IsDeleted=0", "Addedon desc", new { Query = "%" + query + "%" });
+                "Where KeyName like @Query and IsDeleted=0 and Culture=@Culture", "Addedon desc", new { Culture=_webSetting.BaseCulture, Query = "%" + query + "%" });
             return View(model);
         }
 

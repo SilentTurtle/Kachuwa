@@ -11,6 +11,6 @@ namespace Kachuwa.HtmlContent
         public List<string> SupportedVersions { get; set; }=new List<string>(){"1.0.0"};
         public string Author { get; set; } = "Binod Tamang";
         public Assembly Assembly { get; set; } = typeof(HtmlModule).GetTypeInfo().Assembly;
-        public bool IsInstalled { get; set; } = false;
+        public bool IsInstalled { get; set; } = true;
     }
 }
