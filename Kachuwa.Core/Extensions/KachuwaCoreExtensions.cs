@@ -140,7 +140,7 @@ namespace Kachuwa.Core.Extensions
                     });
                     builder.AddStylePolicy(style =>
                     {
-                        style.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] { "" });
+                        style.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] { "https://fonts.googleapis.com" });
                     });
                 });
                 config.RemoveServerHeader();
