@@ -36,10 +36,10 @@ namespace Kachuwa.Identity.Models
         [IgnoreUpdate]
         public bool IsActive { get; set; }
 
-        [AutoFill(IsDate = true)]
+        [AutoFill(AutoFillProperty.CurrentDate)]
         public DateTime AddedOn { get; set; }
 
-        [AutoFill(GetCurrentUser = true)]
+        [AutoFill(AutoFillProperty.CurrentUser)]
         [IgnoreUpdate]
         public string AddedBy { get; set; }
 
