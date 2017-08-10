@@ -108,7 +108,7 @@ CREATE TABLE dbo.Page
 	Content									nvarchar(max) NOT NULL,
 	UseMasterLayout							bit default(0) not null,
     IsPublished								bit default(0) not null,
-	Culture									varchar (10)  not null,
+	Culture									nvarchar (10)  not null,
 	LastModified							datetime NOT NULL,
 	LastRequested							datetime NULL,
 	IsActive                                bit NOT NULL Default(1),
@@ -189,6 +189,7 @@ Create Table dbo.Menu
 	ParentId								int default(0) not null,
 	MenuOrder								int default(0) not null,
 	GroupName								nvarchar(256) not null,--main,side side2
+	Culture									nvarchar (10)  not null,
 	IsBackend								bit default(0) not null,
 	IsActive								bit default(1) not null,
 	IsDeleted								bit default(0) not null,
@@ -216,8 +217,8 @@ CREATE table dbo.Setting
 	Longitude								decimal(16,4) default(0),
 	Lattitude								decimal(16,4) default(0),	
 	Logo									nvarchar(256) not null,
-	DefaultLanguage							nvarchar(50) not null,
-	DefaultCurrency							nvarchar(5) not null,		
+	BaseCulture 							nvarchar(10) not null,
+	BaseCurrency							nvarchar(5) not null,		
 	CurrencyCode							nvarchar(5) not null,
 	GoogleAnalyticScript 					nvarchar(1000) null,
 	UseHttps								bit default(0) NOT NULL	
@@ -227,3 +228,20 @@ CREATE table dbo.Setting
 Insert Into dbo.Page Select 'Home','landing','This is page Content',1,1,'en-us','2017/1/1','2017/1/1',1,0,'2017/1/1','Admin'	
 
 Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0
+
+
+
+Insert Into dbo.IdentityRole 
+Select  NULL, N'SuperAdmin', N'SuperAdmin'
+Union Select  NULL, N'Admin', N'ADMIN'
+Union  Select  NULL, N'User', N'User'
+Union Select NULL, N'Guest', N'GUEST'
+
+INSERT dbo.IdentityUser (AccessFailedCount, ConcurrencyStamp, Email, EmailConfirmed, LockoutEnabled,
+ LockoutEnd, NormalizedEmail, NormalizedUserName, PasswordHash, PhoneNumber, PhoneNumberConfirmed, SecurityStamp,
+  TwoFactorEnabled, UserName) VALUES (0, N'4b61d65e-b2bf-4d81-825d-7322c885bb06', N'ADMIN@KACHUWAFRAMEWORK.COM', 0, 1,
+   NULL, NULL, NULL, N'AQAAAAEAACcQAAAAEHrwK3kFYF74DKSajkZ89I8sgaB7LKquxP0a4+8bkpgPSQGrg/pFJRXOOXxOeDzP9g==', NULL,
+    0, N'df5b1a7e-e735-4164-8fa0-ec96decf5e4a', 0, N'admin@kachuwaframework.com')
+
+
+Insert Into dbo.IdentityUserRole Select 1, 1 Union Select 1, 2
