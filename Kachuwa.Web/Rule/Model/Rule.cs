@@ -33,11 +33,11 @@ namespace Kachuwa.Web.Rule
         [IgnoreUpdate]
         public bool IsDeleted { get; set; }
 
-        [AutoFill(IsDate = true)]
+        [AutoFill(AutoFillProperty.CurrentDate)]
         [IgnoreUpdate]
         public DateTime AddedOn { get; set; }
 
-        [AutoFill(GetCurrentUser = true)]
+        [AutoFill(AutoFillProperty.CurrentUser)]
         [IgnoreUpdate]
         public string AddedBy { get; set; }
 

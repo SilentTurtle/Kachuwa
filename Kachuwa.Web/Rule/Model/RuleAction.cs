@@ -22,10 +22,10 @@ namespace Kachuwa.Web.Rule
         [AutoFill(false)]
         public bool IsDeleted { get; set; }
         [IgnoreUpdate]
-        [AutoFill(IsDate = true)]
+        [AutoFill(AutoFillProperty.CurrentDate)]
         public DateTime AddedOn { get; set; }
         [IgnoreUpdate]
-        [AutoFill(GetCurrentUser = true)]
+        [AutoFill(AutoFillProperty.CurrentUser)]
         public string AddedBy { get; set; }
         [IgnoreAll]
         public int RowTotal { get; set; }

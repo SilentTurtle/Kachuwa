@@ -30,9 +30,9 @@ namespace Kachuwa.Web.Model
 
         public string Logo { get; set; }
         [Required]
-        public string DefaultLanguage { get; set; }
+        public string BaseCulture { get; set; }
 
-        public string DefaultCurrency { get; set; }
+        public string BaseCurrency { get; set; }
 
         public string CurrencyCode { get; set; }
 
