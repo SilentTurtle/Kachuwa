@@ -18,10 +18,19 @@ namespace Kachuwa.Data.Crud.FormBuilder
                 var customAtt = prop.GetCustomAttribute<AutoFillAttribute>();
                 if (customAtt != null)
                 {
-                    if (customAtt.fillBy != null)
+                    if (customAtt.HasFixedValue)
                     {
 
+                        var typedDefValue = Convert.ChangeType(customAtt.DefaultValue, prop.PropertyType);
+                        if (null != prop && prop.CanWrite)
+                        {
+                            prop.SetValue(obj, typedDefValue, null);
+                        }
 
+
+                    }
+                    else
+                    {
                         switch (customAtt.fillBy)
                         {
                             case AutoFillProperty.CurrentCulture:
@@ -39,27 +48,27 @@ namespace Kachuwa.Data.Crud.FormBuilder
                                 break;
 
                         }
-                      
+                        var typedDefValue = Convert.ChangeType(customAtt.DefaultValue, prop.PropertyType);
+                        if (null != prop && prop.CanWrite)
+                        {
+                            prop.SetValue(obj, typedDefValue, null);
+                        }
                     }
 
-                    System.TypeCode typeCode = System.Type.GetTypeCode(prop.PropertyType);
-                    if (customAtt.GetCurrentUser)
-                    {
+                    //System.TypeCode typeCode = System.Type.GetTypeCode(prop.PropertyType);
+                    //if (customAtt.GetCurrentUser)
+                    //{
 
-                        //TODO:: fetch username
-                        // customAtt.DefaultValue = UserHelper.UserName;
-                        customAtt.DefaultValue = "Admin";// ContextResolver.Context.User.Identity.Name;
-                    }
-                    else
-                        customAtt.DefaultValue = customAtt.IsDate ? DateTime.Now : customAtt.DefaultValue;
+                    //    //TODO:: fetch username
+                    //    // customAtt.DefaultValue = UserHelper.UserName;
+                    //    customAtt.DefaultValue = "Admin";// ContextResolver.Context.User.Identity.Name;
+                    //}
+                    //else
+                    //    customAtt.DefaultValue = customAtt.IsDate ? DateTime.Now : customAtt.DefaultValue;
 
 
 
-                    var typedDefValue = Convert.ChangeType(customAtt.DefaultValue, prop.PropertyType);
-                    if (null != prop && prop.CanWrite)
-                    {
-                        prop.SetValue(obj, typedDefValue, null);
-                    }
+                 
                 }
             }
         }

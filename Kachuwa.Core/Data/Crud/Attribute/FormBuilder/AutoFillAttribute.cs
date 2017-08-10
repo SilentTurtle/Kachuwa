@@ -6,15 +6,12 @@ namespace Kachuwa.Data.Crud.FormBuilder
     public class AutoFillAttribute : InputAttribute
     {
         public object DefaultValue;
-        public bool IsDate = false;
+        public bool HasFixedValue = false;
 
         public AutoFillAttribute(object value) : base("hidden")
         {
             DefaultValue = value;
-        }
-        public AutoFillAttribute() : base("hidden")
-        {
-            
+            HasFixedValue = true;
         }
 
         public AutoFillProperty fillBy ;
@@ -22,9 +19,6 @@ namespace Kachuwa.Data.Crud.FormBuilder
         {
             fillBy = autofillby;
         }
-
-
-        public bool GetCurrentUser = false;
     }
 
     public enum AutoFillProperty
