@@ -9,6 +9,7 @@ namespace Kachuwa.Admin.Controllers
 {
 
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class DashboardController : BaseController
     {
         public async Task<IActionResult> Index()

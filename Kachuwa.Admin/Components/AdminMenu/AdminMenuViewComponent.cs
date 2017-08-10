@@ -10,21 +10,25 @@ namespace Kachuwa.Admin.Components
     {
         private readonly ILogger _logger;
         private readonly IMenuService _menuService;
+        private readonly ISettingService _settingService;
 
-        public AdminMenuViewComponent(ILogger logger,IMenuService menuService)
+        public AdminMenuViewComponent(ILogger logger,IMenuService menuService ,ISettingService settingService)
         {
             _logger = logger;
             _menuService = menuService;
+            _settingService = settingService;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
             try
             {
+                var setting = await _settingService.CrudService.GetAsync(1);
               var menus=  await _menuService.MenuCrudService.GetListAsync("Where IsActive=@IsActive and IsBackend=@IsBackend Order By MenuOrder asc",
                     new
                     {
                         IsActive = true,
                         IsBackend = true,
+                        Culture= setting.BaseCulture
                     });
                 return View(menus);
             }

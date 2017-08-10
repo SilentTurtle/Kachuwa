@@ -10,6 +10,7 @@ namespace Kachuwa.Admin.Controllers
 {
     
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class PageController : BaseController
     {
         private readonly IPageService _pageService;

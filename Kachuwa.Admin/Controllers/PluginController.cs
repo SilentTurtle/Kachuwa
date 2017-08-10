@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kachuwa.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class PluginController : BaseController
     {
         public async Task<IActionResult> Index()

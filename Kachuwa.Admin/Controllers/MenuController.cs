@@ -3,11 +3,13 @@ using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web;
 using Kachuwa.Web.Model;
 using Kachuwa.Web.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class MenuController : BaseController
     {
         private readonly IMenuService _menuService;

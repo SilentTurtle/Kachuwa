@@ -13,7 +13,7 @@
             <span class="menu-label">Menu</span>
             <ul class="nav navbar-nav">
                 <!--TODO RECURSIVE-->
-                @foreach (var menu in Model)
+                @*@foreach (var menu in Model)
                 {
                     <li class="active"><a href="@menu.Url">
                         @if (string.IsNullOrEmpty(menu.Icon))
@@ -22,65 +22,74 @@
                         }
                         @menu.Name
                     </a></li>
-                }
+                }*@
 
-                @*<li class="active"><a href="#"><i class="material-icons md-18">home</i>Dashboard</a></li>
-                <!-- Dropdown-->
-                <li class="" id="movie">
-                    <a data-toggle="collapse" href="#movie-lvl1">
-                        <i class="material-icons md-18">movie</i>Movie Management<span class="caret text-right"></span>
-                    </a>
-                    <!-- Dropdown level 1 -->
-                    <div id="movie-lvl1" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <ul class="nav navbar-nav">
-                                <li><a href="/admin/genre">Genre</a></li>
-                                <li><a href="/admin/motionpicture">Motion Picture Rating</a></li>
-                                <li><a href="/admin/distributor">Distributor</a></li>
-                                <li><a href="/admin/movie">Movie</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <li class="active">
+                    <a href="/admin/dashboard"><i class="material-icons md-18">dashboard</i>Dashboard</a>
                 </li>
-                <!-- Dropdown-->
-                <li class="panel " id="dropdown">
+                <li class="panel panel-default" id="dropdown">
                     <a data-toggle="collapse" href="#dropdown-lvl1">
-                        <i class="material-icons md-18">theaters</i>Theater Management<span class="caret text-right"></span>
+                        <i class="material-icons md-18">language</i>Web<span class="caret text-right"></span>
                     </a>
                     <!-- Dropdown level 1 -->
                     <div id="dropdown-lvl1" class="panel-collapse collapse">
                         <div class="panel-body">
                             <ul class="nav navbar-nav">
-                                <li><a href="/admin/theater/company">Theater Company</a></li>
-                                <li><a href="/admin/theater/type">Theater Type</a></li>
-                                <li><a href="/admin/theater">Theater</a></li>
+                                <li><a href="/admin/page"><i class="material-icons md-18">pages</i>Page</a></li>
+                                <li><a href="/admin/module"><i class="material-icons md-18">web</i>Module</a></li>
+                                <li><a href="/admin/plugin"><i class="material-icons md-18">web</i>Plugin</a></li>
+                                <li><a href="/admin/user"><i class="material-icons md-18">people</i>User</a></li>
+                                <li><a href="/admin/role"><i class="material-icons md-18">group add</i>Role</a></li>
                             </ul>
-                         
                         </div>
                     </div>
                 </li>
-
-                <!-- Dropdown-->
-                <li class="" id="screen">
-                    <a data-toggle="collapse" href="#screen-lvl1">
-                        <i class="material-icons md-18">theaters</i>Screen Management<span class="caret text-right"></span>
+                
+                <li class="panel panel-default" id="dropdown">
+                    <a data-toggle="collapse" href="#dropdown-lvl2">
+                        <i class="material-icons md-18">palette</i>Themes<span class="caret text-right"></span>
                     </a>
                     <!-- Dropdown level 1 -->
-                    <div id="screen-lvl1" class="panel-collapse collapse">
+                    <div id="dropdown-lvl2" class="panel-collapse collapse">
                         <div class="panel-body">
                             <ul class="nav navbar-nav">
-                                <li><a href="/admin/seat/type">Seat Type</a></li>
-                                <li><a href="/admin/screen">Screen</a></li>
+                                <li><a href="/admin/theme/manage"><i class="material-icons md-18">settings</i>Manage</a></li>
+                                <li><a href="/admin/theme/customize"><i class="material-icons md-18">reorder</i>Customize</a></li>
                             </ul>
-                         
                         </div>
                     </div>
                 </li>
-
-                <li><a href="#"><i class="material-icons md-18">event_seat</i>Event Management</a></li>
-                <li><a href="#"><i class="material-icons md-18">local_activity</i>Ticketing Rules</a></li>
-                <li><a href="#"><i class="material-icons md-18">local_pizza</i>Food Court</a></li>
-                <li><a href="#"><i class="material-icons md-18">settings</i>Settings</a></li>*@
+                <li class="panel panel-default" id="dropdown">
+                    <a data-toggle="collapse" href="#dropdown-lvl21">
+                        <i class="material-icons md-18">build</i>Dev Tools<span class="caret text-right"></span>
+                    </a>
+                    <!-- Dropdown level 1 -->
+                    <div id="dropdown-lvl21" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul class="nav navbar-nav">
+                                <li><a href="/admin/dev/log"><i class="material-icons md-18">error</i>Logs</a></li>
+                                <li><a href="/admin/dev/sql"><i class="material-icons md-18">build</i>Sql</a></li>
+                                <li><a href="/admin/dev/cli"><i class="material-icons md-18">computer</i>CLI</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="panel panel-default" id="dropdown">
+                    <a data-toggle="collapse" href="#dropdown-lvl213">
+                        <i class="material-icons md-18">settings</i>Setting<span class="caret text-right"></span>
+                    </a>
+                    <!-- Dropdown level 1 -->
+                    <div id="dropdown-lvl213" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul class="nav navbar-nav">
+                                <li><a href="/admin/security"><i class="material-icons md-18">security</i>Security</a></li>
+                                <li><a href="/admin/setting/Web"><i class="material-icons md-18">build</i>Web Setting</a></li>
+                                <li><a href="/admin/setting/caching"><i class="material-icons md-18">cached</i>Caching</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+              
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
