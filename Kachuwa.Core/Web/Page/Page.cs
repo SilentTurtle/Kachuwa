@@ -18,7 +18,7 @@ namespace Kachuwa.Web
         public bool UseMasterLayout { get; set; }
         public bool IsPublished { get; set; }
        
-        [AutoFill(IsDate = true)]
+        [AutoFill(AutoFillProperty.CurrentDate)]
         public DateTime LastModified { get; set; }
        
         [IgnoreAll]
