@@ -1,11 +1,13 @@
-﻿using Kachuwa.Data.Crud.Attribute;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Web.Model
 {
     [Table("SeoSetting")]
     public class SEOSetting
     {
-        [Data.Crud.Attribute.Key]
+        [Key]
         public int SEOSettingId { get; set; }
     }
 }

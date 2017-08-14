@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
@@ -10,7 +11,7 @@ namespace Kachuwa.Web.Model
    [Table("MenuType")]
     public class MenuType
     {
-        [Data.Crud.Attribute.Key]
+        [Key]
         public int MenuTypeId { get; set; }
 
         [Required]

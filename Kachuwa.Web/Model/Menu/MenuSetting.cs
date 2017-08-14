@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Web.Model
@@ -6,7 +7,7 @@ namespace Kachuwa.Web.Model
     [Table("MenuSetting")]
     public class MenuSetting
     {
-        [Data.Crud.Attribute.Key]
+        [Key]
         public int MenuSettingId { get; set; }
         [Required]
         public string MenuGroupName { get; set; }

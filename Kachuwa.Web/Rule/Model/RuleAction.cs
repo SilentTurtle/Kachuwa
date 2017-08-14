@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
 
@@ -7,7 +9,7 @@ namespace Kachuwa.Web.Rule
     [Table("RuleAction")]
     public class RuleAction
     {
-        [Kachuwa.Data.Crud.Attribute.Key]
+        [Key]
         public int RuleActionId { get; set; }
         [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; }
