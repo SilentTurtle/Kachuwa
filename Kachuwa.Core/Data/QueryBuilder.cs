@@ -11,7 +11,9 @@ using Kachuwa.Data.Crud;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
 using EditableAttribute = Kachuwa.Data.Crud.Attribute.EditableAttribute;
-using KeyAttribute = Kachuwa.Data.Crud.Attribute.KeyAttribute;
+using KeyAttribute = System.ComponentModel.DataAnnotations.KeyAttribute;
+
+//using KeyAttribute = Kachuwa.Data.Crud.Attribute.KeyAttribute;
 
 namespace Kachuwa.Data
 {

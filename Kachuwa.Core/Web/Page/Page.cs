@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
 
@@ -8,7 +9,7 @@ namespace Kachuwa.Web
     [Table("Page")]
     public class Page
     {
-        [Data.Crud.Attribute.Key]
+        [Key]
         public long PageId { get; set; }
         [Required]
         public string Name { get; set; }

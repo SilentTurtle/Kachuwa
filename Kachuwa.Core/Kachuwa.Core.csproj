@@ -8,6 +8,7 @@
     <Folder Include="Data\MySQL\" />
     <Folder Include="Data\PostgreSQL\" />
     <Folder Include="Data\SQLite\" />
+    <Folder Include="Plugin\Service\" />
     <Folder Include="Service\" />
     <Folder Include="Queue\" />
     <Folder Include="Dev\" />

@@ -5,10 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace Kachuwa.Plugin
 {
-    class Class1
-    {
-    }
-
     public abstract class PluginViewComponent : ViewComponent
     {
 

@@ -5,7 +5,6 @@ using System.Dynamic;
 using System.Reflection;
 using Kachuwa.Data.Crud.Attribute;
 using Newtonsoft.Json;
-using KeyAttribute = Kachuwa.Data.Crud.Attribute.KeyAttribute;
 
 namespace Kachuwa.Data.Crud.FormBuilder
 {

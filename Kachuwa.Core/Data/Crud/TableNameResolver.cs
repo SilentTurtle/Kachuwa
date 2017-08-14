@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Dapper;
 using Microsoft.CSharp.RuntimeBinder;
