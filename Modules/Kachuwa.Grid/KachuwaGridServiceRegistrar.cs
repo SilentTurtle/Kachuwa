@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Kachuwa.Core.DI;
 using Kachuwa.Log;
 using Kachuwa.Web.Razor;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Kachuwa.Grid
 {
@@ -15,6 +17,7 @@ namespace Kachuwa.Grid
         {
           
         }
+       
 
         public void Register(IServiceCollection serviceCollection, IConfigurationRoot configuration)
         {

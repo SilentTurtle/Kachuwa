@@ -23,7 +23,7 @@ namespace Kachuwa.KGrid
             foreach (var prop in row.Model.GetType().GetProperties())
             {
 
-                if (prop.GetCustomAttribute<Kachuwa.Data.Crud.Attribute.KeyAttribute>() != null)
+                if (prop.GetCustomAttribute<KeyAttribute>() != null)
                 {
                     System.TypeCode typeCode = System.Type.GetTypeCode(prop.PropertyType);
                     if (typeCode == TypeCode.Int64)
