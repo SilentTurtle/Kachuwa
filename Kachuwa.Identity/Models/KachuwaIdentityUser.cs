@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Identity.Models

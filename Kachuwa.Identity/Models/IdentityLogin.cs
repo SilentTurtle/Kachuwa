@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Identity.Models

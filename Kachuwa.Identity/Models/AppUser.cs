@@ -2,13 +2,14 @@
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kachuwa.Identity.Models
 {
     [Table("AppUser")]
     public class AppUser
     {
-        [Kachuwa.Data.Crud.Attribute.Key]
+        [Key]
         public long AppUserId { get; set; }
 
         [IgnoreUpdate]
