@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kachuwa.KGrid
@@ -61,6 +62,12 @@ namespace Kachuwa.KGrid
         public virtual IHtmlGrid<T> Empty(string text)
         {
             Grid.NoDataText = text;
+
+            return this;
+        }
+        public virtual IHtmlGrid<T> Empty(Func<dynamic, HelperResult> template)
+        {
+            Grid.NoDataTemplate = template;
 
             return this;
         }

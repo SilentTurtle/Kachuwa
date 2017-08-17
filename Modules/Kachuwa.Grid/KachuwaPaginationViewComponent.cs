@@ -18,6 +18,7 @@ namespace Kachuwa.Grid
             return View(pager);
         }
 
-
+        public override string DisplayName { get; } = "Grid Pagination";
+        public override bool IsVisibleOnUI { get; } = true;
     }
 }

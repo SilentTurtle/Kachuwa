@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using Kachuwa.Grid;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
@@ -17,6 +18,7 @@ namespace Kachuwa.KGrid
     {
         string Name { get; set; }
         string NoDataText { get; set; }
+        Func<dynamic, HelperResult> NoDataTemplate { get; set; }
         string CssClasses { get; set; }
         ViewContext ViewContext { get; set; }
         IQueryCollection Query { get; set; }
@@ -27,6 +29,7 @@ namespace Kachuwa.KGrid
 
         KachuwaPager Pager { get; set; }
         bool UseCardView { get; set; }
+        string SearchBarClasses { get; set; }
     }
 
     public interface IKachuwaGrid<T> : IKachuwaGrid
@@ -41,7 +44,7 @@ namespace Kachuwa.KGrid
     {
        
         public string Name { get; set; }
-       
+        public Func<dynamic, HelperResult> NoDataTemplate { get; set; }
         public string CssClasses { get; set; }
         public string FooterPartialViewName { get; set; }
 
@@ -72,7 +75,8 @@ namespace Kachuwa.KGrid
            Pager = new KachuwaPager(rowTotal, 1);
         }
         public string NoDataText { get; set; }
-      
+        public string  SearchBarClasses { get; set; }
+
         IKachuwaGridCommands<IKachuwaGridCommand> IKachuwaGrid.Commands => Commands;
         public IKachuwaGridCommandsOf<T> Commands { get; set; }
 

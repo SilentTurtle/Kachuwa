@@ -19,6 +19,8 @@
         }
     }
 
+  
+
 }
 <div id="@Model.Name" class="kachuwa-form">
 
@@ -48,11 +50,22 @@
     @foreach (var row in formSection.Rows)
     {
         <div class="@row.CssClasses">
-
+            
+            @if (row.Template != null)
+            {
+                @(row.Template)
+             
+            }
         @{ int ColumnNo = row.Columns.Count();}
         @foreach (var column in row.Columns)
         {
             @(Html.Raw(parseColumnTemplate(column.ColumnFormat)[0]))
+
+            @if(column.Template != null)
+            {
+                @(column.Template)
+
+            }
             if (ColumnNo > 1)
             {
                 <div class="@column.CssClasses">
@@ -67,7 +80,7 @@
                         switch (control.InputType)
                         {
                             case FormInputControl.Hidden:
-                                <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" />
+                                <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" @control.RenderAttributes() />
                                 break;
                             case FormInputControl.CheckBox:
                                 if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
@@ -161,7 +174,7 @@
                                                     </textarea>
                                 break;
                             case FormInputControl.TextBox:
-                                <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"
+                                <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"   @Html.Raw(control.RenderAttributes())
                                        value="@control.ValueFor(Model.FormModel)"
                                        placeholder="@control.PlaceHolder" />
                                 break;
@@ -312,7 +325,7 @@
                                                     </textarea>
                             break;
                         case FormInputControl.TextBox:
-                            <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"
+                            <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"   @Html.Raw(control.RenderAttributes())
                                    value="@control.ValueFor(Model.FormModel)"
                                    placeholder="@control.PlaceHolder" />
                             break;

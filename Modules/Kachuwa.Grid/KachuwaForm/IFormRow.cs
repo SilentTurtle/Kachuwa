@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Kachuwa.Form
 {
@@ -8,6 +10,7 @@ namespace Kachuwa.Form
     {
         string CssClasses { get; set; }
         IFormColumns<IFormColumn> Columns { get; }
+        IHtmlContent Template { get; set; }
     }
     public interface IFormRow<T>: IFormRow
     {
@@ -23,6 +26,9 @@ namespace Kachuwa.Form
         IForm<T> Form { get; }
         IFormRow<T> Add(string name, string classes);
         IFormRow<T> Add(string name, string classes, Action<IFormColumnsOf<T>> action);
+
+        IFormRow<T> Add(string name, string classes, Func<dynamic, HelperResult> template);
+        IFormRow<T> Add(string name, string classes, Func<dynamic, HelperResult> template,object templateModel);
     }
 
     public abstract class BaseFormRow<T> : IFormRow<T>
@@ -35,6 +41,7 @@ namespace Kachuwa.Form
         {
             get { return Columns; }
         }
+        public IHtmlContent Template { get; set; }
     }
     public class FormRow<T> : BaseFormRow<T> where T : class
     {
@@ -43,6 +50,7 @@ namespace Kachuwa.Form
         {
             Form = form;
             CssClasses = classes;
+            Template = null;
             Columns = new FormColumns<T>(Form);
 
 
@@ -52,7 +60,26 @@ namespace Kachuwa.Form
             Form = form;
             CssClasses = classes;
             Columns = new FormColumns<T>(Form);
+            Template = null;
             columnsBuilder(Columns);
+        }
+        public FormRow(IForm<T> form, string name, string classes, Func<dynamic, HelperResult> template)
+        {
+            Form = form;
+            CssClasses = classes;
+            Template = template.Invoke(null);
+            Columns = new FormColumns<T>(Form);
+
+
+        }
+        public FormRow(IForm<T> form, string name, string classes, Func<dynamic, HelperResult> template,object templateModel)
+        {
+            Form = form;
+            CssClasses = classes;
+            Template = template(templateModel);
+            Columns = new FormColumns<T>(Form);
+
+
         }
     }
     public class FormRows<T> : List<IFormRow<T>>, IFormRowsOf<T> where T : class 
@@ -93,7 +120,18 @@ namespace Kachuwa.Form
             return form;
         }
 
-        
+        public IFormRow<T> Add(string name, string classes, Func<dynamic, HelperResult> template)
+        {
+            IFormRow<T> form = new FormRow<T>(Form, name, classes, template);
+            Add(form);
+            return form;
+        }
+        public IFormRow<T> Add(string name, string classes, Func<dynamic, HelperResult> template,object templateModel)
+        {
+            IFormRow<T> form = new FormRow<T>(Form, name, classes, template, templateModel);
+            Add(form);
+            return form;
+        }
 
 
         //public virtual IFormRow<T> GetEnumerator()

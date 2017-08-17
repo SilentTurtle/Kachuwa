@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace Kachuwa.Form
@@ -20,7 +22,8 @@ namespace Kachuwa.Form
         object Value { get; set; }
         string Help { get; set; }
         IHtmlContent ValueFor(object model);
-
+        IDictionary<string, object> Attributes { get; set; }
+        IHtmlContent RenderAttributes();
         FormInputControl InputType { get; set; }
         string DisplayName { get; set; }
         IEnumerable<FormInputItem> DataSource { get; set; }
@@ -46,8 +49,9 @@ namespace Kachuwa.Form
 
         IFormInput<T> Add(string name, string classes);//final forms
         IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint);
-        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl);
-        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource);
+        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, object attributes = null);
+        IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource, object attributes = null);
+
 
 
     }
@@ -69,6 +73,7 @@ namespace Kachuwa.Form
         public object Value { get; set; }
         public string DisplayName { get; set; }
         public IForm<T> Form { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
         public FormInputControl InputType { get; set; } = FormInputControl.TextBox;
         public Func<T, object> RenderValue { get; set; }
         public abstract IHtmlContent ValueFor(object model);
@@ -80,6 +85,7 @@ namespace Kachuwa.Form
 
         public IEnumerable<FormInputItem> DataSource { get; set; }
         public abstract IHtmlContent RenderControlSource(object model);
+        public abstract IHtmlContent RenderAttributes();
     }
 
     public class FormInput<T, TValue> : BaseFormInput<T, TValue> where T : class
@@ -96,6 +102,29 @@ namespace Kachuwa.Form
             DisplayName = Name;
 
 
+        }
+        private static IDictionary<string, object> GetHtmlAttributeDictionaryOrNull(object htmlAttributes)
+        {
+            IDictionary<string, object> htmlAttributeDictionary = null;
+            if (htmlAttributes != null)
+            {
+                htmlAttributeDictionary = htmlAttributes as IDictionary<string, object>;
+                if (htmlAttributeDictionary == null)
+                {
+                    htmlAttributeDictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+                    //already defined in input class ie removing
+                    if (htmlAttributeDictionary.ContainsKey("id"))
+                        htmlAttributeDictionary.Remove("id");
+                    if (htmlAttributeDictionary.ContainsKey("class"))
+                        htmlAttributeDictionary.Remove("class");
+                    if (htmlAttributeDictionary.ContainsKey("placeholder"))
+                        htmlAttributeDictionary.Remove("placeholder");
+                    if (htmlAttributeDictionary.ContainsKey("value"))
+                        htmlAttributeDictionary.Remove("value");
+                }
+            }
+
+            return htmlAttributeDictionary;
         }
         public FormInput(IForm<T> form,
           string name, string classes,
@@ -124,10 +153,11 @@ namespace Kachuwa.Form
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
 
+
         }
 
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
-            FormInputControl inputType)
+            FormInputControl inputType,object attributes)
         {
             Form = form;
             CssClasses = classes;
@@ -137,9 +167,10 @@ namespace Kachuwa.Form
             InputType = inputType;
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
+            Attributes=GetHtmlAttributeDictionaryOrNull(attributes);
         }
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
-          FormInputControl inputType, IEnumerable<FormInputItem> dataSource)
+          FormInputControl inputType, IEnumerable<FormInputItem> dataSource,object attributes)
         {
             Form = form;
             CssClasses = classes;
@@ -150,9 +181,31 @@ namespace Kachuwa.Form
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
             DataSource = dataSource;
+            Attributes=GetHtmlAttributeDictionaryOrNull(attributes);
         }
 
+        public override  IHtmlContent RenderAttributes()
+        {
+            TextWriter writer =new StringWriter();
+            if (this.Attributes != null && this.Attributes.Count > 0)
+            {
+                foreach (var attribute in Attributes)
+                {
+                    var key = attribute.Key;
+                    writer.Write(" ");
+                    writer.Write(key);
+                    writer.Write("=\"");
+                    if (attribute.Value != null)
+                    {
+                        HtmlEncoder.Default.Encode(writer, attribute.Value.ToString());
+                    }
 
+                    writer.Write("\"");
+                }
+                return new HtmlString(writer.ToString());
+            }
+            return null;
+        }
 
         public override IHtmlContent RenderControlSource(object model)
         {
@@ -314,24 +367,24 @@ namespace Kachuwa.Form
         {
             IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes);
             Add(inputControl);
-
             return inputControl;
         }
 
-        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl)
+        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl,object attributes=null)
         {
-            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl);
+            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl, attributes);
             Add(inputControl);
             return inputControl;
         }
-        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource)
+        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, IEnumerable<FormInputItem> datasource, object attributes = null)
         {
-            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl, datasource);
+            IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl, datasource, attributes);
             Add(inputControl);
             return inputControl;
         }
+      
 
-
+       
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Kachuwa.KGrid
 {
@@ -21,6 +22,7 @@ namespace Kachuwa.KGrid
         IHtmlGrid<T> RowCss(Func<T, string> cssClasses);
         IHtmlGrid<T> Css(string cssClasses);
         IHtmlGrid<T> Empty(string text);
+        IHtmlGrid<T> Empty(Func<dynamic, HelperResult> template);
         IHtmlGrid<T> Named(string name);
 
         //IHtmlGrid<T> Pageable(Action<IGridPager<T>> builder);
