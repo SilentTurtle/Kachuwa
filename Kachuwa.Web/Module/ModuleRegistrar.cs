@@ -29,7 +29,6 @@ namespace Kachuwa.Web.Module
                 var serviceProvider = _services.BuildServiceProvider();
                 var moduleService = serviceProvider.GetService<IModuleService>();
 
-
                 var assesmblies = AppDomain.CurrentDomain.GetAssemblies();
                 var modules = new List<IModule>();
                 foreach (var assembly in assesmblies)
@@ -39,6 +38,7 @@ namespace Kachuwa.Web.Module
                                           && t.GetConstructor(Type.EmptyTypes) != null
                                     select Activator.CreateInstance(t) as IModule;
 
+                   
                     modules.AddRange(instances);
                 }
                 var installedModules = moduleService.Service.GetList("Where IsInstalled=1",new{});
@@ -58,7 +58,6 @@ namespace Kachuwa.Web.Module
                 _services.Configure<RazorViewEngineOptions>(options =>
                 {
                     options.FileProviders.Add(modulesFileProvider);
-
                 });
                 _logger.Log(LogType.Trace, () => $"Razor engine module file provider added.");
                 return true;
