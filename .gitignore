@@ -212,5 +212,10 @@ _Pvt_Extensions/
 ModelManifest.xml
 webApp/wwwroot/*
 buildlog/
+publog/
+artifacts/
+artifactspublish/
+webApp/Locale/*
 webApp/Logs
+webApp/DbLogs
 
