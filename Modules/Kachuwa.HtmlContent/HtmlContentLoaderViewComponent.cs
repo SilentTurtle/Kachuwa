@@ -42,6 +42,8 @@ namespace Kachuwa.HtmlContent
             }
             return View(key);
         }
-      
+
+        public override string DisplayName { get; } = "Html Content Loder";
+        public override bool IsVisibleOnUI { get; } = true;
     }
 }

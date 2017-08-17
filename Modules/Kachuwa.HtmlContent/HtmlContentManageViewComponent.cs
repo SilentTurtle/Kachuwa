@@ -21,5 +21,8 @@ namespace Kachuwa.HtmlContent
             //var data = await _service.GetAll();
             return View();
         }
+
+        public override string DisplayName { get; } = "Html Content Management";
+        public override bool IsVisibleOnUI { get; } = true;
     }
 }
