@@ -158,7 +158,9 @@
                             case FormInputControl.RadioList:
                                 break;
                             case FormInputControl.Select:
-                                <select class="@control.CssClasses" name="@control.Name"></select>
+                                <select class="@control.CssClasses" name="@control.Name">
+                                    (@control.RenderControlSource(control.DataSource))
+                                </select>
                                 break;
                             case FormInputControl.Telephone:
                                 <input type="tel" class="@control.CssClasses" id="@control.Id"
@@ -309,7 +311,9 @@
                         case FormInputControl.RadioList:
                             break;
                         case FormInputControl.Select:
-                            <select class="@control.CssClasses" name="@control.Name"></select>
+                            <select class="@control.CssClasses" name="@control.Name">
+                                (@control.RenderControlSource(control.DataSource))
+                            </select>
                             break;
                         case FormInputControl.Telephone:
                             <input type="tel" class="@control.CssClasses" id="@control.Id"
