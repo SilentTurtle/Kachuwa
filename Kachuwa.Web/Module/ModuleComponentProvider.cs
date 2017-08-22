@@ -8,14 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Kachuwa.Web.Module
 {
-    public class ModuleComponentDescription
+    public class ModuleComponentDescription : IModuleComponentDescription
     {
         public string DisplayName { get; set; }
         public ViewComponentDescriptor ComponentDescriptor { get; set; }
         public bool IsVisibleOnUI { get; set; } = true;
         public string FullName { get; set; }
         public string ShortName { get; set; }
-    }
+        public bool HasSetting { get; set; }
+        public string ModuleSettingComponent { get; set; }
+}
     public class ModuleComponentProvider : IModuleComponentProvider
     {
         private readonly IServiceProvider _serviceProvider;
@@ -55,7 +57,10 @@ namespace Kachuwa.Web.Module
                             (bool) serviceType.GetProperty("IsVisibleOnUI").GetValue(viewComponentInstance);
                         var DisplayName =
                             (string) serviceType.GetProperty("DisplayName").GetValue(viewComponentInstance);
-
+                        var hasSetting =
+                           (bool)serviceType.GetProperty("HasSetting").GetValue(viewComponentInstance);
+                        var settingComponent =
+                          (string)serviceType.GetProperty("ModuleSettingComponent").GetValue(viewComponentInstance);
                         if (_modulesComponent.ContainsKey(module.Name))
                         {
                             _modulesComponent[module.Name].Add(new ModuleComponentDescription()
@@ -64,7 +69,9 @@ namespace Kachuwa.Web.Module
                                 DisplayName = DisplayName,
                                 IsVisibleOnUI = IsVisibleOnUI,
                                 ShortName = component.ShortName,
-                                FullName = component.FullName
+                                FullName = component.FullName,
+                                HasSetting= hasSetting,
+                                ModuleSettingComponent= settingComponent
 
                             });
                         }
