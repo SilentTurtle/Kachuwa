@@ -41,7 +41,12 @@
                                         "/admin/menu/delete");
 
                                 }).Css("table-hover")
-                                      .Empty("No Menu's added yet.")
+                                      .Empty(@<div class="no-item-template">
+                                                 <div>
+                                                     <h2>No Menus Found</h2>
+                                                     <p>test</p>
+                                                 </div>
+                                             </div>)
                                       .Pagination(pager =>
                                       {
                                     pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented

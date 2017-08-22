@@ -1,23 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Kachuwa.Admin.ViewModel;
 using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web;
+using Kachuwa.Web.Layout;
+using Kachuwa.Web.Module;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Admin.Controllers
 {
-    
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class PageController : BaseController
     {
         private readonly IPageService _pageService;
+        private readonly IModuleComponentProvider _moduleComponentProvider;
+        private readonly ILayoutRenderer _layoutRenderer;
 
-        public PageController(IPageService pageService)
+        public PageController(IPageService pageService, 
+            IModuleComponentProvider moduleComponentProvider,ILayoutRenderer layoutRenderer)
         {
             _pageService = pageService;
+            _moduleComponentProvider = moduleComponentProvider;
+            _layoutRenderer = layoutRenderer;
         }
         #region PAge Crud
         [Route("admin/page/page/{page?}")]
@@ -35,19 +44,20 @@ namespace Kachuwa.Admin.Controllers
         [Route("admin/page/new")]
         public async Task<IActionResult> New()
         {
-
+          
             return View();
         }
 
         [HttpPost]
         [Route("admin/page/new")]
-        public async Task<IActionResult> New(Page model)
+        public async Task<IActionResult> New(PageViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Url= model.Url.TrimStart(new char[] {'/'});
                 model.AutoFill();
                 if (model.PageId == 0)
+                    
                     await _pageService.CrudService.InsertAsync<int>(model);
                 else
                     await _pageService.CrudService.UpdateAsync(model);
@@ -57,6 +67,36 @@ namespace Kachuwa.Admin.Controllers
             {
                 return View(model);
             }
+        }
+
+        [Route("admin/page/config/{pageId}")]
+        public async Task<IActionResult> Config([FromRoute]int pageId)
+        {
+            var model = await _pageService.CrudService.GetAsync(pageId);
+            var moduleComponents = _moduleComponentProvider.GetComponents();
+            var moduleList = new List<ModuleViewModel>();
+            foreach (var key in moduleComponents.Keys)
+            {
+                var moduleViewComponents = moduleComponents[key];
+                moduleList.Add(new ModuleViewModel()
+                {
+                    ModuleName = key,
+                    ModuleComponents = moduleViewComponents
+                });
+            }
+            ViewData["Modules"] = moduleList;
+            return View(model);
+        }
+        [HttpPost]
+        [Route("admin/page/config")]
+        public async Task<JsonResult> Config(LayoutContent model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _pageService.SavePageLayout(model);
+                return Json(true);
+            }
+            return Json(false);
         }
 
 
@@ -94,8 +134,18 @@ namespace Kachuwa.Admin.Controllers
             var result = await _pageService.CrudService.DeleteAsync(id);
             return Json(result);
         }
-        #endregion
+        [HttpGet]
+        [Route("admin/page/modulesetting/{name}")]
+        public async Task<IActionResult> LoadModuleSetting([FromRoute]string name)
+        {
+            var moduleComponents = _moduleComponentProvider.GetComponents(name);
+            if (moduleComponents.FirstOrDefault().HasSetting)
+                return ViewComponent(moduleComponents.FirstOrDefault().ModuleSettingComponent);
+            else return Json(false);
 
+        }
+        #endregion
+        
 
 
     }

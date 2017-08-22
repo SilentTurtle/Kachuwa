@@ -1,0 +1,442 @@
+﻿@using Kachuwa.Admin.ViewModel
+@using Kachuwa.Form
+@using Kachuwa.KGrid
+@using Kachuwa.Web
+@model Page
+@{
+    ViewData["Title"] = "Page Config";
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Page Layout</h2>
+                            <div class="input-group col-md-9 col-xs-4">
+                                <div class="input-group-btn pull-right">
+                                    <button class="btn btn-warning" type="button" id="btnRefresh" title="Reset Layout">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                    <button class="btn btn-success" type="button" id="btnSavePage" title="Save Layout">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-collapse" aria-labelledby="headingOne"
+                             aria-expanded="true">
+                            <div class="panel-body">
+                                <div id="pageLayoutWrapper">
+                                    <div class="col-md-9 ">
+                                        <div class="module-recycle">
+
+                                        </div>
+                                        <div>
+                                            <ul id="pageLayout">
+                                                <li class="page-row">
+                                                    <div class="module-lines">
+
+                                                        <div class="dropable room room-2"></div>
+                                                        <div class="dropable room room-2"></div>
+                                                        <div class="dropable room room-2"></div>
+                                                        <div class="dropable room room-2"></div>
+                                                        <div class="dropable room room-2"></div>
+                                                        <div class="dropable room room-2"></div>
+                                                    </div>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 block__list block__list_words">
+                                        <div class="block__list-title">Modules</div>
+                                        <div class="pagination pagination-large">
+                                            <ul class="modulelist-alpha"><li data-sid="A"><a href="javascript:void(0);" class="letters">A</a></li><li data-sid="B"><a href="javascript:void(0);" class="letters">B</a></li><li data-sid="C"><a href="javascript:void(0);" class="letters">C</a></li><li data-sid="D"><a href="javascript:void(0);" class="letters">D</a></li><li data-sid="E"><a href="javascript:void(0);" class="letters">E</a></li><li data-sid="F"><a href="javascript:void(0);" class="letters">F</a></li><li data-sid="G"><a href="javascript:void(0);" class="letters">G</a></li><li data-sid="H"><a href="javascript:void(0);" class="letters">H</a></li><li data-sid="I"><a href="javascript:void(0);" class="letters">I</a></li><li data-sid="J"><a href="javascript:void(0);" class="letters">J</a></li><li data-sid="K"><a href="javascript:void(0);" class="letters">K</a></li><li data-sid="L"><a href="javascript:void(0);" class="letters">L</a></li><li data-sid="M"><a href="javascript:void(0);" class="letters">M</a></li><li data-sid="N"><a href="javascript:void(0);" class="letters">N</a></li><li data-sid="O"><a href="javascript:void(0);" class="letters">O</a></li><li data-sid="P"><a href="javascript:void(0);" class="letters">P</a></li><li data-sid="Q"><a href="javascript:void(0);" class="letters">Q</a></li><li data-sid="R"><a href="javascript:void(0);" class="letters">R</a></li><li data-sid="S"><a href="javascript:void(0);" class="letters">S</a></li><li data-sid="T"><a href="javascript:void(0);" class="letters">T</a></li><li data-sid="U"><a href="javascript:void(0);" class="letters">U</a></li><li data-sid="V"><a href="javascript:void(0);" class="letters">V</a></li><li data-sid="W"><a href="javascript:void(0);" class="letters">W</a></li><li data-sid="X"><a href="javascript:void(0);" class="letters">X</a></li><li data-sid="Y"><a href="javascript:void(0);" class="letters">Y</a></li><li data-sid="Z"><a href="javascript:void(0);" class="letters">Z</a></li></ul>
+                                        </div>
+
+                                        <ul id="pageModules">
+                                            @foreach (var module in (List<ModuleViewModel>)ViewData["Modules"])
+                                            {
+                                                <li class="dropdown" data-name="@module.ModuleName">
+                                                    @module.ModuleName
+                                                    <ul class="moduleComponents ">
+                                                        @foreach (var component in module.ModuleComponents)
+                                                        {
+                                                            if (component.IsVisibleOnUI)
+                                                            {
+                                                                <li st-name="@component.ShortName" fl-name="@component.FullName">@component.DisplayName</li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    @*<div style="width: 25%; float: left; margin-top: 15px; margin-left: 10px" class="block__list block__list_words">
+                                            <div class="block__list-title">only put</div>
+                                            <ul id="advanced-3">
+                                                <li>Money</li>
+                                                <li>Force</li>
+                                                <li>Agility</li>
+                                            </ul>
+                                        </div>*@
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container demo">
+
+
+        @*<div class="text-center">
+        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal">
+            Left Sidebar Modal
+        </button>
+
+        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#dvModuleSetting">
+            Right Sidebar Modal
+        </button>
+    </div>*@
+
+        <!-- Modal -->
+        <div class="modal left fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Left Sidebar</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </p>
+                    </div>
+
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+        <!-- Modal -->
+        <div class="modal right fade" id="dvModuleSetting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="headingModule"></h4>
+                    </div>
+
+                    <div class="modal-body" id="dvModuleSettingContainer">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" >
+                           <i class="fa fa-save"></i> Save
+                        </button>
+                    </div>
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+
+
+    </div><!-- container -->
+    <div class="row">
+        <div class="demo-footer">
+           SEttings
+        </div>
+    </div>
+</section>
+
+<link href="~/resources/contextmenu/jquery.contextMenu.min.css" rel="stylesheet" />
+@section scripts{
+    @*<script src="/resources/Sortable/Sortable.min.js"></script>*@
+    <script src="~/resources/Sortable/jquery.fn.sortable.js"></script>
+    <script src="~/resources/contextmenu/jquery.contextMenu.min.js"></script>
+    <script src="~/resources/contextmenu/jquery.ui.position.js"></script>
+    <script type="text/javascript" asp-add-nonce="true">
+        'use strict';
+        var pageLayoutManager = function() {
+            var ajaxCall = function(url, param, successFx, error) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: url,
+                    data: param,
+                    dataType: "json",
+                    success: successFx,
+                    error: error
+                });
+            };
+            var configLayout = function() {}
+
+            var renderUiConfig = function() {
+                var model = {
+                    PageId:@Model.PageId,
+                    Rows: []
+                };
+                var rows = [];
+                $("#pageLayout li").each(function(index, item) {
+
+                    var $li = $(item);
+                    var row = {};
+                    row.Order = $li.index();
+                    row.ClassName = "";
+                    row.RowName = "";
+                    row.Columns = [];
+                    $li.find(".module-lines >.room").each(function(i, col) {
+                        var numberPattern = /\d+/g;
+                        var $col = $(col);
+                        var classes = $col.prop('class');
+                        var z = classes.match(numberPattern);
+                        var column = {};
+                        column.Name = "";
+                        column.ClassName = "";
+                        column.Components = [];
+                        column.Order = i;
+                        if (z == undefined) {
+                            column.Width = 12;
+                        } else {
+                            column.Width = z[0];
+                        }
+
+                        $(col).find(".dropped").each(function(z, module) {
+                            var item = $(module).data('item');
+                            var component = {};
+                            component.Name = item.ShortName;
+                            component.DisplayName = item.DisplayName;
+                            component.FullName = item.FullName;
+                            component.Params = item.Param;
+                            column.Components.push(component);
+                        });
+
+                        row.Columns.push(column);
+                    });
+                    rows.push(row);
+
+
+                });
+                model.Rows = rows;
+                console.log(model);
+                return model;
+            }
+
+            var savePageLayout = function() {
+                if (confirm("Done with editing?")) {
+                    var model = renderUiConfig();
+                    ajaxCall("/admin/page/config",
+                        model,
+                        function() {},
+                        function() {});
+                }
+            }
+
+            var resetPageLayout = function() {
+                $("#pageLayout")
+                    .html("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>");
+
+            }
+            var currModule = {};
+            var setmoduleSetting=function(param) {
+                currModule.Param = param;
+                var item = currModule.Elem.data('item');
+                item.Param = currModule.Param;
+                currModule.Elem.data('item', item);
+            }
+            var loadModuleSetting = function(moduleName) {
+               
+                $("#headingModule").text('').text();
+                $.ajax({
+                    url: '/admin/page/modulesetting/' + moduleName,
+                    type: "GET",
+                    success: function (response, status, xhr) {
+                        $("#dvModuleSettingContainer").html(response);
+                        $('#dvModuleSetting').modal('show');
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //show the error somewhere - but this is a bad solution
+                    }
+                });
+
+            }
+
+            var moduleDropBoxInit = function() {
+                $(".dropable").sortable('destroy').sortable({
+                    animation: 150,
+                    put: true,
+                    pull: true,
+                    group: 'room-module',
+                    onAdd: function(/**Event*/evt) {
+                        console.log(evt);
+                        // evt.oldIndex; // element's old index within parent
+                        //evt.newIndex; // element's new index within parent
+                        var dropedElem = $(evt.item);
+                        // console.log(dropedElem, dropedElem.is("div"))
+                        if (!dropedElem.is("div")) {
+                            var shortName = dropedElem.attr('st-name');
+                            var fullName = dropedElem.attr('fl-name');
+                            var new_droppedElem =
+                                $("<div class='dropped'><div class='dropped-setting'><i class='fa fa-cog module-setting' ></i></div>" + $.trim(dropedElem.html()) + "</div>");
+                            new_droppedElem.data('item', { ShortName: shortName, FullName: fullName });
+                            $(evt.to).find("li").remove();
+                            if (evt.newIndex == 0) {
+                                $(evt.to).append(new_droppedElem);
+                            } else {
+                                new_droppedElem.insertBefore($(evt.to).find(".dropped:eq(" + evt.newIndex + ")"));
+                            }
+                            // console.log(evt.oldIndex, evt.newIndex);
+                        }
+                    }
+                });
+            }
+            var pageWrapperSortInit = function() {
+                $("#pageLayout").sortable('destroy').sortable({
+                    animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+                    //  handle: ".tile__title", // Restricts sort start click/touch to the specified element
+                    draggable: ".page-row", // Specifies which items inside the element should be sortable
+                    put: true,
+                    pull: true,
+                    group: 'row'
+                });
+
+                moduleDropBoxInit();
+            }
+
+            var addNewRow = function() {
+
+                $("#pageLayout")
+                    .append("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>");
+                pageWrapperSortInit();
+            }
+
+            var roomMaker = function(key, options) {
+                var m = "clicked: " + key;
+                var index = $(".context-menu-active").index();
+                var columnSize = options.items[key].value;
+                var rootRow = $("<div class='module-lines'></div>");
+                for (var i = 0; i < columnSize; i++) {
+                    var width = 12 / columnSize;
+                    rootRow.append($("<div class='dropable room room-" + width + "' ></div>"));
+                }
+
+                $("#pageLayout li:eq(" + index + ")").html(rootRow);
+                moduleDropBoxInit();
+
+            }
+
+            var UI = function() {
+
+                pageWrapperSortInit();
+
+                $(".module-lines").sortable({
+                    animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+                    //  handle: ".tile__title", // Restricts sort start click/touch to the specified element
+                    // draggable: ".dropable", // Specifies which items inside the element should be sortable
+                    put: true,
+                    pull: true,
+                    group: 'row-columns'
+                });
+
+                $(".module-recycle").sortable({
+                    animation: 150,
+                    put: true,
+                    pull: false,
+                    group: 'room-module',
+                    onAdd: function(/**Event*/evt) {
+                        $(evt.to).html('');
+                    }
+                });
+
+                $(".moduleComponents").sortable({
+                    animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+                    put: false,
+                    //filter: ".page-row",
+                    pull: 'clone',
+                    sort: false,
+                    group: { name: 'room-module', pull: 'clone', put: false }
+                });
+
+                var selectedClass = "";
+                $(".modulelist-alpha li").click(function() {
+                    selectedClass = $(this).attr("data-sid");
+                    // $("#pageModules").fadeTo(100, 0.1);
+                    $("#pageModules>li ").not("[data-name^=" + selectedClass + "]").fadeOut().removeClass('scale-anm');
+                    $("#pageModules>li[data-name^=" + selectedClass + "]").fadeIn().addClass('scale-anm');
+
+
+                });
+
+                $.contextMenu({
+                    selector: '#pageLayout>li',
+                    items: {
+                        "room2": { "value": 2, "name": "Make 2 Room", "icon": "cut", callback: roomMaker },
+                        "room3": { "value": 3, "name": "Make 3 Room", "icon": "cut", callback: roomMaker },
+                        "room4": { "value": 4, "name": "Make 4 Room", "icon": "cut", callback: roomMaker },
+                        "room6": { "value": 6, "name": "Make 6 Room", "icon": "cut", callback: roomMaker },
+                        "room12": { "value": 1, "name": "Make 1 room", "icon": "cut", callback: roomMaker },
+                        "sep1": "---------",
+                        "newrow": { "name": "New Row", "icon": "fa plus", callback: addNewRow },
+                        "sep2": "---------",
+                        "config": { "name": "Config", "icon": "fa cog", callback: configLayout }
+
+                    }
+                });
+
+                $(document).off("click", "#pageModules>li").on("click",
+                    "#pageModules>li",
+                    function() {
+                        $(this).find("ul").slideToggle("slow");
+                    });
+                $(document).off("click", "#btnSavePage").on("click",
+                    "#btnSavePage",
+                    function() {
+                        savePageLayout();
+                    });
+                $(document).off("click", "#btnRefresh").on("click",
+                    "#btnRefresh",
+                    function() {
+                        if (confirm("Are you sure?want to reset?")) {
+                            resetPageLayout();
+                        }
+
+                    });
+                $(document).off("click", ".dropped-setting>.module-setting").on("click",
+                    ".dropped-setting>.module-setting",
+                    function () {
+                        var item = $(this).parents(".dropped:eq(0)").data('item');
+                        currModule.Elem = $(this).parents(".dropped:eq(0)");
+                        currModule.Name = item.ShortName;
+                        loadModuleSetting(currModule.Name);
+
+
+                    });
+
+
+            }
+
+            var init = function() {
+
+                UI();
+            }();
+            var modSetting = {
+                onload:function(){},
+                CurrentModule: setmoduleSetting,
+                run:function() {
+                    modSetting.onload();
+                }
+            };
+            return { ModuleSetting:modSetting }
+        }();
+
+    </script>
+}

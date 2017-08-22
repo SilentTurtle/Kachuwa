@@ -34,6 +34,7 @@
 
                                       }).AddCommands(commands =>
                                       {
+                                          commands.Add("Module", "Module", "fa fa-cogs", "", "/admin/page/config", model => model.PageId);
                                           commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/page/edit", model => model.PageId);
                                           commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
                                               "/admin/page/delete");
