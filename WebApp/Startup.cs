@@ -78,7 +78,7 @@ namespace WebApp
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 options.SerializerSettings.Formatting = Formatting.Indented;
-            });
+            }).AddViewComponentsAsServices();
             //enable directory browsing
             //services.AddDirectoryBrowser();
 
