@@ -16,5 +16,7 @@ namespace Kachuwa.Grid
        public string Author { get; set; } = "Binod Tamang";
        public Assembly Assembly { get; set; } = typeof(KachuwaGridModule).GetTypeInfo().Assembly;
        public bool IsInstalled { get; set; } = true;
+       public bool RequireSettingComponent { get; set; } = false;
+       public string ModuleSettingComponent { get; set; }
    }
 }
