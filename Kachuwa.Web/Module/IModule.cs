@@ -12,5 +12,7 @@ namespace Kachuwa.Web.Module
         string Author { get; set; }
         Assembly Assembly { get; set; }
         bool IsInstalled { get; set; }
+        bool RequireSettingComponent { get; set; }
+        string ModuleSettingComponent { get; set; } 
     }
 }
