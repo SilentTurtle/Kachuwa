@@ -12,5 +12,7 @@ namespace Kachuwa.HtmlContent
         public string Author { get; set; } = "Binod Tamang";
         public Assembly Assembly { get; set; } = typeof(HtmlModule).GetTypeInfo().Assembly;
         public bool IsInstalled { get; set; } = true;
+        public bool RequireSettingComponent { get; set; } = true;
+        public string ModuleSettingComponent { get; set; } = "HtmlContentSetting";
     }
 }
