@@ -106,6 +106,7 @@ CREATE TABLE dbo.Page
 	Name									nvarchar(256) NOT NULL,
 	URL										nvarchar(256),	
 	Content									nvarchar(max) NOT NULL,
+	ContentConfig							nvarchar(max) not null,
 	UseMasterLayout							bit default(0) not null,
     IsPublished								bit default(0) not null,
 	Culture									nvarchar (10)  not null,
