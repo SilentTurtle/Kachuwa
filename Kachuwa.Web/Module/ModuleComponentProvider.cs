@@ -17,7 +17,7 @@ namespace Kachuwa.Web.Module
         public string ShortName { get; set; }
         public bool HasSetting { get; set; }
         public string ModuleSettingComponent { get; set; }
-}
+    }
     public class ModuleComponentProvider : IModuleComponentProvider
     {
         private readonly IServiceProvider _serviceProvider;
@@ -52,15 +52,12 @@ namespace Kachuwa.Web.Module
                         var serviceType = viewComponentInstance.GetType();
                         var module =
                             (IModule)
-                            ((FieldInfo) serviceType.GetMember("Module").GetValue(0)).GetValue(viewComponentInstance);
+                            ((FieldInfo)serviceType.GetMember("Module").GetValue(0)).GetValue(viewComponentInstance);
                         var IsVisibleOnUI =
-                            (bool) serviceType.GetProperty("IsVisibleOnUI").GetValue(viewComponentInstance);
+                            (bool)serviceType.GetProperty("IsVisibleOnUI").GetValue(viewComponentInstance);
                         var DisplayName =
-                            (string) serviceType.GetProperty("DisplayName").GetValue(viewComponentInstance);
-                        var hasSetting =
-                           (bool)serviceType.GetProperty("HasSetting").GetValue(viewComponentInstance);
-                        var settingComponent =
-                          (string)serviceType.GetProperty("ModuleSettingComponent").GetValue(viewComponentInstance);
+                            (string)serviceType.GetProperty("DisplayName").GetValue(viewComponentInstance);
+
                         if (_modulesComponent.ContainsKey(module.Name))
                         {
                             _modulesComponent[module.Name].Add(new ModuleComponentDescription()
@@ -70,8 +67,8 @@ namespace Kachuwa.Web.Module
                                 IsVisibleOnUI = IsVisibleOnUI,
                                 ShortName = component.ShortName,
                                 FullName = component.FullName,
-                                HasSetting= hasSetting,
-                                ModuleSettingComponent= settingComponent
+                                HasSetting = module.RequireSettingComponent,
+                                ModuleSettingComponent = module.ModuleSettingComponent
 
                             });
                         }
@@ -85,7 +82,9 @@ namespace Kachuwa.Web.Module
                                     DisplayName = DisplayName,
                                     IsVisibleOnUI = IsVisibleOnUI,
                                     ShortName = component.ShortName,
-                                    FullName = component.FullName
+                                    FullName = component.FullName,
+                                    HasSetting = module.RequireSettingComponent,
+                                    ModuleSettingComponent = module.ModuleSettingComponent
                                 }
                             });
                         }
