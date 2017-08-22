@@ -13,5 +13,7 @@ namespace Kachuwa.ContactUs
         public string Author { get; set; } = "Binod Tamang";
         public Assembly Assembly { get; set; } = typeof(ContactUsModule).GetTypeInfo().Assembly;
         public bool IsInstalled { get; set; } = false;
+        public bool RequireSettingComponent { get; set; }
+        public string ModuleSettingComponent { get; set; }
     }
 }
