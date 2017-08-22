@@ -1,5 +1,6 @@
 using Kachuwa.Caching;
 using Kachuwa.Log;
+using Kachuwa.Web.Layout;
 using Kachuwa.Web.Razor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,12 +19,14 @@ namespace Kachuwa.Web
             //service to convert view to string
 
             services.TryAddSingleton<IViewRenderService, ViewRenderService>();
+            services.TryAddSingleton<ILayoutRenderer, LayoutContentRenderer>();
             services.TryAddSingleton<IPageService, PageService>();
             var serviceProvider = services.BuildServiceProvider();
             var logger = serviceProvider.GetService<ILogger>();
             var pageService = serviceProvider.GetService<IPageService>();
             var cacheService = serviceProvider.GetService<ICacheService>();
             var ctxaccessor = serviceProvider.GetService<IHttpContextAccessor>();
+        
             services.Configure<RazorViewEngineOptions>(opts =>
             {
                 opts.FileProviders.Add(

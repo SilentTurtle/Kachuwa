@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Kachuwa.Data;
+using Kachuwa.Web.Layout;
 
 namespace Kachuwa.Web
 {
@@ -9,5 +10,7 @@ namespace Kachuwa.Web
         Task<bool> CheckPageExist(string url);
 
         string GetPageNamespaces(bool includeMasterLayout);
+
+        Task<bool> SavePageLayout(LayoutContent content);
     }
 }

@@ -123,29 +123,29 @@ namespace Kachuwa.Core.Extensions
             //app.UseTenant();
             //TODO cache middle ware causing problem
             //app.UseMiddleware<CacheMiddleware>();
-            app.UseSecurityHeadersMiddleware(config =>
-            {
-                config.AddContentTypeOptionsNoSniff();
-               // config.AddContentSecurity("YXjwbSX9P94nhr8M8UdVfon4v1KGwTJDk/dRqx72CwM=");
-                config.AddFrameOptionsDeny();
-                config.AddXssProtectionBlock();
-                // config.AddStrictTransportSecurityMaxAge();
-                config.AddContentSecurity(builder =>
-                {
-                    builder.AddScriptPolicy(script =>
-                    {
-                        script.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] {""});
+            //app.UseSecurityHeadersMiddleware(config =>
+            //{
+            //    config.AddContentTypeOptionsNoSniff();
+            //   // config.AddContentSecurity("YXjwbSX9P94nhr8M8UdVfon4v1KGwTJDk/dRqx72CwM=");
+            //    config.AddFrameOptionsSameOrigin("/");
+            //    config.AddXssProtectionBlock();
+            //    // config.AddStrictTransportSecurityMaxAge();
+            //    config.AddContentSecurity(builder =>
+            //    {
+            //        builder.AddScriptPolicy(script =>
+            //        {
+            //            script.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] {""});
                         
 
-                    });
-                    builder.AddStylePolicy(style =>
-                    {
-                        style.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] { "https://fonts.googleapis.com" });
-                    });
-                });
-                config.RemoveServerHeader();
+            //        });
+            //        builder.AddStylePolicy(style =>
+            //        {
+            //            style.AllowSelf().AllowInline().AddNonce().AllowfromCdn(new[] { "https://fonts.googleapis.com" });
+            //        });
+            //    });
+            //    config.RemoveServerHeader();
 
-            });
+            //});
             app.UseKSockets(serviceProvider);
             app.UseLocalization();
             // yes, demo code

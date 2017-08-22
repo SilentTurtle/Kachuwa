@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
+using Kachuwa.Web.Layout;
 
 namespace Kachuwa.Web
 {
@@ -16,6 +18,7 @@ namespace Kachuwa.Web
         [Required]
         public string Url { get; set; }
         public string Content { get; set; }
+        public string ContentConfig { get; set; }
         public bool UseMasterLayout { get; set; }
         public bool IsPublished { get; set; }
        
@@ -42,5 +45,11 @@ namespace Kachuwa.Web
         [IgnoreAll]
         public int RowTotal { get; set; }
 
+    }
+
+    public class PageConfig
+    {
+        public int PageId { get; set; }
+        public List<Row> Rows { get; set; }
     }
 }

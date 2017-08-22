@@ -1,50 +1,96 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Kachuwa.Web.Layout
 {
-    public class LayoutContentRenderer
+    public class LayoutContentRenderer : ILayoutRenderer
     {
-        private ILayoutContent _layout;
-        public LayoutContentRenderer(ILayoutContent layout)
-        {
-            _layout = layout;
-        }
+        private LayoutContent _layout;
+        private ILayoutGridSystem _layoutGridSys;
 
-        private string _row = "<div rid={0} rname={1} class={2} >{3}</div>";
+        private string _container = "<div class=\"{0}\" >{1}</div>";
+        private string _row = "<div rid=\"{0}\" rname={1} class={2} >{3}</div>";
         private string _column = "<div cid={0} cname={1} class={2} >{3}</div>";
-        public string Render()
+        private string _component = "<component name={0} param='new{ }' ></component>";
+
+
+
+        public string Render(LayoutContent layoutContent, LayoutGridSystem gridSystem)
         {
-            StringBuilder layout = new StringBuilder();
-
-            foreach (var resource in _layout.Resources)
+            try
             {
-                switch (resource.Type)
-                {
-                    case "css":
-                        break;
-                    case "script":
-                        break;
-                }
-            }
 
-            var rows = _layout.Rows.OrderBy(e => e.Order);
-            foreach (var row in rows)
+
+                _layout = layoutContent;
+
+                switch (gridSystem)
+                {
+                    case LayoutGridSystem.BootStrap:
+                        _layoutGridSys = new BootStrapLayoutGridSystem();
+                        break;
+
+
+                }
+
+                StringBuilder layout = new StringBuilder();
+
+                foreach (var resource in _layout.Resources)
+                {
+                    switch (resource.Type)
+                    {
+                        case "css":
+                            break;
+                        case "script":
+                            break;
+                    }
+                }
+
+                var rows = _layout.Rows.OrderBy(e => e.Order);
+                foreach (var row in rows)
+                {
+                    var columns = row.Columns.OrderBy(x => x.Order);
+                    // var rowColums = "";
+                    StringBuilder rowColums = new StringBuilder();
+
+                    foreach (var column in columns)
+                    {
+                        StringBuilder modules = new StringBuilder();
+                        if (column.Components != null)
+                        {
+                            foreach (var component in column.Components)
+                            {
+                                if (string.IsNullOrEmpty(component.Params))
+                                {
+                                    modules.Append(
+                                "<component name=\"" + component.Name + "\" }' ></component>");
+                                    modules.Append("<div class=\"clearfix\"></div>");
+                                }
+                                else
+                                {
+                                    modules.Append(
+                                "<component name=\"" + component.Name + "\" params='new { " + component.Params +"}' ></component>");
+                                    modules.Append("<div class=\"clearfix\"></div>");
+                                }
+                            
+                            }
+                        }
+
+                        rowColums.AppendFormat("<div cid=\"{0}\" cname=\"{1}\" class=\"{2}\" >{3}</div>", column.ColumnId, column.Name, _layoutGridSys.GetColumnClass(column.Width), modules);
+                    }
+                    var finalRow = string.Format("<div rid=\"{0}\" rname=\"{1}\" class=\"{2}\" >{3}</div>", row.RowId, row.RowName, _layoutGridSys.Row, rowColums);
+                    var container = string.Format("<div class=\"{0}\" >{1}</div>", _layoutGridSys.Container, finalRow);
+                    layout.Append(container);
+
+
+                }
+                return layout.ToString();
+            }
+            catch (Exception e)
             {
-                var columns = row.Columns.OrderBy(x => x.Order);
-                // var rowColums = "";
-                StringBuilder rowColums = new StringBuilder();
-
-                foreach (var column in columns)
-                {
-                    rowColums.AppendFormat(_column, column.ColumnId, column.Name, column.ClassName, column.Content);
-                }
-                layout.AppendFormat(_row, row.RowId, row.RowName, row.ClassName, rowColums.ToString());
-
-
+                throw e;
             }
-            return layout.ToString();
-
         }
     }
 }

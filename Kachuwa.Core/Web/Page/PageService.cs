@@ -7,18 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Kachuwa.Data;
+using Kachuwa.Web.Layout;
 using Kachuwa.Web.Razor;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace Kachuwa.Web
 {
     public class PageService : IPageService
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ILayoutRenderer _layoutRenderer;
 
-        public PageService(IHostingEnvironment hostingEnvironment)
+        public PageService(IHostingEnvironment hostingEnvironment, ILayoutRenderer layoutRenderer)
         {
             _hostingEnvironment = hostingEnvironment;
+            _layoutRenderer = layoutRenderer;
         }
         public CrudService<Page> CrudService { get; set; } = new CrudService<Page>();
         public async Task<bool> CheckPageExist(string url)
@@ -51,6 +55,23 @@ namespace Kachuwa.Web
                 return fileContent;
             }
             return "";
+        }
+
+        public  async Task<bool> SavePageLayout(LayoutContent content)
+        {
+            var renderedContent=_layoutRenderer.Render(content, LayoutGridSystem.BootStrap);
+            var jsonContent = JsonConvert.SerializeObject(content);
+
+            var dbFactory = DbFactoryProvider.GetFactory();
+            using (var db = (SqlConnection)dbFactory.GetConnection())
+            {
+                await db.OpenAsync();
+                var result =
+                    await db.ExecuteAsync(
+                        "Update  dbo.Page Set Content=@Content,ContentConfig=@ContentConfig Where PageId=@PageId",
+                        new {Content = renderedContent, ContentConfig = jsonContent, PageId = content.PageId});
+                return true;
+            }
         }
     }
 }
