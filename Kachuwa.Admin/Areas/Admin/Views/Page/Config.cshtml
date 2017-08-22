@@ -67,7 +67,7 @@
                                                         {
                                                             if (component.IsVisibleOnUI)
                                                             {
-                                                                <li st-name="@component.ShortName" fl-name="@component.FullName">@component.DisplayName</li>
+                                                                <li m-name="@module.ModuleName" st-name="@component.ShortName" fl-name="@component.FullName">@component.DisplayName</li>
                                                             }
                                                         }
                                                     </ul>
@@ -285,9 +285,10 @@
                         if (!dropedElem.is("div")) {
                             var shortName = dropedElem.attr('st-name');
                             var fullName = dropedElem.attr('fl-name');
+                            var moduleName = dropedElem.attr('m-name');
                             var new_droppedElem =
                                 $("<div class='dropped'><div class='dropped-setting'><i class='fa fa-cog module-setting' ></i></div>" + $.trim(dropedElem.html()) + "</div>");
-                            new_droppedElem.data('item', { ShortName: shortName, FullName: fullName });
+                            new_droppedElem.data('item', { ModuleName:moduleName,ShortName: shortName, FullName: fullName });
                             $(evt.to).find("li").remove();
                             if (evt.newIndex == 0) {
                                 $(evt.to).append(new_droppedElem);
@@ -416,7 +417,8 @@
                         var item = $(this).parents(".dropped:eq(0)").data('item');
                         currModule.Elem = $(this).parents(".dropped:eq(0)");
                         currModule.Name = item.ShortName;
-                        loadModuleSetting(currModule.Name);
+                        currModule.ModuleName = item.ModuleName;
+                        loadModuleSetting(currModule.ModuleName);
 
 
                     });
