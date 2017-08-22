@@ -16,7 +16,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Components\HtmlContentSetting\Default.cshtml" />
     <EmbeddedResource Include="Components\HtmlContentLoader\Default.cshtml" />
-    <EmbeddedResource Include="Components\HtmlContentManage\Default.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
