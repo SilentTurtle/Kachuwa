@@ -245,7 +245,7 @@ CREATE table dbo.Setting
 
 )
 
-Insert Into dbo.Page Select 'Home','landing','This is page Content',1,1,'en-us','2017/1/1','2017/1/1',1,0,'2017/1/1','Admin'	
+Insert Into dbo.Page Select 'Home','landing','This is page Content','',1,1,'en-us','2017/1/1','2017/1/1',1,0,'2017/1/1','Admin'	
 
 Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0
 
