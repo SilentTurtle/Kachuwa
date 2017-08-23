@@ -1,4 +1,6 @@
+using Kachuwa.Caching;
 using Kachuwa.Log;
+using Kachuwa.Web.Layout;
 using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Rule;
@@ -18,7 +20,20 @@ namespace Kachuwa.Web
     {
         public static IServiceCollection RegisterKachuwaWebServices(this IServiceCollection services)
         {
+            services.TryAddSingleton<ILayoutRenderer, LayoutContentRenderer>();
+            services.TryAddSingleton<ISeoService, SeoService>();
+            services.TryAddSingleton<IPageService, PageService>();
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger>();
+            var pageService = serviceProvider.GetService<IPageService>();
+            var cacheService = serviceProvider.GetService<ICacheService>();
+            var ctxaccessor = serviceProvider.GetService<IHttpContextAccessor>();
 
+            services.Configure<RazorViewEngineOptions>(opts =>
+            {
+                opts.FileProviders.Add(
+                    new PageFileProvider(pageService, logger, cacheService, ctxaccessor));
+            });
             services.AddSingleton<IRuleService, RuleService>();
             services.AddSingleton<IScriptRunner, SQLScriptRunner>();
             services.AddSingleton<IModuleService, ModuleService>();
@@ -38,7 +53,6 @@ namespace Kachuwa.Web
             //var ctxaccessor = services.BuildServiceProvider().GetService<IHttpContextAccessor>();
             //var ctx = new ContextResolver(ctxaccessor);
             //services.AddSingleton(ctx);
-            var logger = services.BuildServiceProvider().GetService<ILogger>();
             var modules = new ModuleRegistrar(services, logger);
             return services;
         }

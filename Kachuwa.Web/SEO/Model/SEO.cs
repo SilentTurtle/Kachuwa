@@ -14,8 +14,8 @@ namespace Kachuwa.Web.Model
 
         [Required]
         public string MetaTitle { get; set; }
-   
-        public string MetaKeyWords { get; set; }
+
+        public string MetaKeyWords { get; set; } = "";
 
         [Required]
         public string MetaDescription { get; set; }
@@ -25,7 +25,7 @@ namespace Kachuwa.Web.Model
         public string LastUrl { get; set; }
         [Required]
         public string Url { get; set; }
-        [Required]
+        public int PageId { get; set; }
         public string PageName { get; set; }
      
         public string Image { get; set; }
