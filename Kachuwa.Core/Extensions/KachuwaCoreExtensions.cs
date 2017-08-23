@@ -58,13 +58,6 @@ namespace Kachuwa.Core.Extensions
             services.AddScoped<IViewRenderService, ViewRenderService>();
             //services.TryAddSingleton<IViewComponentSelector, Default2ViewComponentSelector>();
             // services.TryAddTransient<IViewComponentHelper, Default2ViewComponentHelper>();
-
-            IDatabaseFactory dbFactory = DatabaseFactories.GetFactory(Dialect.SQLServer, serviceProvider);
-            services.AddSingleton(dbFactory);
-            var asdf = new Bootstrapper(services, serviceProvider);
-            // services.AddSingleton(configuration);
-
-            // services.TryAddSingleton<ICache, DefaultCache>();
             services.TryAddSingleton<ICacheService, DefaultCacheService>();
             services.AddTransient<KachuwaCacheAttribute>();
             services.TryAddSingleton<IStorageProvider, LocalStorageProvider>();
@@ -73,6 +66,13 @@ namespace Kachuwa.Core.Extensions
 
             });
 
+            IDatabaseFactory dbFactory = DatabaseFactories.GetFactory(Dialect.SQLServer, serviceProvider);
+            services.AddSingleton(dbFactory);
+            var asdf = new Bootstrapper(services, serviceProvider);
+            // services.AddSingleton(configuration);
+
+            // services.TryAddSingleton<ICache, DefaultCache>();
+           
             services.EnableLocalization(config =>
             {
                 config.UseDbResources = true;
