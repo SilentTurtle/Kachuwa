@@ -1,8 +1,9 @@
 ﻿@using System.ComponentModel
+@using Kachuwa.Admin.ViewModel
 @using Kachuwa.Form
 @using Kachuwa.KGrid
 @using Kachuwa.Web
-@model Page
+@model PageViewModel
 @{
     ViewData["Title"] = "New Page";
 }
@@ -24,72 +25,93 @@
                         <div class="panel-collapse" aria-labelledby="headingOne"
                              aria-expanded="true">
                             <div class="panel-body">
-                                @(Html.CreateKachuwaForm<Page>("pageForm", Model)
+                                @(Html.CreateKachuwaForm<PageViewModel>("pageForm", Model)
                                       .SetHeading("")
                                       .ActionUrl("/admin/page/new")
                                       .CancelUrl("/admin/page")
                                       .CreateSection(section =>
                                       {
-                                          // section.Add("section1", "myclass");
-                                          section.Add("section1", "col-md-12", rows =>
+                                      // section.Add("section1", "myclass");
+                                      section.Add("section1", "col-md-12", rows =>
+                                      {
+                                          rows.Add("1strow", "form-group", columns =>
                                           {
-                                              rows.Add("1strow", "form-group", columns =>
+                                              columns.Add("12strow1stcol", "", controls =>
                                               {
-                                                  columns.Add("12strow1stcol", "", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.PageId, FormInputControl.Hidden);
-                                                  });
-                                                  columns.Add("1strow1stcol", "", controls =>
-                                                  {
-                                                      controls.Add("form-control keychange", x => x.Name, FormInputControl.TextBox).SetPlaceHolder("Enter Page Name");
-                                                  });
+                                                  controls.Add("form-control", x => x.PageId, FormInputControl.Hidden);
                                               });
-                                              rows.Add("2strow", "form-group", columns =>
+                                              columns.Add("1strow1stcol", "", controls =>
                                               {
-                                                  columns.Add("2strow1stcol", "colClass", controls =>
-                                                  {
-                                                      controls.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox);
-
-
-                                                  });
+                                                  controls.Add("form-control keychange", x => x.Name, FormInputControl.TextBox).SetPlaceHolder("Enter Page Name");
                                               });
-                                              rows.Add("third", "form-group", columns =>
-                                              {
-                                                  columns.Add("2strow1stcol", "colClass", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.UseMasterLayout, FormInputControl.Switch)
-                                                          .SetDisplayName("Use Master Layout");
-
-                                                  });
-                                              });
-                                              rows.Add("third", "form-group", columns =>
-                                              {
-                                                  columns.Add("2strow1stcol", "colClass", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.IsActive, FormInputControl.Switch)
-                                                          .SetDisplayName("Is Active")
-                                                          ;
-
-                                                  });
-                                              });
-                                              rows.Add("third", "form-group", columns =>
-                                              {
-                                                  columns.Add("1strow1stcol", "col-md-12", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.IsPublished, FormInputControl.Switch)
-                                                          .SetDisplayName("Is Published");
-                                                  });
-                                              });
-                                          }).SetHeading("Add New").SetHelpLine("Create a new page");
-
-                                          section.Add("section2", "col-md-12", rows =>
+                                          });
+                                          rows.Add("third", "row", columns =>
                                           {
-                                              rows.Add("seo", "row", @<div class="">
-                                                                           @await Component.InvokeAsync("SEOForm")
-                                                                     </div>);
-                                          }).SetHeading("SEO").SetHelpLine("provide information that helps search engine to find easily."); ;
+                                              columns.Add("2strow1stcol", "col-md-4", controls =>
+                                              {
+                                                  controls.Add("form-control", x => x.UseMasterLayout, FormInputControl.Switch)
+                                                      .SetDisplayName("Use Master Layout");
+
+                                              });
+                                         
+                                              columns.Add("2strow1stcol", "col-md-4", controls =>
+                                              {
+                                                  controls.Add("form-control", x => x.IsActive, FormInputControl.Switch)
+                                                      .SetDisplayName("Is Active");
+
+                                              });
+                                         
+                                              columns.Add("1strow1stcol", "col-md-4", controls =>
+                                              {
+                                                  controls.Add("form-control", x => x.IsPublished, FormInputControl.Switch)
+                                                      .SetDisplayName("Is Published");
+                                              });
+                                          });
+                                      }).SetHeading("Add New").SetHelpLine("Create a new page");
+
+                                      section.Add("section2", "col-md-12", rows =>
+                                      {
+                                      rows.Add("1strow", "row", columns =>
+                                      {
+                                          columns.Add("12strow1stcol", "", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.SEOId, FormInputControl.Hidden);
+                                          });
+                                          columns.Add("1strow1stcol", "col-md-6", controls =>
+                                          {
+                                              controls.Add("form-control keychange", x => x.MetaTitle, FormInputControl.TextBox)
+                                              .SetDisplayName("Meta Title").SetPlaceHolder("Enter Title");
+                                          });
+                                          columns.Add("1strow1stcol", "col-md-6", controls =>
+                                          {
+                                              controls.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox).SetPlaceHolder("Enter Url");
+                                          });
+                                      });
+                                      rows.Add("2nd", "form-group", columns =>
+                                      {
+                                      columns.Add("12strow1stcol", "", @<input name="SeoType" value="page" type="hidden" />);
+                                          columns.Add("1strow1stcol", "", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.MetaDescription, FormInputControl.TextArea)
+                                              .SetDisplayName("Meta Description").SetPlaceHolder("Enter Meta Description");
+                                          });
+                                      });
+                                          rows.Add("2nd", "form-group", columns =>
+                                          {
+                                          columns.Add("12strow1stcol", "", @<input name="SeoType" value="page" type="hidden" />);
+                                              columns.Add("1strow1stcol", "", controls =>
+                                              {
+                                                  controls.Add("form-control", x => x.Image, FormInputControl.File);
+                                              });
+                                          });
+                                          rows.Add("hidden", "form-group",@<div>
+                                                                              <input type="hidden" name="IsNew" value="true"/>
+                                                                               <input type="hidden" name="OldUrl" value="" />
+                                                                          </div>);
+
+                                      }).SetHeading("SEO").SetHelpLine("provide short and powerfull content that helps search engine to find easily."); ;
                                       })
-                                      )
+)
                             </div>
                         </div>
                     </div>
@@ -101,8 +123,8 @@
 </section>
 @section scripts{
     <script type="text/javascript" asp-add-nonce="true">
-        (function() {
-            $(".keychange").keyup(function(event) {
+        (function () {
+            $(".keychange").keyup(function (event) {
                 var name = $(this).val();
                 var dname_without_space = name.replace(/\s\s+/g, ' ');
                 var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
@@ -119,7 +141,7 @@
 
             });
 
-            $(".keychange").change(function(event) {
+            $(".keychange").change(function (event) {
 
                 var name = $(this).val();
                 var dname_without_space = name.replace(/\s\s+/g, ' ');
@@ -136,7 +158,7 @@
                 //$("#lblUrl").text(hostUrl + "/" + name_without_special_char);
 
             });
-            $(".urlchange").keyup(function(event) {
+            $(".urlchange").keyup(function (event) {
 
                 var fulltxt = $(this).val();
                 var pagename = fulltxt.replace("/", "");

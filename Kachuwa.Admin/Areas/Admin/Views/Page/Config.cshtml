@@ -1,7 +1,9 @@
-﻿@using Kachuwa.Admin.ViewModel
+﻿@using System.Linq
+@using Kachuwa.Admin.ViewModel
 @using Kachuwa.Form
 @using Kachuwa.KGrid
 @using Kachuwa.Web
+@using Newtonsoft.Json
 @model Page
 @{
     ViewData["Title"] = "Page Config";
@@ -17,6 +19,9 @@
                             <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Page Layout</h2>
                             <div class="input-group col-md-9 col-xs-4">
                                 <div class="input-group-btn pull-right">
+                                    <a class="btn btn-warning" href="/admin/page" title="Go Back">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
                                     <button class="btn btn-warning" type="button" id="btnRefresh" title="Reset Layout">
                                         <i class="fa fa-refresh"></i>
                                     </button>
@@ -36,17 +41,44 @@
                                         </div>
                                         <div>
                                             <ul id="pageLayout">
-                                                <li class="page-row">
-                                                    <div class="module-lines">
 
-                                                        <div class="dropable room room-2"></div>
-                                                        <div class="dropable room room-2"></div>
-                                                        <div class="dropable room room-2"></div>
-                                                        <div class="dropable room room-2"></div>
-                                                        <div class="dropable room room-2"></div>
-                                                        <div class="dropable room room-2"></div>
-                                                    </div>
-                                                </li>
+                                                @foreach (var row in ((Kachuwa.Web.Layout.LayoutContent)ViewData["Layout"]).Rows)
+                                                {
+                                                    <li class="page-row">
+                                                        <div class="module-lines">
+                                                            @foreach (var column in row.Columns)
+                                                            {
+                                                                <div class="dropable room room-@column.Width">
+                                                                    @if (column.Components != null && column.Components.Any())
+                                                                    {
+                                                                    @foreach (var component in column.Components)
+                                                                    {
+                                                                        <div class="dropped" data-item="@JsonConvert.SerializeObject(new {FullName = component.FullName, ShortName = component.Name,Params=component.Params, ModuleName = component.ModuleName})">
+                                                                            <div class="dropped-setting">
+                                                                                <i class="fa fa-cog module-setting"></i>
+                                                                            </div>
+                                                                            @component.Name
+                                                                        </div>
+                                                                    } }
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                }
+                                                @if (!((Kachuwa.Web.Layout.LayoutContent)ViewData["Layout"]).Rows.Any())
+                                                {
+                                                    <li class="page-row">
+                                                        <div class="module-lines">
+
+                                                            <div class="dropable room room-2"></div>
+                                                            <div class="dropable room room-2"></div>
+                                                            <div class="dropable room room-2"></div>
+                                                            <div class="dropable room room-2"></div>
+                                                            <div class="dropable room room-2"></div>
+                                                            <div class="dropable room room-2"></div>
+                                                        </div>
+                                                    </li>
+                                                }
 
                                             </ul>
                                         </div>
@@ -213,10 +245,11 @@
                         $(col).find(".dropped").each(function(z, module) {
                             var item = $(module).data('item');
                             var component = {};
+                            component.ModuleName = item.ModuleName;
                             component.Name = item.ShortName;
                             component.DisplayName = item.DisplayName;
                             component.FullName = item.FullName;
-                            component.Params = item.Param;
+                            component.Params = item.Params;
                             column.Components.push(component);
                         });
 
@@ -248,9 +281,9 @@
             }
             var currModule = {};
             var setmoduleSetting=function(param) {
-                currModule.Param = param;
+                currModule.Params = param;
                 var item = currModule.Elem.data('item');
-                item.Param = currModule.Param;
+                item.Params = currModule.Params;
                 currModule.Elem.data('item', item);
             }
             var loadModuleSetting = function(moduleName) {

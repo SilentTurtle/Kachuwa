@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -10,6 +11,7 @@ using Kachuwa.Web.Layout;
 using Kachuwa.Web.Module;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Kachuwa.Admin.Controllers
 {
@@ -21,8 +23,8 @@ namespace Kachuwa.Admin.Controllers
         private readonly IModuleComponentProvider _moduleComponentProvider;
         private readonly ILayoutRenderer _layoutRenderer;
 
-        public PageController(IPageService pageService, 
-            IModuleComponentProvider moduleComponentProvider,ILayoutRenderer layoutRenderer)
+        public PageController(IPageService pageService,
+            IModuleComponentProvider moduleComponentProvider, ILayoutRenderer layoutRenderer)
         {
             _pageService = pageService;
             _moduleComponentProvider = moduleComponentProvider;
@@ -44,7 +46,7 @@ namespace Kachuwa.Admin.Controllers
         [Route("admin/page/new")]
         public async Task<IActionResult> New()
         {
-          
+
             return View();
         }
 
@@ -54,13 +56,26 @@ namespace Kachuwa.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Url= model.Url.TrimStart(new char[] {'/'});
-                model.AutoFill();
+                model.Url = model.Url.TrimStart(new char[] { '/' });
+                if (model.Url.ToLower() == "landing")
+                {
+
+                    ModelState.TryAddModelError("System Url", "unable to use this url.enter another url.");
+                    return View(model);
+                }
                 if (model.PageId == 0)
-                    
-                    await _pageService.CrudService.InsertAsync<int>(model);
-                else
-                    await _pageService.CrudService.UpdateAsync(model);
+                {
+                    if (!await _pageService.CheckPageExist(model.Url))
+                    {
+                        await _pageService.Save(model);
+                    }
+                    else
+                    {
+                        ModelState.TryAddModelError("Existing Url", "url is already in use.");
+                        return View(model);
+                    }
+
+                }
                 return RedirectToAction("Index");
             }
             else
@@ -85,6 +100,14 @@ namespace Kachuwa.Admin.Controllers
                 });
             }
             ViewData["Modules"] = moduleList;
+            if (string.IsNullOrEmpty(model.ContentConfig))
+            {
+                ViewData["Layout"] = new LayoutContent();
+            }
+            else
+            {
+                ViewData["Layout"] = (LayoutContent) JsonConvert.DeserializeObject<LayoutContent>(model.ContentConfig);
+            }
             return View(model);
         }
         [HttpPost]
@@ -103,22 +126,45 @@ namespace Kachuwa.Admin.Controllers
         [Route("admin/page/edit/{pageId}")]
         public async Task<IActionResult> Edit([FromRoute]int pageId)
         {
-            var model = await _pageService.CrudService.GetAsync(pageId);
+            var model = await _pageService.Get(pageId);
             return View(model);
         }
 
         [HttpPost]
         [Route("admin/page/edit")]
-        public async Task<IActionResult> Edit(Page model)
+        public async Task<IActionResult> Edit(PageViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Url = model.Url.TrimStart(new char[] { '/' });
-                model.AutoFill();
-                if (model.PageId == 0)
-                    await _pageService.CrudService.InsertAsync<int>(model);
-                else
-                    await _pageService.CrudService.UpdateAsync(model);
+                if (model.Url.ToLower() == "landing")
+                {
+
+                    ModelState.TryAddModelError("System Url", "unable to use this url.enter another url.");
+                    return View(model);
+                }
+                if (model.PageId != 0)
+                {
+                    if (model.IsNew == false && model.OldUrl == model.Url)
+                    {
+                        await _pageService.Save(model);
+                    }
+                    else
+                    {
+                        if (!await _pageService.CheckPageExist(model.Url))
+                        {
+                            await _pageService.Save(model);
+                        }
+                        else
+                        {
+                            ModelState.TryAddModelError("Existing Url", "url is already in use.");
+                            return View(model);
+                        }
+
+                    }
+
+                }
+
                 return RedirectToAction("Index");
             }
             else
@@ -131,8 +177,31 @@ namespace Kachuwa.Admin.Controllers
         [Route("admin/page/delete")]
         public async Task<JsonResult> Delete(int id)
         {
-            var result = await _pageService.CrudService.DeleteAsync(id);
-            return Json(result);
+            try
+            {
+                var result = await _pageService.DeletePageAsync(id);
+                return Json(new { code = 200, Message = "", Data = result });
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 200, Message = e.Message, Data = false });
+            }
+           
+        }
+        [HttpPost]
+        [Route("admin/page/makelanding")]
+        public async Task<JsonResult> MakeLandingPage(int id)
+        {
+            try
+            {
+                var result = await _pageService.MakeLandingPage(id);
+                return Json(new{code=200,Message="",Data=result});
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 200, Message = e.Message, Data = false });
+            }
+         
         }
         [HttpGet]
         [Route("admin/page/modulesetting/{name}")]
@@ -145,7 +214,7 @@ namespace Kachuwa.Admin.Controllers
 
         }
         #endregion
-        
+
 
 
     }
