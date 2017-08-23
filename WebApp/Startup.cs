@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ using Kachuwa.Web;
 using Kachuwa.Web.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
@@ -69,6 +71,7 @@ namespace WebApp
 
             //});
             services.RegisterKachuwaCoreServices(serviceProvider);
+            services.AddLocalization();
             // Add framework services.
             services.AddMvc(options =>
             {
@@ -182,6 +185,27 @@ namespace WebApp
             // app.UseMiddleware<ChatWebSocketMiddleware>();
             //app.UseMiddleware<HeaderLogMiddleware>();
             app.UseWebSockets();
+            var supportedCultures = new[]
+              {
+                new CultureInfo("en-US")
+                //new CultureInfo("en-AU"),
+                //new CultureInfo("en-GB"),
+                //new CultureInfo("en"),
+                //new CultureInfo("es-ES"),
+                //new CultureInfo("es-MX"),
+                //new CultureInfo("es"),
+                //new CultureInfo("fr-FR"),
+                //new CultureInfo("fr"),
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
             //core
             app.UseKachuwaCore(serviceProvider);
             //web
