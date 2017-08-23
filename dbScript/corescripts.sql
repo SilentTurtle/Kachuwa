@@ -205,6 +205,25 @@ Create Table dbo.MenuSetting
 	CssClasses								nvarchar(256)
 
 );
+CREATE TABLE dbo.SEO
+(
+	SEOId									int primary key IDENTITY(1,1),
+	MetaTitle								nvarchar(256)  null,
+	MetaKeyWords							nvarchar(256)  null,
+	MetaDescription							nvarchar(max) null,
+	SeoType									nvarchar(256) not null,--page,product..
+	LastUrl									nvarchar(256) null,
+	Url										nvarchar(256) not null,
+	Image									nvarchar(256) ,
+	PageName								nvarchar(256) null,
+	PageId								 	int default(0),
+	ProductId								int null default(0),
+	IsActive                                bit NOT NULL Default(1),
+    IsDeleted                               bit NOT NULL Default(0),
+    AddedOn                                 datetime NOT NULL Default(GETDATE()),
+    AddedBy                                 national character varying(256)
+
+);
 CREATE table dbo.Setting
 (
 	SettingId								int primary key identity(1,1) not null,
