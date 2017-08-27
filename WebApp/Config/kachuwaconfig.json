@@ -1,0 +1,10 @@
+﻿{
+  "KachuwaAppConfig": {
+    "Framwork": "Kachuwa Framework",
+    "Version": "beta",
+    "AppName": "Web App",
+    "SiteUrl": "http://kachuwaframework.com",
+    "IsInstalled": true
+  }
+
+}
