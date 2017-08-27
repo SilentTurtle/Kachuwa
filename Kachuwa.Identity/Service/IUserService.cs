@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kachuwa.Data;
 using Kachuwa.Identity.Models;
@@ -12,5 +13,6 @@ namespace Kachuwa.Identity.Service
         CrudService<IdentityUserRole> UserRoleService { get; set; }
 
         Task<bool> AddUserRoles(int[] roleIds,long userId);
+        Task<List<int>> GetUserRoles(long userIdentityUserId);
     }
 }

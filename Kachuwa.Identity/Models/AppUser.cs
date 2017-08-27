@@ -13,7 +13,7 @@ namespace Kachuwa.Identity.Models
         public long AppUserId { get; set; }
 
         [IgnoreUpdate]
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public long IdentityUserId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
@@ -25,7 +25,7 @@ namespace Kachuwa.Identity.Models
         public string Bio { get; set; }
 
 
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         [IgnoreUpdate]
         public string Email { get; set; }
 
@@ -34,10 +34,13 @@ namespace Kachuwa.Identity.Models
         public string DOB { get; set; }
         public string ProfilePicture { get; set; }
 
-        [IgnoreUpdate]
-        public bool IsActive { get; set; }
 
+        public bool IsActive { get; set; }
+        [IgnoreInsert]
+        [AutoFill(false)]
+        public bool IsDeleted { get; set; }
         [AutoFill(AutoFillProperty.CurrentDate)]
+        [IgnoreUpdate]
         public DateTime AddedOn { get; set; }
 
         [AutoFill(AutoFillProperty.CurrentUser)]

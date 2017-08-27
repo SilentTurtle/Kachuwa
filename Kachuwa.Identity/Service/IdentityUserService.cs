@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Kachuwa.Data;
@@ -27,6 +29,19 @@ namespace Kachuwa.Identity.Service
                 }
 
                 return true;
+            }
+        }
+
+        public async Task<List<int>> GetUserRoles(long userIdentityUserId)
+        {
+            var dbFactory = DbFactoryProvider.GetFactory();
+            using (var db = (DbConnection)dbFactory.GetConnection())
+            {
+                await db.OpenAsync();
+                var roles=  await db.QueryAsync<int>("Select RoleId from dbo.IdentityUserRole Where UserId=@UserId;", new { UserId = userIdentityUserId });
+                return roles.ToList();
+
+
             }
         }
     }
