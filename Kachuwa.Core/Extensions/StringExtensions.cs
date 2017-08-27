@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Kachuwa.Extensions
 {
     public static class StringExtensions
     {
-
+       
         public static string Truncate(this string text, int length, string ellipsis, bool keepFullWordAtEnd)
         {
             if (string.IsNullOrEmpty(text))
