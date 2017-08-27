@@ -1,0 +1,149 @@
+﻿@using System.ComponentModel
+@using Kachuwa.Identity.ViewModels
+@using Kachuwa.Form
+@using Kachuwa.KGrid
+@using Kachuwa.Web
+@model UserViewModel
+@{
+    ViewData["Title"] = "New User";
+}
+@{ var datasource = (FormDatasource) ViewData["FormDataSource"];}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">User</h2>
+                            <div class="input-group col-md-9 col-xs-4">
+                                <div class="input-group-btn pull-right">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-collapse" aria-labelledby="headingOne"
+                             aria-expanded="true">
+                            <div class="panel-body">
+                                @(Html.CreateKachuwaForm<UserViewModel>("pageForm", Model)
+                                      .SetHeading("")
+                                      .ActionUrl("/admin/user/new")
+                                      .CancelUrl("/admin/user")
+                                      .CreateSection(section =>
+                                      {
+                                          // section.Add("section1", "myclass");
+                                          section.Add("section1", "col-md-12", rows =>
+                                          {
+                                              rows.Add("1strow", "row", columns =>
+                                              {
+                                                  columns.Add("12strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.AppUserId, FormInputControl.Hidden);
+                                                  });
+                                                  columns.Add("1strow1stcol", "col-md-6", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.FirstName, FormInputControl.TextBox)
+                                                      .SetDisplayName("First Name")
+                                                      .SetPlaceHolder("Enter First Name");
+                                                  });
+                                                  columns.Add("1strow1stcol", "col-md-6", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.LastName, FormInputControl.TextBox)
+                                                      .SetDisplayName("Last Name")
+                                                      .SetPlaceHolder("Enter Last Name");
+                                                  });
+                                              });
+
+                                              rows.Add("1strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("1strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.DOB, FormInputControl.Date)
+                                                      .SetDisplayName("DOB")
+                                                      .SetPlaceHolder("Enter DOB");
+                                                  });
+                                              });
+
+                                              rows.Add("1strow", "row", columns =>
+                                              {
+                                                  columns.Add("1strow1stcol", "col-md-6", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.PhoneNumber, FormInputControl.Telephone)
+                                                      .SetDisplayName("Phone Number")
+                                                      .SetPlaceHolder("Enter Phone Number");
+                                                  });
+
+                                                  columns.Add("1strow1stcol", "col-md-6", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.Address, FormInputControl.TextBox)
+                                                      .SetDisplayName("Address")
+                                                      .SetPlaceHolder("Enter Address");
+                                                  });
+                                              });
+                                              rows.Add("1strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("1strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.Bio, FormInputControl.TextArea)
+                                                      .SetDisplayName("Bio")
+                                                      .SetPlaceHolder("Enter Bio");
+                                                  });
+                                              });
+                                              rows.Add("1strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("1strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control ", x => x.IsActive, FormInputControl.Switch)
+                                                          .SetDisplayName("Is Active");
+                                                  });
+                                              });
+                                          }).SetHeading("Add New").SetHelpLine("enter personal information");
+
+                                          section.Add("section2", "col-md-6", rows =>
+                                          {
+                                              rows.Add("1strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("12strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.Email, FormInputControl.Email);
+                                                  });
+                                              });
+                                              rows.Add("2nd", "form-group", columns =>
+                                              {
+                                                  columns.Add("12strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.Password, FormInputControl.Password);
+                                                  });
+                                              });
+
+
+                                          }).SetHeading("Login").SetHelpLine("login credentials");
+                                          section.Add("role", "col-md-6", rows =>
+                                          {
+
+                                              rows.Add("2nd", "form-group", columns =>
+                                              {
+                                                  columns.Add("12strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.UserRoleIds, FormInputControl.CheckBoxList, datasource.GetSource("Roles"))
+                                                      .SetDisplayName("Roles").Encode(false);
+                                                  });
+                                              });
+
+
+                                          }).SetHeading("Roles").SetHelpLine("assign user roles");
+                                      })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+@section scripts{
+  
+}

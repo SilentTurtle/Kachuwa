@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Kachuwa.Identity.Models;
 using Kachuwa.Web.Module;
 
 namespace Kachuwa.Admin.ViewModel
@@ -10,4 +12,6 @@ namespace Kachuwa.Admin.ViewModel
         public bool HasSetting { get; set; }
         public List<ModuleComponentDescription> ModuleComponents { get; set; }=new List<ModuleComponentDescription>();
     }
+
+   
 }

@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <None Remove="Areas\Admin\Views\Page\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Security.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Web.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +46,14 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Admin\Views\Page\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Security.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Web.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\User\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\New.cshtml" />
     <EmbeddedResource Include="Areas\Admin\Views\_ViewImports.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
@@ -69,6 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Admin\Views\Role\" />
     <Folder Include="Model\" />
     <Folder Include="resources\" />
     <Folder Include="Service\" />

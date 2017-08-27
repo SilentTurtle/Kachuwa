@@ -9,6 +9,7 @@ using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web;
 using Kachuwa.Web.Layout;
 using Kachuwa.Web.Module;
+using Kachuwa.Web.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,13 +23,15 @@ namespace Kachuwa.Admin.Controllers
         private readonly IPageService _pageService;
         private readonly IModuleComponentProvider _moduleComponentProvider;
         private readonly ILayoutRenderer _layoutRenderer;
+        private readonly INotificationService _notificationService;
 
         public PageController(IPageService pageService,
-            IModuleComponentProvider moduleComponentProvider, ILayoutRenderer layoutRenderer)
+            IModuleComponentProvider moduleComponentProvider, ILayoutRenderer layoutRenderer,INotificationService notificationService)
         {
             _pageService = pageService;
             _moduleComponentProvider = moduleComponentProvider;
             _layoutRenderer = layoutRenderer;
+            _notificationService = notificationService;
         }
         #region PAge Crud
         [Route("admin/page/page/{page?}")]
@@ -68,6 +71,7 @@ namespace Kachuwa.Admin.Controllers
                     if (!await _pageService.CheckPageExist(model.Url))
                     {
                         await _pageService.Save(model);
+                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
                     }
                     else
                     {
@@ -117,6 +121,7 @@ namespace Kachuwa.Admin.Controllers
             if (ModelState.IsValid)
             {
                 await _pageService.SavePageLayout(model);
+                _notificationService.Notify("Saved Successfully!", NotificationType.Success);
                 return Json(true);
             }
             return Json(false);
@@ -148,12 +153,14 @@ namespace Kachuwa.Admin.Controllers
                     if (model.IsNew == false && model.OldUrl == model.Url)
                     {
                         await _pageService.Save(model);
+                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
                     }
                     else
                     {
                         if (!await _pageService.CheckPageExist(model.Url))
                         {
                             await _pageService.Save(model);
+                            _notificationService.Notify("Saved Successfully!", NotificationType.Success);
                         }
                         else
                         {
@@ -180,6 +187,7 @@ namespace Kachuwa.Admin.Controllers
             try
             {
                 var result = await _pageService.DeletePageAsync(id);
+                _notificationService.Notify("Deleted Successfully!", NotificationType.Success);
                 return Json(new { code = 200, Message = "", Data = result });
             }
             catch (Exception e)
@@ -195,6 +203,7 @@ namespace Kachuwa.Admin.Controllers
             try
             {
                 var result = await _pageService.MakeLandingPage(id);
+                _notificationService.Notify("Set Landing Page Successfully!", NotificationType.Success);
                 return Json(new{code=200,Message="",Data=result});
             }
             catch (Exception e)
