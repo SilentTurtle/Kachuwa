@@ -11,6 +11,8 @@ using Kachuwa.Identity.IdSrv;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using Kachuwa.Web.Service;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kachuwa.Web
 {
@@ -28,7 +30,9 @@ namespace Kachuwa.Web
 
         public void Update(IServiceCollection serviceCollection)
         {
-
+            var builder=serviceCollection.BuildServiceProvider();
+            var settingService=builder.GetService<ISettingService>();
+            serviceCollection.AddSingleton(settingService.CrudService.Get(1));
         }
     }
 }

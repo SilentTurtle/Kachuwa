@@ -6,15 +6,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Kachuwa.Web.Module
 {
    
-    public abstract class KachuwaModuleViewComponent<T> : ViewComponent where T : IModule, new()
+    public abstract class KachuwaModuleViewComponent<T> : KachuwaViewComponent where T : IModule, new()
     {
         public readonly IModuleManager ModuleManager;
         public IModule Module;
-        public abstract string DisplayName { get; }
-
-        public abstract bool IsVisibleOnUI { get; }
-
-
         protected KachuwaModuleViewComponent(IModuleManager moduleManager)
         {
             ModuleManager = moduleManager;

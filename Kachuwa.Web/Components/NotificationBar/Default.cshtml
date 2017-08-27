@@ -1,0 +1,23 @@
+﻿@using Kachuwa.Web.Notification
+@model  Kachuwa.Web.Notification.NotificationViewModel
+
+@foreach (var template in Model.Templates)
+    {
+    @(template)
+    }
+
+
+<script type="text/javascript" asp-add-nonce="true">
+
+    function showNotification(color) {
+        $(".notification").removeClass(def);
+        $(".notification").addClass(color);
+        def = color;
+        $(".notification").fadeIn("slow");
+    }
+    $(document).off("click", ".notification-btn").on("click", ".notification-btn", function () {
+
+        $(this).parents(".notification:eq(0)").fadeOut("slow");
+    });
+
+</script>
