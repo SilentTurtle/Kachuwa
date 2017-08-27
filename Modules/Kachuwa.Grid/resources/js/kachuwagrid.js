@@ -127,7 +127,7 @@
             //        console.log(jqxhr.status); // 200
                 
             //    });
-            $(".kachuwa-form").find("input:checkbox").on("change",
+            $(".kachuwa-form").find(".switch input:checkbox").on("change",
                 function () {
                     console.log(this);
                     $(this).val($(this).is(":checked"));

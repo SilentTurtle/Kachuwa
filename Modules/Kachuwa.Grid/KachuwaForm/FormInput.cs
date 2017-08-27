@@ -59,7 +59,7 @@ namespace Kachuwa.Form
     public enum FormInputControl
     {
         TextBox, Password, Select, Radio, CheckBox, RadioList, CheckBoxList,
-        Number, File, Image, Email, Url, Telephone, Date, DateTime, Color, TextArea, Editor, Hidden,Tag, Template, Switch
+        Number, File, Image, Email, Url, Telephone, Date, DateTime, Color, TextArea, Editor, Hidden, Tag, Template, Switch
     }
 
     public abstract class BaseFormInput<T, TValue> : IFormInput<T>
@@ -157,7 +157,7 @@ namespace Kachuwa.Form
         }
 
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
-            FormInputControl inputType,object attributes)
+            FormInputControl inputType, object attributes)
         {
             Form = form;
             CssClasses = classes;
@@ -167,10 +167,10 @@ namespace Kachuwa.Form
             InputType = inputType;
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
-            Attributes=GetHtmlAttributeDictionaryOrNull(attributes);
+            Attributes = GetHtmlAttributeDictionaryOrNull(attributes);
         }
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
-          FormInputControl inputType, IEnumerable<FormInputItem> dataSource,object attributes)
+          FormInputControl inputType, IEnumerable<FormInputItem> dataSource, object attributes)
         {
             Form = form;
             CssClasses = classes;
@@ -181,12 +181,12 @@ namespace Kachuwa.Form
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
             DataSource = dataSource;
-            Attributes=GetHtmlAttributeDictionaryOrNull(attributes);
+            Attributes = GetHtmlAttributeDictionaryOrNull(attributes);
         }
 
-        public override  IHtmlContent RenderAttributes()
+        public override IHtmlContent RenderAttributes()
         {
-            TextWriter writer =new StringWriter();
+            TextWriter writer = new StringWriter();
             if (this.Attributes != null && this.Attributes.Count > 0)
             {
                 foreach (var attribute in Attributes)
@@ -222,15 +222,41 @@ namespace Kachuwa.Form
 
                 if (controlValue == null)
                 {
-
-                    foreach (var item in this.DataSource)
+                    if (this.InputType == FormInputControl.Select)
                     {
-                        if (this.InputType == FormInputControl.Select)
+
+                        foreach (var item in this.DataSource)
                         {
+
                             sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
                         }
+
+
                     }
+                    else if (this.InputType == FormInputControl.CheckBoxList)
+                    {
+                        foreach (var item in this.DataSource)
+                        {
+                            if (item.IsSelected)
+                            {
+                                sb.AppendFormat(
+                                    "<div class='checkbox'><label><input type='checkbox' name='{0}' checked='checked' value='{1}'>{2}</label></div> ",
+                                    this.Name, item.Id, item.Label);
+
+                            }
+                            else
+                            {
+                                sb.AppendFormat(
+                                "<div class='checkbox'><label><input type='checkbox' name='{0}' value='{1}'>{2}</label></div> ",
+                                this.Name, item.Id, item.Label);
+                            }
+
+                        }
+
+                    }
+
                 }
+
                 else
                 {
                     System.TypeCode typeCode = System.Type.GetTypeCode(controlValue.GetType());
@@ -238,52 +264,81 @@ namespace Kachuwa.Form
                     foreach (var item in this.DataSource)
                     {
 
-                        if (this.InputType == FormInputControl.Select)
-                        {
-                            //if col value is int
-                            if (typeCode == TypeCode.Int32)
-                            {
-                                if (controlValue.ToString() == item.Id.ToString())
-                                {
-                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
-                                        item.Id, item.Label);
-                                }
-                                else
-                                {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
-                                }
-                            }//value is string
-                            else if (typeCode == TypeCode.String)
-                            {
-                                if (controlValue.ToString() == item.Label.ToString())
-                                {
-                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
-                                        item.Id, item.Label);
-                                }
-                                else
-                                {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
-                                }
-                            }//value is int array
-                            else if (typeCode == TypeCode.Object)
-                            {
-                                var x = controlValue as int[];
-                                if (x.Contains(item.Id))
-                                {
-                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
-                                        item.Id, item.Label);
-                                }
-                                else
-                                {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
-                                }
-                            }
 
+                        //if col value is int
+                        if (typeCode == TypeCode.Int32)
+                        {
+                            if (controlValue.ToString() == item.Id.ToString())
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>",
+                                        item.Id,
+                                        item.Id, item.Label);
+                                }
+
+                            }
+                            else
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                        item.Label);
+                                }
+
+                            }
+                        }//value is string
+                        else if (typeCode == TypeCode.String)
+                        {
+                            if (controlValue.ToString() == item.Label.ToString())
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat(
+                                        "<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
+                                        item.Id, item.Label);
+                                }
+
+                            }
+                            else
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                        item.Label);
+                                }
+
+                            }
+                        }//value is int array
+                        else if (typeCode == TypeCode.Object)
+                        {
+                            var x = controlValue as int[];
+                            if (x.Contains(item.Id))
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>",
+                                        item.Id,
+                                        item.Id, item.Label);
+                                }
+
+                            }
+                            else
+                            {
+                                if (this.InputType == FormInputControl.Select)
+                                {
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                        item.Label);
+                                }
+
+                            }
                         }
+
                     }
                 }
-
             }
+
+
 
             Object value = sb.ToString();
             if (value == null) return HtmlString.Empty;
@@ -370,7 +425,7 @@ namespace Kachuwa.Form
             return inputControl;
         }
 
-        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl,object attributes=null)
+        public IFormInput<T> Add<TValue>(string classes, Expression<Func<T, TValue>> constraint, FormInputControl formControl, object attributes = null)
         {
             IFormInput<T> inputControl = new FormInput<T, TValue>(Form, constraint, classes, formControl, attributes);
             Add(inputControl);
@@ -382,9 +437,9 @@ namespace Kachuwa.Form
             Add(inputControl);
             return inputControl;
         }
-      
 
-       
+
+
     }
 
 }

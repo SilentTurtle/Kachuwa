@@ -85,24 +85,28 @@
                             case FormInputControl.CheckBox:
                                 if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                                 {
-                                    <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                    <input type="checkbox" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                            name="@control.Name" value="false" />
                                 }
                                 else
                                 {
-                                    <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                    <input type="checkbox" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                            name="@control.Name" value="true" checked="checked" />
                                 }
                                 break;
                             case FormInputControl.CheckBoxList:
+                                <div class="checkbox-wrapper"> 
+                                    @control.RenderControlSource(control.DataSource)
+                                </div>
+                              
                                 break;
                             case FormInputControl.Color:
-                                <input type="color" class="@control.CssClasses" id="@control.Id"
+                                <input type="color" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.Date:
                                 <div class='input-group'>
-                                    <input type="date" class="date @control.CssClasses" id="@control.Id"
+                                    <input type="date" class="date @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                            name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -111,7 +115,7 @@
                                 break;
                             case FormInputControl.DateTime:
                                 <div class='input-group'>
-                                    <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"
+                                    <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                            name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -120,58 +124,58 @@
 
                                 break;
                             case FormInputControl.Editor:
-                                <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id">
+                                <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
                                                     @control.ValueFor(Model.FormModel)
                                                     </textarea>
                                 break;
                             case FormInputControl.Email:
-                                <input type="email" class="@control.CssClasses" id="@control.Id"
+                                <input type="email" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.File:
-                                <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" />
+                                <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name"  @Html.Raw(control.RenderAttributes()) />
                                 break;
-                            case FormInputControl.Image:
-                                <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" />
+                            case FormInputControl.Image: 
+                                <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name"  @Html.Raw(control.RenderAttributes()) />
                                 break;
                             case FormInputControl.Number:
-                                <input type="number" class="@control.CssClasses" id="@control.Id"
+                                <input type="number" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.Password:
-                                <input type="password" class="@control.CssClasses" id="@control.Id"
+                                <input type="password" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.Radio:
 
                                 if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                                 {
-                                    <input type="radio" class="@control.CssClasses" id="@control.Id"
+                                    <input type="radio" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                            name="@control.Name" />
 
                                 }
                                 else
-                                { <input type="radio" class="@control.CssClasses" id="@control.Id"
+                                { <input type="radio" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                          name="@control.Name" checked="checked" />
                                 }
                                 break;
                             case FormInputControl.RadioList:
                                 break;
                             case FormInputControl.Select:
-                                <select class="@control.CssClasses" name="@control.Name">
+                                <select class="@control.CssClasses" name="@control.Name"  @Html.Raw(control.RenderAttributes())>
                                     (@control.RenderControlSource(control.DataSource))
                                 </select>
                                 break;
                             case FormInputControl.Telephone:
-                                <input type="tel" class="@control.CssClasses" id="@control.Id"
+                                <input type="tel" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.Url:
-                                <input type="url" class="@control.CssClasses" id="@control.Id"
+                                <input type="url" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
-                            case FormInputControl.TextArea:
-                                <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id">
+                            case FormInputControl.TextArea: 
+                                <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
                                                     @control.ValueFor(Model.FormModel)
                                                     </textarea>
                                 break;
@@ -181,7 +185,7 @@
                                        placeholder="@control.PlaceHolder" />
                                 break;
                             case FormInputControl.Tag:
-                                <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id"
+                                <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        value="@control.ValueFor(Model.FormModel)"
                                        placeholder="@control.PlaceHolder" />
 
@@ -194,14 +198,14 @@
                                 if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                                 {
                                     <label class="switch">
-                                        <input type="checkbox" name="@control.Name" value="false" />
+                                        <input type="checkbox" name="@control.Name" value="false"  @Html.Raw(control.RenderAttributes()) />
                                         <div class="switchslider round"></div>
                                     </label>
                                 }
                                 else
                                 {
                                     <label class="switch">
-                                        <input type="checkbox" name="@control.Name" value="true" checked="checked" />
+                                        <input type="checkbox" name="@control.Name" value="true" checked="checked"   @Html.Raw(control.RenderAttributes())/>
                                         <div class="switchslider round"></div>
                                     </label>
 
@@ -233,29 +237,32 @@
                     switch (control.InputType)
                     {
                         case FormInputControl.Hidden:
-                            <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" />
+                            <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name"  @Html.Raw(control.RenderAttributes()) />
                             break;
                         case FormInputControl.CheckBox:
                             if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                             {
-                                <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                <input type="checkbox" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="false" />
                             }
                             else
                             {
-                                <input type="checkbox" class="@control.CssClasses" id="@control.Id"
+                                <input type="checkbox" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="true" checked="checked" />
                             }
                             break;
                         case FormInputControl.CheckBoxList:
+                            <div class="checkbox-wrapper">
+                                @control.RenderControlSource(control.DataSource)
+                            </div>
                             break;
                         case FormInputControl.Color:
-                            <input type="color" class="@control.CssClasses" id="@control.Id"
+                            <input type="color" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.Date:
                             <div class='input-group'>
-                                <input type="date" class="date @control.CssClasses" id="@control.Id"
+                                <input type="date" class="date @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
@@ -264,7 +271,7 @@
                             break;
                         case FormInputControl.DateTime:
                             <div class='input-group '>
-                                <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"
+                                <input type="datetime" class="datetimepicker @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
@@ -273,58 +280,58 @@
 
                             break;
                         case FormInputControl.Editor:
-                            <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id">
+                            <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
                                                     @control.ValueFor(Model.FormModel)
                                                     </textarea>
                             break;
                         case FormInputControl.Email:
-                            <input type="email" class="@control.CssClasses" id="@control.Id"
+                            <input type="email" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.File:
-                            <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" />
+                            <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name"   @Html.Raw(control.RenderAttributes())/>
                             break;
                         case FormInputControl.Image:
-                            <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" />
+                            <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name"  @Html.Raw(control.RenderAttributes()) />
                             break;
                         case FormInputControl.Number:
-                            <input type="number" class="@control.CssClasses" id="@control.Id"
+                            <input type="number" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.Password:
-                            <input type="password" class="@control.CssClasses" id="@control.Id"
+                            <input type="password" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.Radio:
 
                             if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                             {
-                                <input type="radio" class="@control.CssClasses" id="@control.Id"
+                                <input type="radio" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                        name="@control.Name" />
 
                             }
                             else
-                            { <input type="radio" class="@control.CssClasses" id="@control.Id"
+                            { <input type="radio" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                      name="@control.Name" checked="checked" />
                             }
                             break;
                         case FormInputControl.RadioList:
                             break;
                         case FormInputControl.Select:
-                            <select class="@control.CssClasses" name="@control.Name">
+                            <select class="@control.CssClasses" name="@control.Name"  @Html.Raw(control.RenderAttributes()) >
                                 (@control.RenderControlSource(control.DataSource))
                             </select>
                             break;
                         case FormInputControl.Telephone:
-                            <input type="tel" class="@control.CssClasses" id="@control.Id"
+                            <input type="tel" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.Url:
-                            <input type="url" class="@control.CssClasses" id="@control.Id"
+                            <input type="url" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.TextArea:
-                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id">
+                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
                                                     @control.ValueFor(Model.FormModel)
                                                     </textarea>
                             break;
@@ -334,7 +341,7 @@
                                    placeholder="@control.PlaceHolder" />
                             break;
                         case FormInputControl.Tag:
-                            <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id"
+                            <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
                                    value="@control.ValueFor(Model.FormModel)"
                                    placeholder="@control.PlaceHolder" />
 
@@ -347,14 +354,14 @@
                             if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
                             {
                                 <label class="switch">
-                                    <input type="checkbox" name="@control.Name" value="false" />
+                                    <input type="checkbox" name="@control.Name" value="false"  @Html.Raw(control.RenderAttributes()) />
                                     <div class="switchslider round"></div>
                                 </label>
                             }
                             else
                             {
                                 <label class="switch">
-                                    <input type="checkbox" name="@control.Name" value="true" checked="checked" />
+                                    <input type="checkbox" name="@control.Name" value="true" checked="checked"   @Html.Raw(control.RenderAttributes())/>
                                     <div class="switchslider round"></div>
                                 </label>
 
