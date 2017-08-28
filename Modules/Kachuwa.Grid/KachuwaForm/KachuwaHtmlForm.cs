@@ -21,6 +21,7 @@ namespace Kachuwa.Form
         string Action { get; set; }
         string SubHeading { get; set; }
         string CssClasses { get; set; }
+        string EncType { get; set; }
 
         Boolean RequestAntiFrogeryToken { get; set; }
         ViewContext ViewContext { get; set; }
@@ -53,7 +54,7 @@ namespace Kachuwa.Form
         public string Name { get; set; } = "";
         public string Action { get; set; } = "";
         public string CssClasses { get; set; } = "";
-
+        public string  EncType { get; set; }
         public T Model { get; set; }
         public IFormCollection FormCollections { get; set; }
         public ViewContext ViewContext { get; set; }
@@ -147,6 +148,13 @@ namespace Kachuwa.Form
 
             return this;
         }
+        public virtual KachuwaHtmlForm<T> EncType(string encType)
+        {
+            Form.EncType = encType;
+
+            return this;
+        }
+
 
         public virtual IKachuwaHtmlForm<T> CreateSection(Action<IFormSectionsOf<T>> builder)
         {
