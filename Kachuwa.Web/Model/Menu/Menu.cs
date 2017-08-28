@@ -31,6 +31,8 @@ namespace Kachuwa.Web.Model
         public string GroupName { get; set; }
 
         public bool IsBackend { get; set; }
+        [AutoFill(AutoFillProperty.CurrentCulture)]
+        public string Culture { get; set; }
 
         public bool IsActive { get; set; }
         [AutoFill(false)]
