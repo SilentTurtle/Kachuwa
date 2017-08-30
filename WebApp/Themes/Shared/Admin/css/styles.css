@@ -8597,23 +8597,24 @@ ul {
 .page-row {
     border: 1px solid #57585b;
     margin-bottom: 3px;
-    min-height: 50px;
+    min-height: 70px;
     opacity: 0.5;
     overflow: auto;
     padding: 5px;
 }
-
+   
 .room {
     border: thin dashed #696969;
     display: inline;
     float: left;
     font-size: 13px;
-    margin: 2px 2px 2px 5px;
-    min-height: 30px;
+    margin: 5px 2px 2px 5px;
+    min-height: 50px;
     text-align: center;
 }
 .dropable .dropped {
     background: #d5cece none repeat scroll 0 0;
+    min-height: 50px;
 }
 .room-1 {
     width: 8%
