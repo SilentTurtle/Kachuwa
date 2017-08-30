@@ -51,15 +51,15 @@
                                                                 <div class="dropable room room-@column.Width">
                                                                     @if (column.Components != null && column.Components.Any())
                                                                     {
-                                                                    @foreach (var component in column.Components)
-                                                                    {
-                                                                        <div class="dropped" data-item="@JsonConvert.SerializeObject(new {FullName = component.FullName, ShortName = component.Name,Params=component.Params, ModuleName = component.ModuleName})">
-                                                                            <div class="dropped-setting">
-                                                                                <i class="fa fa-cog module-setting"></i>
+                                                                        @foreach (var component in column.Components)
+                                                                        {
+                                                                            <div class="dropped" data-item="@JsonConvert.SerializeObject(new {FullName = component.FullName, ShortName = component.Name,Params=component.Params, ModuleName = component.ModuleName})">
+                                                                                <div class="dropped-setting">
+                                                                                    <i class="fa fa-cog module-setting"></i>
+                                                                                </div>
+                                                                                @component.Name
                                                                             </div>
-                                                                            @component.Name
-                                                                        </div>
-                                                                    } }
+                                                                        } }
                                                                 </div>
                                                             }
                                                         </div>
@@ -131,14 +131,14 @@
 
 
         @*<div class="text-center">
-        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal">
-            Left Sidebar Modal
-        </button>
+                <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal">
+                    Left Sidebar Modal
+                </button>
 
-        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#dvModuleSetting">
-            Right Sidebar Modal
-        </button>
-    </div>*@
+                <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#dvModuleSetting">
+                    Right Sidebar Modal
+                </button>
+            </div>*@
 
         <!-- Modal -->
         <div class="modal left fade" id="dvConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -153,7 +153,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="email">Row Name:</label>
-                            <input id="txtRowName" class="form-control" placeholder="Row Name"/>
+                            <input id="txtRowName" class="form-control" placeholder="Row Name" />
                         </div>
                         <div class="form-group">
                             <label for="email">Row Classes:</label>
@@ -187,11 +187,11 @@
                     </div>
 
                     <div class="modal-body" id="dvModuleSettingContainer">
-                        
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btnSettingSave" class="btn btn-primary" >
-                           <i class="fa fa-save"></i> Save
+                        <button type="button" id="btnSettingSave" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Save
                         </button>
                     </div>
                 </div><!-- modal-content -->
@@ -200,7 +200,7 @@
 
 
     </div><!-- container -->
-    
+
 </section>
 
 <link href="~/resources/contextmenu/jquery.contextMenu.min.css" rel="stylesheet" />
@@ -228,14 +228,18 @@
                 var index = $(".context-menu-active").index();
                 $activeRowSetting=$("#pageLayout>li:eq(" + index + ")");
                 $("#dvConfig").modal('show');
+                var item=$activeRowSetting.data('item');
+                $("#ddlRowType").val(item.IsFluid == true ? 'fluid' : 'boxed');
+                $("#txtRowClasses").val( item.ClassName);
+                $("#txtRowName").val(item.RowName);
             }
             var saveLayoutConfig=function() {
                 var item = { IsFluid: false, ClassName: '', RowName: '' };
-              
+
                 var rowType = $("#ddlRowType").val();
                 item.IsFluid = rowType == 'fluid';
-                item.ClassName=$.trim($("txtRowClasses").val());
-                item.RowName=$.trim($("txtRowName").val());
+                item.ClassName=$.trim($("#txtRowClasses").val());
+                item.RowName=$.trim($("#txtRowName").val());
                 $activeRowSetting.data('item', item);
                 $('#dvConfig').modal('hide');
             }
