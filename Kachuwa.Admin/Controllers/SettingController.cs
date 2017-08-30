@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Kachuwa.Core.DI;
 using Kachuwa.Extensions;
 using Kachuwa.Web.Notification;
+using Kachuwa.Web.Services;
 
 namespace Kachuwa.Admin.Controllers
 {
@@ -21,13 +22,17 @@ namespace Kachuwa.Admin.Controllers
     public class SettingController : BaseController
     {
         private readonly ISettingService _settingService;
+        private readonly IFileService _fileService;
         private readonly IServiceCollection _diService;
         private readonly INotificationService _notificationService;
 
-        public SettingController(ISettingService settingService,IServiceCollection diService,INotificationService notificationService)
+        public SettingController(ISettingService settingService,
+            IFileService fileService,
+            IServiceCollection diService,INotificationService notificationService)
         {
             _settingService = settingService;
-           
+            _fileService = fileService;
+
             _diService = diService;
             _notificationService = notificationService;
         }
@@ -38,7 +43,7 @@ namespace Kachuwa.Admin.Controllers
         }
         public async Task<IActionResult> Web()
         {
-            var _setting = _diService.BuildServiceProvider().GetService<Setting>();
+            var _setting =await  _settingService.CrudService.GetAsync(1);
             return View(_setting);
         }
         [HttpPost]
@@ -48,9 +53,13 @@ namespace Kachuwa.Admin.Controllers
             {
                 model.AutoFill();
                 model.Description.Trim();
+                if (model.LogoFile != null)
+                {
+                    model.Logo = _fileService.Save("Logo", model.LogoFile);
+                }
                 await _settingService.CrudService.UpdateAsync(model);
                 _diService.TryAddSingleton(model.To<Setting>());
-                _notificationService.Notify("Saved Successfully!", NotificationType.Error);
+                _notificationService.Notify("Saved Successfully!", NotificationType.Success);
                 // _diService.BuildServiceProvider(true);
                 // var asdf= serviceProvider.GetService<Setting>();
                 //_diService.TryAddSingleton(model);

@@ -26,42 +26,52 @@
                             <div class="panel-body">
                                 @(Html.CreateKachuwaForm<Setting>("pageForm", Model)
                                       .SetHeading("")
+                                       .EncType("multipart/form-data")
                                       .ActionUrl("/admin/setting/web")
                                       .CancelUrl("/admin/setting/web")
                                       .CreateSection(section =>
                                       {
-                                          // section.Add("section1", "myclass");
-                                          section.Add("section1", "col-md-8", rows =>
+                                      // section.Add("section1", "myclass");
+                                      section.Add("section1", "col-md-8", rows =>
+                                      {
+                                      rows.Add("1strow", "form-group", columns =>
+                                      {
+                                          columns.Add("12strow1stcol", "", controls =>
                                           {
-                                              rows.Add("1strow", "form-group", columns =>
-                                              {
-                                                  columns.Add("12strow1stcol", "", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.SettingId, FormInputControl.Hidden);
-                                                  });
-                                                  columns.Add("1strow1stcol", "", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.WebsiteName, FormInputControl.TextBox)
-                                                      .SetPlaceHolder("Enter Your WebSite Name")
-                                                      .SetDisplayName("WebSite Name");
-                                                  });
-                                              });
-                                              rows.Add("2strow", "form-group", columns =>
-                                              {
-                                                  columns.Add("2strow1stcol", "colClass", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.Description, FormInputControl.TextArea);
+                                              controls.Add("form-control", x => x.SettingId, FormInputControl.Hidden);
+                                          });
+                                          columns.Add("1strow1stcol", "", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.WebsiteName, FormInputControl.TextBox)
+                                              .SetPlaceHolder("Enter Your WebSite Name")
+                                              .SetDisplayName("WebSite Name");
+                                          });
+                                      });
+                                      rows.Add("2strow", "form-group", columns =>
+                                      {
+                                          columns.Add("2strow1stcol", "colClass", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.Description, FormInputControl.TextArea);
 
 
-                                                  });
-                                              });
-                                              rows.Add("2strow", "form-group", columns =>
-                                              {
-                                                  columns.Add("2strow1stcol", "colClass", controls =>
-                                                  {
-                                                      controls.Add("form-control", x => x.Logo, FormInputControl.File);
+                                          });
+                                      });
+                                      rows.Add("2strow", "row", columns =>
+                                      {
+                                          columns.Add("2strow1stcol", "", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.Logo, FormInputControl.Hidden);
 
-                                                  });
+                                          });
+
+                                          columns.Add("2strow1stcol", "col-md-6", controls =>
+                                          {
+                                              controls.Add("form-control", x => x.LogoFile, FormInputControl.File);
+
+                                          });
+                                          columns.Add("2strow1stcol", "col-md-6",@<div>
+                                                                                             <img src="@Model.Logo" class="img img-responsive" width="=200" />                                     
+                                                                                         </div>);
                                               });
 
                                           }).SetHeading("Configuration").SetHelpLine("Configure your website information");
@@ -173,7 +183,7 @@
                                                         .SetHelp("allow your site run on secure https,ps. ssl certificate must be installed before use.");
 
                                                   });
-                                                
+
                                               });
 
                                           }).SetHeading("Others").SetHelpLine("");

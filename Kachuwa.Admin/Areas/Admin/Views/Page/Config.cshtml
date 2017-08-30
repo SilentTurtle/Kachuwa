@@ -22,7 +22,7 @@
                                     <a class="btn btn-warning" href="/admin/page" title="Go Back">
                                         <i class="fa fa-arrow-left"></i>
                                     </a>
-                                    <button class="btn btn-warning" type="button" id="btnRefresh" title="Reset Layout">
+                                    <button class="btn btn-info" type="button" id="btnRefresh" title="Reset Layout">
                                         <i class="fa fa-refresh"></i>
                                     </button>
                                     <button class="btn btn-success" type="button" id="btnSavePage" title="Save Layout">
@@ -44,7 +44,7 @@
 
                                                 @foreach (var row in ((Kachuwa.Web.Layout.LayoutContent)ViewData["Layout"]).Rows)
                                                 {
-                                                    <li class="page-row">
+                                                    <li class="page-row" data-item="@JsonConvert.SerializeObject(row)">
                                                         <div class="module-lines">
                                                             @foreach (var column in row.Columns)
                                                             {
@@ -67,7 +67,7 @@
                                                 }
                                                 @if (!((Kachuwa.Web.Layout.LayoutContent)ViewData["Layout"]).Rows.Any())
                                                 {
-                                                    <li class="page-row">
+                                                    <li class="page-row" data-item="{ 'IsFluid': false, 'ClassName': '', 'RowName': '' }">
                                                         <div class="module-lines">
 
                                                             <div class="dropable room room-2"></div>
@@ -141,19 +141,36 @@
     </div>*@
 
         <!-- Modal -->
-        <div class="modal left fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal left fade" id="dvConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Left Sidebar</h4>
+                        <h4 class="modal-title" id="myModalLabel">Configure</h4>
                     </div>
 
                     <div class="modal-body">
-                        <p>
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </p>
+                        <div class="form-group">
+                            <label for="email">Row Name:</label>
+                            <input id="txtRowName" class="form-control" placeholder="Row Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Row Classes:</label>
+                            <input id="txtRowClasses" class="form-control" placeholder="Aditional Classes" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Row Type:</label>
+                            <select class="form-control" id="ddlRowType">
+                                <option value="boxed">Boxed</option>
+                                <option value="fluid">Fuild</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSaveConfig" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Save
+                        </button>
                     </div>
 
                 </div><!-- modal-content -->
@@ -173,7 +190,7 @@
                         
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" >
+                        <button type="button" id="btnSettingSave" class="btn btn-primary" >
                            <i class="fa fa-save"></i> Save
                         </button>
                     </div>
@@ -183,11 +200,7 @@
 
 
     </div><!-- container -->
-    <div class="row">
-        <div class="demo-footer">
-           SEttings
-        </div>
-    </div>
+    
 </section>
 
 <link href="~/resources/contextmenu/jquery.contextMenu.min.css" rel="stylesheet" />
@@ -210,11 +223,26 @@
                     error: error
                 });
             };
-            var configLayout = function() {}
+            var $activeRowSetting;
+            var configLayout = function(key, options) {
+                var index = $(".context-menu-active").index();
+                $activeRowSetting=$("#pageLayout>li:eq(" + index + ")");
+                $("#dvConfig").modal('show');
+            }
+            var saveLayoutConfig=function() {
+                var item = { IsFluid: false, ClassName: '', RowName: '' };
+              
+                var rowType = $("#ddlRowType").val();
+                item.IsFluid = rowType == 'fluid';
+                item.ClassName=$.trim($("txtRowClasses").val());
+                item.RowName=$.trim($("txtRowName").val());
+                $activeRowSetting.data('item', item);
+                $('#dvConfig').modal('hide');
+            }
 
             var renderUiConfig = function() {
                 var model = {
-                    PageId:@Model.PageId,
+                    PageId: @Model.PageId,
                     Rows: []
                 };
                 var rows = [];
@@ -223,8 +251,9 @@
                     var $li = $(item);
                     var row = {};
                     row.Order = $li.index();
-                    row.ClassName = "";
-                    row.RowName = "";
+                    row.IsFluid=$li.data('item').IsFluid;
+                    row.ClassName = $li.data('item').ClassName;
+                    row.RowName =$li.data('item').RowName;
                     row.Columns = [];
                     $li.find(".module-lines >.room").each(function(i, col) {
                         var numberPattern = /\d+/g;
@@ -275,28 +304,33 @@
             }
 
             var resetPageLayout = function() {
+                var item = { IsFluid: false, ClassName: '', RowName: '' };
                 $("#pageLayout")
-                    .html("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>");
+                    .html($("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>").data('item', item));
 
             }
             var currModule = {};
-            var setmoduleSetting=function(param) {
+            var setmoduleSetting = function(param) {
                 currModule.Params = param;
                 var item = currModule.Elem.data('item');
                 item.Params = currModule.Params;
                 currModule.Elem.data('item', item);
             }
             var loadModuleSetting = function(moduleName) {
-               
+
                 $("#headingModule").text('').text();
                 $.ajax({
                     url: '/admin/page/modulesetting/' + moduleName,
                     type: "GET",
-                    success: function (response, status, xhr) {
-                        $("#dvModuleSettingContainer").html(response);
-                        $('#dvModuleSetting').modal('show');
+                    success: function(response, status, xhr) {
+                        if (response == false) {
+                            alert('Does not require to setup.');
+                        } else {
+                            $("#dvModuleSettingContainer").html(response);
+                            $('#dvModuleSetting').modal('show');
+                        }
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
                         //show the error somewhere - but this is a bad solution
                     }
                 });
@@ -321,7 +355,8 @@
                             var moduleName = dropedElem.attr('m-name');
                             var new_droppedElem =
                                 $("<div class='dropped'><div class='dropped-setting'><i class='fa fa-cog module-setting' ></i></div>" + $.trim(dropedElem.html()) + "</div>");
-                            new_droppedElem.data('item', { ModuleName:moduleName,ShortName: shortName, FullName: fullName });
+                            new_droppedElem.data('item',
+                                { ModuleName: moduleName, ShortName: shortName, FullName: fullName });
                             $(evt.to).find("li").remove();
                             if (evt.newIndex == 0) {
                                 $(evt.to).append(new_droppedElem);
@@ -347,9 +382,9 @@
             }
 
             var addNewRow = function() {
-
+                var item = { IsFluid: false, ClassName: '', RowName: '' };
                 $("#pageLayout")
-                    .append("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>");
+                    .append($("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>").data('item',item));
                 pageWrapperSortInit();
             }
 
@@ -409,7 +444,7 @@
 
 
                 });
-
+                $(".modulelist-alpha li:first").trigger('click');
                 $.contextMenu({
                     selector: '#pageLayout>li',
                     items: {
@@ -446,31 +481,41 @@
                     });
                 $(document).off("click", ".dropped-setting>.module-setting").on("click",
                     ".dropped-setting>.module-setting",
-                    function () {
+                    function() {
                         var item = $(this).parents(".dropped:eq(0)").data('item');
                         currModule.Elem = $(this).parents(".dropped:eq(0)");
                         currModule.Name = item.ShortName;
                         currModule.ModuleName = item.ModuleName;
                         loadModuleSetting(currModule.ModuleName);
 
-
                     });
 
 
+                $(document).off("click", "#btnSettingSave").on("click",
+                    "#btnSettingSave",
+                    function() {
+                        $('#dvModuleSetting').modal('hide');
+
+                    });
+                $(document).off("click", "#btnSaveConfig").on("click",
+                    "#btnSaveConfig",
+                    function() {
+
+                        saveLayoutConfig();
+                    });
             }
 
             var init = function() {
-
                 UI();
             }();
             var modSetting = {
-                onload:function(){},
+                onload: function() {},
                 CurrentModule: setmoduleSetting,
-                run:function() {
+                run: function() {
                     modSetting.onload();
                 }
             };
-            return { ModuleSetting:modSetting }
+            return { ModuleSetting: modSetting }
         }();
 
     </script>
