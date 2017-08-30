@@ -367,7 +367,7 @@ namespace Kachuwa.Form
             if (value == null)
                 return HtmlString.Empty;
             if (value is IHtmlContent)
-                return value as IHtmlContent;
+                return new HtmlString(value.ToString().Trim());
             //if (Format != null)
             //{
             //    if (System.Type.GetTypeCode(value.GetType()) == TypeCode.Object)
@@ -383,9 +383,9 @@ namespace Kachuwa.Form
             //    }
             //}
             if (IsEncoded)
-                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
+                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString().Trim()));
 
-            return new HtmlString(value.ToString());
+            return new HtmlString(value.ToString().Trim());
         }
 
 

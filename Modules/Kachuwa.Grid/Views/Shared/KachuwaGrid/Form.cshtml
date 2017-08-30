@@ -124,9 +124,7 @@
 
                                 break;
                             case FormInputControl.Editor:
-                                <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
-                                                    @control.ValueFor(Model.FormModel)
-                                                    </textarea>
+                                <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>@control.ValueFor(Model.FormModel)</textarea>
                                 break;
                             case FormInputControl.Email:
                                 <input type="email" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
@@ -175,9 +173,7 @@
                                        name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                                 break;
                             case FormInputControl.TextArea: 
-                                <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
-                                                    @control.ValueFor(Model.FormModel)
-                                                    </textarea>
+                                <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>@control.ValueFor(Model.FormModel)</textarea>
                                 break;
                             case FormInputControl.TextBox:
                                 <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"   @Html.Raw(control.RenderAttributes())
@@ -280,9 +276,7 @@
 
                             break;
                         case FormInputControl.Editor:
-                            <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
-                                                    @control.ValueFor(Model.FormModel)
-                                                    </textarea>
+                            <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>@control.ValueFor(Model.FormModel)</textarea>
                             break;
                         case FormInputControl.Email:
                             <input type="email" class="@control.CssClasses" id="@control.Id"  @Html.Raw(control.RenderAttributes())
@@ -331,9 +325,7 @@
                                    name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
                             break;
                         case FormInputControl.TextArea:
-                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>
-                                                    @control.ValueFor(Model.FormModel)
-                                                    </textarea>
+                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id"  @Html.Raw(control.RenderAttributes())>@control.ValueFor(Model.FormModel)</textarea>
                             break;
                         case FormInputControl.TextBox:
                             <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id"   @Html.Raw(control.RenderAttributes())
