@@ -11,7 +11,6 @@
                     <thead>
                         <tr>
                             <th>Key</th>
-                            <th>Content</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -19,8 +18,10 @@
                     {
                         <tr>
                             <td>@content.KeyName</td>
-                            <td>@Html.Raw(content.Content.Truncate(50, "...", true)) </td>
-                            <td><label>Select<input type="checkbox" name="useme" value="@content.KeyName" /></label></td>
+                          
+                            <td>
+                                <label>Select<input type="checkbox" name="useme" value="@content.KeyName"/></label>
+                            </td>
                         </tr>
                     }
                 </table>
