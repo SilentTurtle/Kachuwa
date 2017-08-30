@@ -46,6 +46,7 @@ namespace Kachuwa.Web
             services.AddSingleton<ISettingService, SettingService>();
             services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
+            services.AddSingleton<IFileService, LocalFileService>();
             //****for testing******//
             //services.TryAddSingleton<IRazorViewEngine, RazorViewEngine2>();
             //services.TryAddSingleton<IView,Razor2View>();

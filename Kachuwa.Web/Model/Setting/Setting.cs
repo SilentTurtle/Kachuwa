@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
+using Microsoft.AspNetCore.Http;
 
 namespace Kachuwa.Web.Model
 {
@@ -28,7 +29,8 @@ namespace Kachuwa.Web.Model
         public decimal Longitude { get; set; }
 
         public decimal Lattitude { get; set; }
-
+        [IgnoreAll]
+        public IFormFile LogoFile { get; set; }
         public string Logo { get; set; }
         [Required]
         public string BaseCulture { get; set; }
