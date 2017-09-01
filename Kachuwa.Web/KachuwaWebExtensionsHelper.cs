@@ -3,6 +3,7 @@ using Kachuwa.Log;
 using Kachuwa.Web.Layout;
 using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
+using Kachuwa.Web.Notification;
 using Kachuwa.Web.Rule;
 using Kachuwa.Web.Security;
 using Kachuwa.Web.Service;
@@ -47,6 +48,7 @@ namespace Kachuwa.Web
             services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
             services.AddSingleton<IFileService, LocalFileService>();
+            services.RegisterNotificationService();
             //****for testing******//
             //services.TryAddSingleton<IRazorViewEngine, RazorViewEngine2>();
             //services.TryAddSingleton<IView,Razor2View>();
@@ -75,7 +77,8 @@ namespace Kachuwa.Web
                   name: "default",
                   template: "{pageUrl?}",
                   defaults: new { controller = "KachuwPage", action = "Index" }
-                  , constraints: new { pageUrl = @"\w+" });
+                 // , constraints: new { pageUrl = @"\w+" }
+                 );
 
                 routes.MapRoute(
                     name: "default1",

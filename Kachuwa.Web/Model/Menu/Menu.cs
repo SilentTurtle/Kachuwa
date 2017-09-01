@@ -27,7 +27,7 @@ namespace Kachuwa.Web.Model
         public int ParentId { get; set; }
 
         public int MenuOrder { get; set; }
-
+        [Required]
         public string GroupName { get; set; }
 
         public bool IsBackend { get; set; }

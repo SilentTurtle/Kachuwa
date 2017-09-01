@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Kachuwa.Web
@@ -24,11 +25,27 @@ namespace Kachuwa.Web
             }
             else
             {//landing home page
-               
+
                 filterContext.HttpContext.Items.Add("KPageUrl", "landing");
             }
 
             base.OnActionExecuting(filterContext);
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            PartialViewResult result = null;
+
+            if (context.Result.GetType() == typeof(PartialViewResult))
+            {
+                result = context.Result as PartialViewResult;
+            }
+            if (result != null && result.ViewName == "_PageNotFound")
+            {
+                context.HttpContext.Items.Remove("KPageUrl");
+                context.HttpContext.Items.Add("KPageUrl", "_PageNotFound");
+            }
+            base.OnActionExecuted(context);
         }
     }
 }

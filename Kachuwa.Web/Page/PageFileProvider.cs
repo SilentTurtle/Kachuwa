@@ -30,7 +30,7 @@ namespace Kachuwa.Web
         {
             throw new NotImplementedException();
         }
-        private string[] ignoreFiles = new string[] { "Component", "Plugin","Components","Plugins","_ViewImports", "_ViewStart", "_Layout" };
+        private string[] ignoreFiles = new string[] { "_PageNotFound","Component", "Plugin","Components","Plugins","_ViewImports", "_ViewStart", "_Layout" };
         public IFileInfo GetFileInfo(string subpath)
         {
             if (ignoreFiles.Any(subpath.Contains))
