@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Kachuwa.Web.Model.Menu>
+﻿@using Microsoft.AspNetCore.Routing
+@model IEnumerable<Kachuwa.Web.Model.Menu>
 <div class="side-menu">
     <nav class="navbar navbar-default" role="navigation">
         <!-- Main Menu -->
@@ -12,21 +13,49 @@
             </div>
             <span class="menu-label">Menu</span>
             <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/admin/dashboard"><i class="material-icons md-18">dashboard</i>Dashboard</a>
+                </li>
                 <!--TODO RECURSIVE-->
-                @*@foreach (var menu in Model)
+                @foreach (var menu in Model)
                 {
-                    <li class="active"><a href="@menu.Url">
-                        @if (string.IsNullOrEmpty(menu.Icon))
+                    <li class=""><a href="@menu.Url">
+                        @if (!string.IsNullOrEmpty(menu.Icon))
                         {
                             <i class="material-icons md-18">@menu.Icon</i>
                         }
                         @menu.Name
                     </a></li>
-                }*@
+                }
 
-                <li class="active">
-                    <a href="/admin/dashboard"><i class="material-icons md-18">dashboard</i>Dashboard</a>
+                @*
+                <li class="">
+                    <a href="/admin/event"><i class="material-icons md-18">event</i>Event</a>
                 </li>
+                <li class="">
+                    <a href="/admin/noticeboard"><i class="material-icons md-18">notifications</i>Notice Board</a>
+                </li>
+                <li class="">
+                    <a href="/admin/gallery"><i class="material-icons md-18">notifications</i>Gallery</a>
+                </li>
+                <li class="">
+                    <a href="/admin/gallery"><i class="material-icons md-18">add_to_photos</i>Gallery</a>
+                </li>
+                <li class="">
+                    <a href="/admin/vacancy"><i class="material-icons md-18">add_to_photos</i>Vanancy</a>
+                </li>
+                <li class="">
+                    <a href="/admin/newsletter"><i class="material-icons md-18">add_to_photos</i>Vanancy</a>
+                </li>
+                <li class="">
+                    <a href="/admin/newsletter"><i class="material-icons md-18">add_to_photos</i>Materials</a>
+                </li>
+                <li class="">
+                    <a href="/admin/admission"><i class="material-icons md-18">add_to_photos</i>Admission</a>
+                </li>
+                <li class="">
+                    <a href="/admin/alumni"><i class="material-icons md-18">add_to_photos</i>Alumni</a>
+                </li>*@
                 <li class="panel panel-default" id="dropdown">
                     <a data-toggle="collapse" href="#dropdown-lvl1">
                         <i class="material-icons md-18">language</i>Web<span class="caret text-right"></span>
@@ -44,7 +73,7 @@
                         </div>
                     </div>
                 </li>
-                
+
                 <li class="panel panel-default" id="dropdown">
                     <a data-toggle="collapse" href="#dropdown-lvl2">
                         <i class="material-icons md-18">palette</i>Themes<span class="caret text-right"></span>
@@ -89,9 +118,29 @@
                         </div>
                     </div>
                 </li>
-              
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
 
 </div>
+<script type="text/javascript" asp-add-nonce="true">
+    @{
+        string actionName = this.Context.GetRouteValue("action").ToString();
+        string controllerName = this.Context.GetRouteValue("controller").ToString();
+
+        string currentUrl = Url.Action(actionName, controllerName);
+    }
+    var currentPage = '@currentUrl';
+    currentPage = currentPage.replace("/page", "");
+    if ($(".side-menu").find("ul li a[href='" + currentPage + "']").length > 0) {
+        $(".side-menu").find("ul li").removeClass('active');
+        $(".side-menu").find("ul li a[href='" + currentPage + "']").parents("li:last").addClass('active').trigger("click");
+    }
+    $(document).off("click", ".side-menu ul li").on("click",
+        ".side-menu ul li",
+        function() {
+            $(".side-menu").find("ul li").removeClass('active');
+            $(this).addClass('active');
+        });
+</script>

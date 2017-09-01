@@ -132,6 +132,7 @@ namespace Kachuwa.Admin.Controllers
         public async Task<IActionResult> Edit([FromRoute]int pageId)
         {
             var model = await _pageService.Get(pageId);
+            model.Url = "/" + model.Url;
             return View(model);
         }
 
