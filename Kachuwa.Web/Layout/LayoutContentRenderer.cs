@@ -81,6 +81,7 @@ namespace Kachuwa.Web.Layout
                     }
                     var finalRow = string.Format("<div rid=\"{0}\" rname=\"{1}\" class=\"{2}\" >{3}</div>", row.RowId, row.RowName, _layoutGridSys.Row, rowColums);
                     string outerWrapper = row.IsFluid == true ? _layoutGridSys.Row : _layoutGridSys.Container;
+                    outerWrapper += " " + row.ClassName;
                     var container = string.Format("<div class=\"{0}\" >{1}</div>", outerWrapper, finalRow);
                     layout.Append(container);
 

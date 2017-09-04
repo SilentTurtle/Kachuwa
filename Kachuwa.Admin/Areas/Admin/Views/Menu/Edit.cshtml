@@ -26,7 +26,7 @@
                             <div class="panel-body">
                                 @(Html.CreateKachuwaForm<Menu>("pageForm", Model)
                                       .SetHeading("")
-                                      .ActionUrl("/admin/menu/new")
+                                      .ActionUrl("/admin/menu/edit")
                                       .CancelUrl("/admin/menu")
                                       .CreateSection(section =>
                                       {
@@ -78,6 +78,16 @@
                                               {
                                                   columns.Add("2strow1stcol", "colClass", controls =>
                                                   {
+                                                      controls.Add("form-control", x => x.Icon, FormInputControl.TextBox)
+                                                          .SetPlaceHolder("Enter Icon Name")
+                                                          .SetDisplayName("Icon")
+                                                          .SetHelp("enter icon name from material design icons set");
+                                                  });
+                                              });
+                                              rows.Add("2strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("2strow1stcol", "colClass", controls =>
+                                                  {
                                                       controls.Add("form-control", x => x.MenuOrder, FormInputControl.Number)
                                                           .SetPlaceHolder("Enter Menu Order")
                                                           .SetDisplayName("Menu Order")
@@ -105,7 +115,7 @@
 
                                                   });
                                               });
-                                          }).SetHeading("Add New").SetHelpLine("Create a new menu");
+                                          }).SetHeading("Edit").SetHelpLine("edit a menu");
 
 
                                       })
@@ -158,19 +168,12 @@
 
             });
             $(".urlchange").keyup(function(event) {
-
                 var fulltxt = $(this).val();
-                var pagename = fulltxt.replace("/", "");
-                var pagenam2 = fulltxt.replace("/", "");
-                // console.log(pagename);
+                var pagename = fulltxt;//.replace("/", "");
                 var dname_without_space = pagename.replace(/ /g, "");
-                var dname_with_space = pagenam2.replace(/-/g, " ");
-                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
-                var name_without_special_char2 = dname_with_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
-
-                $(this).val("/" + name_without_special_char.replace(/\-+/g, '-'));
-                //$("#lblUrl").text(hostUrl + "/" + name_without_special_char);
-                // $(".keychange").val(name_without_special_char2);
+                var name_without_special_char2 = dname_without_space.replace(/[`~!@@#$%^&*()_|+\-=?;:'"]/gi, '');
+                name_without_special_char2.replace(/\-+/g, '-');
+                $(this).val(name_without_special_char2);
             });
         })();
 
