@@ -34,7 +34,7 @@ namespace Kachuwa.Web.Components
             {
                 var model = new NotificationViewModel();
                 model.Config = _config;
-                var notifications = _notificationTempDataWrapper.Get<IEnumerable<Notification.Notification>>(NotificationConstants.NotificationKey);
+                var notifications = _notificationTempDataWrapper.Peek<IEnumerable<Notification.Notification>>(NotificationConstants.NotificationKey);
                 if (notifications != null)
                 {
                     foreach (var notification in notifications)

@@ -18,6 +18,7 @@ using Kachuwa.Log;
 using Kachuwa.Log.Insight;
 using Kachuwa.Web;
 using Kachuwa.Web.Middleware;
+using Kachuwa.Web.Notification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -25,11 +26,14 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace WebApp
 {
+   
+
     public class Startup
     {
         private IHostingEnvironment hostingEnvironment;
@@ -40,6 +44,7 @@ namespace WebApp
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("config/kachuwaconfig.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -49,6 +54,8 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+           
             services.AddSingleton(Configuration);
             var serviceProvider = services.BuildServiceProvider();
 

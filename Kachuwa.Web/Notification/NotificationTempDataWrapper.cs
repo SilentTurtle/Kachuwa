@@ -24,7 +24,9 @@ namespace Kachuwa.Web.Notification
         {
             if (TempData.ContainsKey(key))
             {
-                return JsonConvert.DeserializeObject<T>(TempData[key].ToString());
+                string value = TempData[key].ToString();
+                TempData.Remove(key);
+                return JsonConvert.DeserializeObject<T>(value);
             }
             return default(T);
         }
@@ -33,7 +35,9 @@ namespace Kachuwa.Web.Notification
         {
             if (TempData.ContainsKey(key))
             {
-                return JsonConvert.DeserializeObject<T>(TempData[key].ToString());
+                string value = TempData.Peek(key).ToString();
+                TempData.Remove(key);
+                return JsonConvert.DeserializeObject<T>(value);
             }
             return default(T);
         }
