@@ -231,7 +231,9 @@ CREATE table dbo.Setting
 	Description								nvarchar(500),
 	Country									nvarchar(256),	
 	Address1								nvarchar(256),
-	Address2								nvarchar(256), 
+	Address2								nvarchar(256),
+	PhoneNumber								nvarchar(256),
+	Email									nvarchar(256), 	
 	State 									nvarchar(256),
 	City									nvarchar(256),
 	Longitude								decimal(16,4) default(0),
@@ -247,13 +249,12 @@ CREATE table dbo.Setting
 
 Insert Into dbo.Page Select 'Home','landing','This is page Content','',1,1,'en-us','2017/1/1','2017/1/1',1,0,'2017/1/1','Admin'	
 
-Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0
+Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','987654321,987654123','info@kachuwaframework.com','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0
 
 
 
 Insert Into dbo.IdentityRole 
-Select  NULL, N'SuperAdmin', N'SuperAdmin'
-Union Select  NULL, N'Admin', N'ADMIN'
+Select  NULL, N'Admin', N'ADMIN'
 Union  Select  NULL, N'User', N'User'
 Union Select NULL, N'Guest', N'GUEST'
 
