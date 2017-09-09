@@ -226,20 +226,20 @@
             var $activeRowSetting;
             var configLayout = function(key, options) {
                 var index = $(".context-menu-active").index();
-                $activeRowSetting=$("#pageLayout>li:eq(" + index + ")");
+                $activeRowSetting = $("#pageLayout>li:eq(" + index + ")");
                 $("#dvConfig").modal('show');
-                var item=$activeRowSetting.data('item');
+                var item = $activeRowSetting.data('item');
                 $("#ddlRowType").val(item.IsFluid == true ? 'fluid' : 'boxed');
-                $("#txtRowClasses").val( item.ClassName);
+                $("#txtRowClasses").val(item.ClassName);
                 $("#txtRowName").val(item.RowName);
             }
-            var saveLayoutConfig=function() {
+            var saveLayoutConfig = function() {
                 var item = { IsFluid: false, ClassName: '', RowName: '' };
 
                 var rowType = $("#ddlRowType").val();
                 item.IsFluid = rowType == 'fluid';
-                item.ClassName=$.trim($("#txtRowClasses").val());
-                item.RowName=$.trim($("#txtRowName").val());
+                item.ClassName = $.trim($("#txtRowClasses").val());
+                item.RowName = $.trim($("#txtRowName").val());
                 $activeRowSetting.data('item', item);
                 $('#dvConfig').modal('hide');
             }
@@ -255,9 +255,9 @@
                     var $li = $(item);
                     var row = {};
                     row.Order = $li.index();
-                    row.IsFluid=$li.data('item').IsFluid;
+                    row.IsFluid = $li.data('item').IsFluid;
                     row.ClassName = $li.data('item').ClassName;
-                    row.RowName =$li.data('item').RowName;
+                    row.RowName = $li.data('item').RowName;
                     row.Columns = [];
                     $li.find(".module-lines >.room").each(function(i, col) {
                         var numberPattern = /\d+/g;
@@ -388,7 +388,7 @@
             var addNewRow = function() {
                 var item = { IsFluid: false, ClassName: '', RowName: '' };
                 $("#pageLayout")
-                    .append($("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>").data('item',item));
+                    .append($("<li class='page-row'><div class='module-lines'>  <div class='dropable room room-12'></div></div></li>").data('item', item));
                 pageWrapperSortInit();
             }
 
@@ -396,10 +396,24 @@
                 var m = "clicked: " + key;
                 var index = $(".context-menu-active").index();
                 var columnSize = options.items[key].value;
+                var value2 = options.items[key].value2;
+                var secondary = [];
+                if (value2 != "") {
+                    secondary = value2.split("-");
+                }
                 var rootRow = $("<div class='module-lines'></div>");
-                for (var i = 0; i < columnSize; i++) {
-                    var width = 12 / columnSize;
-                    rootRow.append($("<div class='dropable room room-" + width + "' ></div>"));
+                if (secondary.length == 0) {
+                    for (var i = 0; i < columnSize; i++) {
+                        var width = 12 / columnSize;
+
+                        rootRow.append($("<div class='dropable room room-" + width + "' ></div>"));
+                    }
+                } else {
+                    for (var i = 0; i < secondary.length; i++) {
+                        var width = 12 / columnSize;
+                        var test = width * secondary[i];
+                        rootRow.append($("<div class='dropable room room-" + test + "' ></div>"));
+                    }
                 }
 
                 $("#pageLayout li:eq(" + index + ")").html(rootRow);
@@ -452,11 +466,75 @@
                 $.contextMenu({
                     selector: '#pageLayout>li',
                     items: {
-                        "room2": { "value": 2, "name": "Make 2 Room", "icon": "cut", callback: roomMaker },
-                        "room3": { "value": 3, "name": "Make 3 Room", "icon": "cut", callback: roomMaker },
-                        "room4": { "value": 4, "name": "Make 4 Room", "icon": "cut", callback: roomMaker },
-                        "room6": { "value": 6, "name": "Make 6 Room", "icon": "cut", callback: roomMaker },
-                        "room12": { "value": 1, "name": "Make 1 room", "icon": "cut", callback: roomMaker },
+                        "room2": {
+                            "value": 2,
+                            "value2": "",
+                            "name": "Make 2 Room",
+                            "icon": "cut",
+                            callback:
+                                roomMaker
+                        },
+                        "room3": {
+                            "value": 3,
+                            "value2": "",
+                            "name": "Make 3 Room",
+                            "icon": "cut",
+                            callback:
+                                roomMaker
+                        },
+                        "room31": {
+                            "value": 4,
+                            "value2": "3-1",
+                            "name": "Make 3-1 Room",
+                            "icon": "cut",
+                            callback: roomMaker
+                        },
+                        "room13": {
+                            "value": 4,
+                            "value2": "1-3",
+                            "name": "Make 1-3 Room",
+                            "icon": "cut",
+                            callback: roomMaker
+                        },
+
+                        "room4": {
+                            "value": 4,
+                            "value2": "",
+                            "name": "Make 4 Room",
+                            "icon": "cut",
+                            callback:
+                                roomMaker
+                        },
+                        "room51": {
+                            "value": 6,
+                            "value2": "5-1",
+                            "name": "Make 5-1 Room",
+                            "icon": "cut",
+                            callback: roomMaker
+                        },
+                        "room15": {
+                            "value": 6,
+                            "value2": "1-5",
+                            "name": "Make 1-5 Room",
+                            "icon": "cut",
+                            callback: roomMaker
+                        },
+
+                        "room6": {
+                            "value": 6,
+                            "value2": "",
+                            "name": "Make 6 Room",
+                            "icon": "cut",
+                            callback:
+                                roomMaker
+                        },
+                        "room12": {
+                            "value": 1,
+                            "value2": "",
+                            "name": "Make 1 room",
+                            "icon": "cut",
+                            callback: roomMaker
+                        },
                         "sep1": "---------",
                         "newrow": { "name": "New Row", "icon": "fa plus", callback: addNewRow },
                         "sep2": "---------",
