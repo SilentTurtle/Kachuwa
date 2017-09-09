@@ -100,5 +100,13 @@ namespace Kachuwa.Web.Services
             }
             return "";
         }
+
+        public void Delete(string dirPath, string filePath)
+        {
+            string physicallPath = CheckOrCreateDirectory(dirPath);
+            var path=Path.Combine(physicallPath, filePath);
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     }
 }
