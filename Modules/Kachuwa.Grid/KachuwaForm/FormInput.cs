@@ -227,8 +227,18 @@ namespace Kachuwa.Form
 
                         foreach (var item in this.DataSource)
                         {
+                            if (!item.IsSelected)
+                            {
 
-                            sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id, item.Label);
+                                sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Value,
+                                    item.Label);
+                            }
+                            else
+                            {
+                                sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>",
+                                        item.Id,
+                                        item.Value, item.Label);
+                            }
                         }
 
 
@@ -274,7 +284,7 @@ namespace Kachuwa.Form
                                 {
                                     sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>",
                                         item.Id,
-                                        item.Id, item.Label);
+                                        item.Value, item.Label);
                                 }
 
                             }
@@ -282,7 +292,7 @@ namespace Kachuwa.Form
                             {
                                 if (this.InputType == FormInputControl.Select)
                                 {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Value,
                                         item.Label);
                                 }
 
@@ -296,7 +306,7 @@ namespace Kachuwa.Form
                                 {
                                     sb.AppendFormat(
                                         "<option id='{0}' selected='selected' value='{1}'>{2}</option>", item.Id,
-                                        item.Id, item.Label);
+                                        item.Value, item.Label);
                                 }
 
                             }
@@ -304,7 +314,7 @@ namespace Kachuwa.Form
                             {
                                 if (this.InputType == FormInputControl.Select)
                                 {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Value,
                                         item.Label);
                                 }
 
@@ -319,7 +329,7 @@ namespace Kachuwa.Form
                                 {
                                     sb.AppendFormat("<option id='{0}' selected='selected' value='{1}'>{2}</option>",
                                         item.Id,
-                                        item.Id, item.Label);
+                                        item.Value, item.Label);
                                 }
 
                             }
@@ -327,7 +337,7 @@ namespace Kachuwa.Form
                             {
                                 if (this.InputType == FormInputControl.Select)
                                 {
-                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Id,
+                                    sb.AppendFormat("<option id='{0}' value='{1}'>{2}</option>", item.Id, item.Value,
                                         item.Label);
                                 }
 
@@ -367,7 +377,7 @@ namespace Kachuwa.Form
             if (value == null)
                 return HtmlString.Empty;
             if (value is IHtmlContent)
-                return new HtmlString(value.ToString().Trim());
+                return value as IHtmlContent;
             //if (Format != null)
             //{
             //    if (System.Type.GetTypeCode(value.GetType()) == TypeCode.Object)
@@ -383,9 +393,9 @@ namespace Kachuwa.Form
             //    }
             //}
             if (IsEncoded)
-                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString().Trim()));
+                return new HtmlString(HtmlEncoder.Default.Encode(value.ToString()));
 
-            return new HtmlString(value.ToString().Trim());
+            return new HtmlString(value.ToString());
         }
 
 
