@@ -6,9 +6,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
+using Kachuwa.Web;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+using Microsoft.Extensions.Options;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Kachuwa.Form
 {
@@ -23,7 +32,7 @@ namespace Kachuwa.Form
         string Help { get; set; }
         IHtmlContent ValueFor(object model);
         IDictionary<string, object> Attributes { get; set; }
-        IHtmlContent RenderAttributes();
+        IHtmlContent RenderAttributes(ViewContext viewContext);
         FormInputControl InputType { get; set; }
         string DisplayName { get; set; }
         IEnumerable<FormInputItem> DataSource { get; set; }
@@ -85,11 +94,14 @@ namespace Kachuwa.Form
 
         public IEnumerable<FormInputItem> DataSource { get; set; }
         public abstract IHtmlContent RenderControlSource(object model);
-        public abstract IHtmlContent RenderAttributes();
+        public abstract IHtmlContent RenderAttributes(ViewContext viewContext);
     }
 
     public class FormInput<T, TValue> : BaseFormInput<T, TValue> where T : class
     {
+        private IModelMetadataProvider _metadataProvider;
+        private ClientValidatorCache _clientValidatorCache;
+        private IClientModelValidatorProvider _clientModelValidatorProvider;
         public FormInput(IForm<T> form,
             string name, string classes)
         {
@@ -100,7 +112,11 @@ namespace Kachuwa.Form
             //ExpressionValue = expression.Compile();
             // Controls=new 
             DisplayName = Name;
-
+            _metadataProvider = (IModelMetadataProvider)ContextResolver.Context.RequestServices.GetService(typeof(IModelMetadataProvider));
+            _clientValidatorCache = new ClientValidatorCache();
+            IOptions<MvcViewOptions> options = (IOptions<MvcViewOptions>)ContextResolver.Context.RequestServices.GetService(typeof(IOptions<MvcViewOptions>));
+            var clientValidatorProviders = options.Value.ClientModelValidatorProviders;
+            _clientModelValidatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
 
         }
         private static IDictionary<string, object> GetHtmlAttributeDictionaryOrNull(object htmlAttributes)
@@ -138,6 +154,11 @@ namespace Kachuwa.Form
             ExpressionValue = expression.Compile();
             DisplayName = ExpressionHelper.GetExpressionText(expression);
             Id = this.Form.Name + "_" + this.Name;
+            _metadataProvider = (IModelMetadataProvider)ContextResolver.Context.RequestServices.GetService(typeof(IModelMetadataProvider));
+            _clientValidatorCache = new ClientValidatorCache();
+            IOptions<MvcViewOptions> options = (IOptions<MvcViewOptions>)ContextResolver.Context.RequestServices.GetService(typeof(IOptions<MvcViewOptions>));
+            var clientValidatorProviders = options.Value.ClientModelValidatorProviders;
+            _clientModelValidatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
 
         }
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes)
@@ -152,7 +173,12 @@ namespace Kachuwa.Form
             DisplayName = ExpressionHelper.GetExpressionText(expression);
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
+            _metadataProvider = (IModelMetadataProvider)ContextResolver.Context.RequestServices.GetService(typeof(IModelMetadataProvider));
 
+            _clientValidatorCache = new ClientValidatorCache();
+            IOptions<MvcViewOptions> options = (IOptions<MvcViewOptions>)ContextResolver.Context.RequestServices.GetService(typeof(IOptions<MvcViewOptions>));
+            var clientValidatorProviders = options.Value.ClientModelValidatorProviders;
+            _clientModelValidatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
 
         }
 
@@ -168,6 +194,11 @@ namespace Kachuwa.Form
             Name = DisplayName;
             Id = this.Form.Name + "_" + this.Name;
             Attributes = GetHtmlAttributeDictionaryOrNull(attributes);
+            _metadataProvider = (IModelMetadataProvider)ContextResolver.Context.RequestServices.GetService(typeof(IModelMetadataProvider));
+            _clientValidatorCache = new ClientValidatorCache();
+            IOptions<MvcViewOptions> options = (IOptions<MvcViewOptions>)ContextResolver.Context.RequestServices.GetService(typeof(IOptions<MvcViewOptions>));
+            var clientValidatorProviders = options.Value.ClientModelValidatorProviders;
+            _clientModelValidatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
         }
         public FormInput(IForm<T> form, Expression<Func<T, TValue>> expression, string classes,
           FormInputControl inputType, IEnumerable<FormInputItem> dataSource, object attributes)
@@ -182,11 +213,38 @@ namespace Kachuwa.Form
             Id = this.Form.Name + "_" + this.Name;
             DataSource = dataSource;
             Attributes = GetHtmlAttributeDictionaryOrNull(attributes);
+            _metadataProvider = (IModelMetadataProvider)ContextResolver.Context.RequestServices.GetService(typeof(IModelMetadataProvider));
+            _clientValidatorCache = new ClientValidatorCache();
+            IOptions<MvcViewOptions> options = (IOptions<MvcViewOptions>)ContextResolver.Context.RequestServices.GetService(typeof(IOptions<MvcViewOptions>));
+            var clientValidatorProviders = options.Value.ClientModelValidatorProviders;
+            _clientModelValidatorProvider = new CompositeClientModelValidatorProvider(clientValidatorProviders);
         }
 
-        public override IHtmlContent RenderAttributes()
+        public override IHtmlContent RenderAttributes(ViewContext viewContext)
         {
+            
+            var modelExplorer = ExpressionMetadataProvider.FromLambdaExpression(Expression,new ViewDataDictionary<T>(_metadataProvider, new ModelStateDictionary()), _metadataProvider);
+            var validationAttributes = new AttributeDictionary() {};
+            AddValidationAttributes(viewContext, modelExplorer, validationAttributes);
+
             TextWriter writer = new StringWriter();
+            if (validationAttributes.Count > 0)
+            {
+                foreach (var attribute in validationAttributes)
+                {
+                    var key = attribute.Key;
+                    writer.Write(" ");
+                    writer.Write(key);
+                    writer.Write("=\"");
+                    if (attribute.Value != null)
+                    {
+                        HtmlEncoder.Default.Encode(writer, attribute.Value.ToString());
+                    }
+
+                    writer.Write("\"");
+                }
+                return new HtmlString(writer.ToString());
+            }
             if (this.Attributes != null && this.Attributes.Count > 0)
             {
                 foreach (var attribute in Attributes)
@@ -206,6 +264,56 @@ namespace Kachuwa.Form
             }
             return null;
         }
+      
+        public  void AddValidationAttributes(
+          ViewContext viewContext,
+          ModelExplorer modelExplorer,
+          IDictionary<string, string> attributes)
+        {
+
+            
+           
+
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException(nameof(viewContext));
+            }
+
+            if (modelExplorer == null)
+            {
+                throw new ArgumentNullException(nameof(modelExplorer));
+            }
+
+            if (attributes == null)
+            {
+                throw new ArgumentNullException(nameof(attributes));
+            }
+
+            var formContext = viewContext.ClientValidationEnabled ? viewContext.FormContext : null;
+            if (formContext == null)
+            {
+                return;
+            }
+
+            var validators = _clientValidatorCache.GetValidators(
+                modelExplorer.Metadata,
+                _clientModelValidatorProvider);
+            if (validators.Count > 0)
+            {
+                var validationContext = new ClientModelValidationContext(
+                    viewContext,
+                    modelExplorer.Metadata,
+                    _metadataProvider,
+                    attributes);
+
+                for (var i = 0; i < validators.Count; i++)
+                {
+                    var validator = validators[i];
+                    validator.AddValidation(validationContext);
+                }
+            }
+        }
+
 
         public override IHtmlContent RenderControlSource(object model)
         {
