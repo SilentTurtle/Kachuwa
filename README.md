@@ -1,4 +1,10 @@
 # Kachuwa कछुवा 
-Kachuwa(कछुवा) is a enterprize ready application framework which is developed on a top of asp.net core.It is simply made to create a better application for better business.
+Kachuwa(कछुवा) is a enterprize ready application framework which is developed on a top of asp.net core.
+It is simply made to create a better application for better business.
+#Dependencies
 
-#migration to .net core 2.0
+
+
+
+# Documentation
+
