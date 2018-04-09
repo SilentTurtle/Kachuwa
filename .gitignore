@@ -217,4 +217,5 @@ artifactspublish/
 KachuwaApp/Locale/*
 KachuwaApp/Logs
 KachuwaApp/DbLogs
+KachuwaApp/wwwroot/lib
 
