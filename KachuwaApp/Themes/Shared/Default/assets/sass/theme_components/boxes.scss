@@ -1,0 +1,71 @@
+/*! - Stack Boxes - */
+
+.box{
+	border-radius: 6px;
+	.background-image-holder{
+		border-radius: 6px;
+	}
+	&:before{
+		border-radius: 6px;
+	}
+	&:not(:last-child){
+		margin-bottom: 30px;
+	}
+	&:not([class*='bg-']){
+		background: $color-bg-site;
+	}
+	&.bg-secondary{
+		.box{
+			background: $color-bg-secondary;
+		}
+	}
+}
+
+@media all and (min-width: 768px){
+	.switchable{
+		.imagebg{
+			.box{
+				padding-left: $base-line-height*3;
+			}
+		}
+	}
+}
+
+.bg-dark,.imagebg:not(.image-light){
+	.box:not([class*='bg-']){
+		background: none;
+		color: #fff;
+		&.box-border{
+			border-color: lighten($color-dark, 10%);
+		}
+	}	
+	.box{
+		&[class*='bg-']{
+			&.box-border{
+				border: none;
+			}
+		}
+	}
+}
+
+.imagebg{
+	&:not(.image-light){
+		.box:not(.bg-white):not(.bg-none){
+			background: rgba(20,20,20,0.3);
+			&.box-border{
+				border: none;
+			}
+			.box{
+				background: none;
+			}
+		}	
+	}
+}
+
+@media all and (min-width: 768px){
+	.box{
+		&.box-emphasis{
+			@include scale(1.075);
+		}
+	}
+}

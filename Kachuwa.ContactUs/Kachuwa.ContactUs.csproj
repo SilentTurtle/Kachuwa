@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Components\ContactUsForm\Default.cshtml" />
+    <EmbeddedResource Include="db\1.0.0.0\mssql\install.sql" />
+    <EmbeddedResource Include="db\1.0.0.0\mssql\uninstall.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Kachuwa.Core\Kachuwa.Core.csproj" />
+    <ProjectReference Include="..\..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
+    <ProjectReference Include="..\..\Kachuwa.Web\Kachuwa.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="db\1.0.0.0\mysql\" />
+    <Folder Include="db\1.0.0.0\postgres\" />
+  </ItemGroup>
+
+</Project>

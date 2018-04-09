@@ -1,0 +1,63 @@
+// MARKUP:
+//
+// <div class="hover-effect">
+//   <div class="hover-effect-default">
+//     ..
+//   </div>
+//
+//   <div class="hover-effect-reveal">
+//     ..
+//   </div>
+// </div>
+//
+//
+//
+// MODIFIERS:
+// .hover-active - simulates a permanent hover on the element
+
+
+.hover-effect{
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 30px;
+	*{
+		@include transition(0.3s,ease);
+	}
+	.hover-effect-reveal{
+		position: absolute;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		.boxed{
+			height: 100%;
+		}
+	}
+	&:hover,&.hover-active{
+		.hover-effect-reveal{
+			opacity: 1;
+		}
+	}
+	img{
+		margin-bottom: 0;
+	}
+}
+
+@media all and (max-width: 1024px){
+	.hover-effect{
+		cursor: pointer;
+	}
+}
+
+.row{
+	&:last-child{
+		div[class*='col-']{
+			&:last-child{
+				.hover-effect{
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,141 @@
+/*! - Stack Masonry - */
+
+.masonry-item:not(:empty){
+	margin-bottom: 30px;
+	article{
+		margin: 0;
+		.boxed{
+			margin: 0;
+		}
+	}
+	transform-style: preserve-3d;
+}
+
+.masonry-item:empty{
+	height: 0;
+	min-height: 0;
+}
+
+.masonry{
+	hr{
+		+.masonry-container, +.row{
+			margin-top: $base-line-height*2.5;
+		}
+	}
+}
+
+.masonry-filter-holder{
+	display: inline-block;
+	cursor: pointer;
+	height: $base-line-height*2;
+	position: relative;
+	z-index: 9;
+	min-width: 143px;
+	.masonry-filters{
+		cursor: pointer;
+		@include transition(0.3s,ease);
+		z-index: 2;
+		display: inline-block;
+		position: absolute;
+		left: 0;
+		text-align: left;
+		padding: $base-line-height/2 $base-line-height;
+		border: 1px solid #ececec;
+		background: $color-bg-site;
+		border-radius: 6px;
+		ul{
+			margin: 0;
+			cursor: pointer;
+			li{
+				@include transition(0.3s,ease);
+				display: block;
+				color: $color-body;
+				white-space: nowrap;
+				&:not(:last-child){
+					margin-bottom: $base-line-height/2;
+				}
+				&.active{
+					color: $color-primary;
+					cursor: pointer;
+					&:after{
+						content: '\25bc';
+						font-size: 8px;
+						margin-left: 6px;
+						position: relative;
+						bottom: 2px;
+						display: inline-block;
+						transform: scaleX(1.4) scaleY(0.9);
+						@include transition(0.2s,linear);
+					}
+				}
+				&:hover{
+					color: $color-primary;
+				}
+			}
+			&:hover{
+				li{
+					&.active{
+						&:after{
+							opacity: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+	&:not(:hover){
+		.masonry-filters{
+			ul{
+				max-height: $base-line-height;
+				overflow: hidden;
+				li{
+					&:not(.active){
+						display: none;
+					}
+				}
+			}
+		}
+	}
+	&:hover{
+		.masonry-filters{
+			
+			@include box-shadow;
+			ul{
+				li{
+					&.active{
+						cursor: default;
+					}
+				}
+			}
+		}
+	}
+}
+
+.masonry-filter-container{
+	+.masonry-container{
+		margin-top: $base-line-height*2;
+	}
+}
+
+.bg-dark{
+	.masonry-filter-holder{
+		.masonry-filters{
+			background: lighten($color-dark, 2%);
+			border-color: lighten($color-dark, 10%);
+			li{
+				color: #fff;
+			}
+		}
+	}
+}
+
+.masonry.masonry-demos{
+	.masonry-item{
+		&:not(:empty){
+			margin-bottom: $base-line-height*2;
+		}
+		h5{
+			margin-bottom: 0;
+		}
+	}
+}

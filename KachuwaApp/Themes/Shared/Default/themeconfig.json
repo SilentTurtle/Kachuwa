@@ -1,0 +1,10 @@
+﻿{
+  "themeName": "Default",
+  "author": "Binod Tamang",
+  "version": "1.0.0",
+  "verificationHash": "unique hash",
+  "layout": "bootstrap", //"google-material","semantic"
+  "layoutVersion": "3.3.7", 
+  "js": [ { "main": [ "", "" ] } ],
+  "css": [ { "theme": [ "", "" ] } ]
+}

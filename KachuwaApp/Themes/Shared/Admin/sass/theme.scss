@@ -1,0 +1,31 @@
+
+
+/* General sass function can be used globally */
+/*@import "functions";*/
+
+
+@import "../../../../wwwroot/lib/bootstrap-sass/assets/stylesheets/_bootstrap";
+@import "../../../../wwwroot/lib/bootstrap-sass/assets/stylesheets/_bootstrap-compass";
+
+/* Custom Variable for theme */
+
+@import "bootswatch";
+
+@import "customVariables";
+
+/* Custom Styles */
+@import "helperclasses";
+@import "custom";
+@import "adminform";
+/* Custom Styles */
+@import "topnav";
+
+/* Content wrapper Styles */
+@import "contentwrapper";
+
+// Material icons
+@import "material-icons";
+
+// Material icons
+@import "seatlayout";
+

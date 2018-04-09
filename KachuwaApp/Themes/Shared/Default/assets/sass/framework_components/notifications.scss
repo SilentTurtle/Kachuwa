@@ -1,0 +1,162 @@
+// MARKUP
+//
+// <div class="notification col-*" data-animation="from-*">
+//   ...
+//   <a class="notification-close">Shut It Down</a>
+// </div>
+//
+// MODIFIERS:
+// .pos-right,top,left,bottom - position the notification
+// .col-* - control the width of the notification
+// [data-animation] - from top,bottom,left,right
+
+.notification{
+	max-width: 100%;
+	@include box-shadow($box-shadow-level);
+	position: fixed;
+	z-index: 99;
+	pointer-events: none;
+	padding: $default-notification-padding;
+	margin: 1em;
+	&:not([class*='bg-']){
+		background: #fff;
+	}
+	&[class*='col-']{
+		min-width: 400px;
+	}
+	opacity: 0;
+	@include transition(0.3s,linear);
+	.close-cross{
+		position: absolute;
+		top: 1em;
+		z-index: 99;
+		right: 1em;
+		cursor: pointer;
+		@include transition(0.1s,linear);
+		opacity: .7;
+		&:before{
+			content: '\00D7';
+			font-size: 1.5em;
+		}
+		&:hover{
+			opacity: 1;
+		}
+	}
+	.reveal{
+		z-index: 99;
+		pointer-events: initial;
+		&[data-animation="from-bottom"]{
+			@include animation(from-bottom,.3s,linear,0s,forwards);
+		}
+		&[data-animation="from-top"]{
+			@include animation(from-top,.3s,linear,0s,forwards);
+		}
+		&[data-animation="from-left"]{
+			@include animation(from-left,.3s,linear,0s,forwards);
+		}
+		&[data-animation="from-right"]{
+			@include animation(from-right,.3s,linear,0s,forwards);
+		}
+	}
+	.dismissed{
+		@include animation(fade-out,.4s,linear,0s,forwards);
+		pointer-events: none;
+	}
+}
+
+.bg-dark + .close-cross{
+	&:before{
+		color: #fff;
+	}
+}
+
+a[data-notification-link]{
+	text-decoration: none;
+	&:hover{
+		text-decoration: none;
+	}
+}
+
+@media all and (max-width: 767px){
+	.notification{
+		&[class*='col-']{
+			min-width: 0;
+		}
+	}
+}
+
+#{$keyframes} from-bottom{
+	from{ @include translate3d(0,100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-moz-keyframes} from-bottom{
+	from{ @include translate3d(0,100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-webkit-keyframes} from-bottom{
+	from{ @include translate3d(0,100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$keyframes} from-top{
+	from{ @include translate3d(0,-100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-moz-keyframes} from-top{
+	from{ @include translate3d(0,-100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-webkit-keyframes} from-top{
+	from{ @include translate3d(0,-100%,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$keyframes} from-left{
+	from{ @include translate3d(-100%,0,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-moz-keyframes} from-left{
+	from{ @include translate3d(-100%,0,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-webkit-keyframes} from-left{
+	from{ @include translate3d(-100%,0,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$keyframes} from-right{
+	from{ @include translate3d(100%,0,0); opacity: 1; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-moz-keyframes} from-right{
+	from{ @include translate3d(100%,0,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$-webkit-keyframes} from-right{
+	from{ @include translate3d(100%,0,0); opacity: 0; }
+	to{ @include translate3d(0,0,0); opacity: 1; }
+}
+
+#{$keyframes} fade-out{
+	0%{ opacity: 1; }
+	100%{ opacity: 0;}
+}
+
+#{$-webkit-keyframes} fade-out{
+	0%{ opacity: 1; }
+	100%{ opacity: 0;}
+}
+
+#{$-moz-keyframes} fade-out{
+	0%{ opacity: 1; }
+	100%{ opacity: 0; }
+}
+

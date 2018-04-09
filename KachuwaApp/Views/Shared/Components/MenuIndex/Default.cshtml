@@ -1,0 +1,52 @@
+﻿@using Kachuwa.Web.Service
+@using System.Collections
+@model IEnumerable<Kachuwa.Web.Model.Menu>
+@inject ISettingService settingService;
+@{ var setting = settingService.CrudService.Get(1);}
+
+@{
+    var rootMenu = Model.GroupBy(e => e.ParentId == 0).ToList();
+
+}
+
+<nav class="navbar navbar-toggleable-sm navbar-light">
+
+    <div class="navbar-header">
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation"></button>
+        <a class="navbar-brand" href="/">
+            <img src="/logo/logo.png" alt="silent turtle pvt.ltd">
+        </a>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end" id="main-menu">
+        <ul class="navbar-nav">
+           @foreach (var menu in Model)
+           {
+            <li class="nav-item">
+                <a class="nav-link" href="@menu.Url">
+                    @menu.Name
+                </a>
+            </li>
+           }
+
+        </ul>
+        <form class="form-inline" action="/search">
+            <div class="top_search_con">
+                <input class=" mr-sm-2" type="text" name="q" placeholder="Search Here ...">
+                <span class="top_search_icon"><i class="icon-magnifier"></i></span>
+            </div>
+        </form>
+    </div>
+
+    <ul class="wpb-mobile-menu">
+       @foreach (var menu in Model)
+       {
+        <li class="">
+            <a class="" href="@menu.Url">
+                @menu.Name
+            </a>
+        </li>
+       }
+    </ul>
+
+</nav>

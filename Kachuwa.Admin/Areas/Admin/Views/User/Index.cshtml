@@ -1,0 +1,60 @@
+﻿@using Kachuwa.Identity.Models
+@using Kachuwa.Web
+@using Kachuwa.KGrid
+@model IEnumerable<Kachuwa.Identity.Models.AppUser>
+    @{
+        ViewData["Title"] = "User";
+    }
+    <section class="container-fluid">
+        <div class="row">
+            <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="panel_wrapper">
+                    <div class="panel module" aria-multiselectable="true">
+                        <div class="panel-inner">
+
+                            <div class="panel-heading clearfix">
+                                <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">User</h2>
+                                <div class="input-group col-md-9 col-xs-4">
+                                    <div class="input-group-btn pull-right">
+                                        <a href="/admin/user/new" class="btn btn-primary"><i class="fa fa-plus"></i>Add</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-collapse" aria-labelledby="headingOne"
+                                 aria-expanded="true">
+                                <div class="panel-body">
+                                    @(Html
+                                      .CreateKachuwaGrid(Model)
+                                      .Build(columns =>
+                                      {
+                                          columns.Add(model => model.FirstName).SetTitle("First Name");
+                                          columns.Add(model => model.LastName).SetTitle("Last Name");
+                                          columns.Add(model => model.Email).SetTitle("Email");
+                                          columns.Add(model => model.IsActive).SetTitle("Is Active");
+
+                                      }).AddCommands(commands =>
+                                      {
+                                          commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/user/edit", model => model.AppUserId);
+                                          commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.AppUserId,
+                                              "/admin/user/delete");
+
+                                      }).Css("table-hover")
+                                      .Empty("No Users's added yet.")
+                                      .Pagination(pager =>
+                                      {
+                                          pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                                          pager.Api = "/admin/user/page";
+                                      })
+
+                                    )
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+

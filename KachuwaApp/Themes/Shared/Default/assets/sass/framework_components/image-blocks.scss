@@ -1,0 +1,85 @@
+// MARKUP:
+//
+// <section class="iimage-wrapper">
+//   <div class="image-block-content pos-left">
+//     ...
+//   </div>
+//
+//   <div class="container">
+//     ...
+//   </div>
+// </section>
+//
+// MODIFIERS:
+// .pos-left,.pos-right,.col-* - Adjust the position and width of the image blocks content on the '.imaeg-block-content' element.
+
+.image-wrapper{
+	position: relative;
+	padding: 0;
+	> .container, > div[class*='col-']:not(.image-wrapper-body){
+		padding-top: $standard-space-n;
+		padding-bottom: $standard-space-s;
+		float: none;
+		overflow: hidden;
+	}
+	&.image-wrapper-lg{
+		> .container, > div[class*='col-']:not(.image-wrapper-body){
+			padding-top: $standard-space-s * 1.25;
+			padding-bottom: $standard-space-s * 1.25;
+			float: none;
+			overflow: hidden;
+		}	
+	}
+	.image-wrapper-body{
+		position: absolute;
+		height: 100%;
+		top: 0;
+		z-index: 2;
+		padding: 0;
+		.slider{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			.slides{
+				> li{
+					padding: 0;
+					min-height: 100%;
+					position: absolute !important;
+				}
+			}
+		}
+	}
+	&.allow-overflow{
+		.image-wrapper-body{
+			overflow: visible;
+		}
+	}
+}
+
+@media all and (max-width: 767px){
+	.image-wrapper{
+		&[class*='space-']{
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		.image-wrapper-body{
+			position: relative;
+			min-height: $base-line-height * 10;
+		}
+		> .container, > div[class*='col-']:not(.image-wrapper-body){
+			padding-top: $standard-space-mobile;
+			padding-bottom: $standard-space-mobile;
+			float: none;
+			overflow: hidden;
+		}
+		&.image-wrapper-lg{
+			> .container, > div[class*='col-']:not(.image-wrapper-body){
+				padding-top: $standard-space-mobile;
+				padding-bottom: $standard-space-mobile;
+				float: none;
+				overflow: hidden;
+			}	
+		}
+	}
+}

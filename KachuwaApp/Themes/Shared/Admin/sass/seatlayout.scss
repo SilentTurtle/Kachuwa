@@ -1,0 +1,567 @@
+﻿@import "customVariables";
+
+.bottomfixedmenu {
+    background-color: #fff;
+    bottom: 0;
+    max-height: 110px;
+    height: auto;
+    right: 0;
+    padding: 10px 20px;
+    position: fixed;
+    width: calc(100% - 260px);
+    z-index: 14;
+    overflow-y: auto;
+    box-shadow: 0 -2px 3px #eee;
+}
+
+.choose-sits {
+    margin-top: 20px;
+}
+
+.choose-sits .choose-sits__info {
+    display: inline-block;
+    font-size: 13px;
+    padding: 10px 20px 0 40px;
+    margin-bottom: 52px;
+}
+
+.choose-sits .choose-sits__info .sits-price {
+    position: relative;
+    display: inline-block;
+    padding: 0 22px;
+}
+
+.choose-sits .choose-sits__info .sits-price:before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 5px;
+    left: 0;
+}
+
+.choose-sits .choose-sits__info .marker--none:before {
+    display: none;
+}
+
+.choose-sits .choose-sits__info .sits-state {
+    position: relative;
+    display: inline-block;
+    padding: 0 25px;
+}
+
+.choose-sits .choose-sits__info .sits-state:before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 5px;
+    left: 0;
+}
+
+.screen {
+    position: relative;
+    color: #969b9f;
+    font-size: 13px;
+    margin-left: 80px;
+    text-align: center;
+}
+
+.screen:before {
+    content: '';
+    background-color: #969b9f;
+    width: 380px;
+    height: 5px;
+    position: absolute;
+    bottom: -9px;
+    left: 50%;
+    margin-left: -190px;
+}
+
+.sits {
+    position: relative;
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+
+.sits .hall_block_row {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    border: 1px solid #4c4145;
+    font-size: 13px;
+    padding-top: 5px;
+    background: white;
+    line-height: 20px;
+    cursor:pointer;
+
+    &:hover {
+        background: $gray;
+        color: white;
+    }
+
+    &.active {
+        background: $brand-primary;
+        color: white;
+        border-color:darken($brand-primary, 10%);
+    }
+}
+.chair-no {
+    input[type="checkbox"] {
+       display:none;
+    }
+}
+.sits .hall_block {
+    width: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    height: 68vh;
+    z-index: 14;
+    margin-top: 33px;
+
+    input[type="checkbox"] {
+        position: absolute;
+        margin-top: 15px;
+        left: -10px;
+    }
+}
+.hall_block {
+    .hall_block_row{
+        margin:5px 0;
+    }
+}
+    .sits .chair-no {
+        font-size: 0;
+        padding-left: 40px;
+        overflow: hidden;
+        background: white;
+    }
+
+    .sits .sits__checked {
+        position: relative;
+        width: 50px;
+        height: 450px;
+        background-color: #4c4145;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 5px;
+        padding: 50px 10px 60px;
+    }
+
+    .sits .sits__checked:before {
+        content: "\f00c";
+        font: 13px "FontAwesome";
+        color: #ffffff;
+        position: absolute;
+        top: 20px;
+        left: 18px;
+    }
+
+    .sits .sits__checked:after {
+        content: "=";
+        font: 13px;
+        color: #ffffff;
+        position: absolute;
+        bottom: 41px;
+        left: 20px;
+    }
+
+    .sits .sits__checked .checked-place {
+        overflow: hidden;
+        max-height: 340px;
+    }
+
+    .sits .sits__checked .checked-result {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: bold;
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .sits .sits__checked .choosen-place {
+        display: block;
+        color: #ffffff;
+        font-size: 10px;
+        padding: 8px 0;
+    }
+
+    .sits .chair-row, .seatHeader {
+        font-size: 0;
+        padding-left: 40px;
+    }
+
+    .selected {
+        background-color: $brand-primary !important;
+        z-index: 14;
+    }
+
+    .chair-row::after {
+        clear: both;
+        display: block;
+        content: "";
+    }
+    /*.chair-row .chair {
+    float:left;
+}*/
+    .sits .chair-row .chair, .seatHeader input{
+        position: relative;
+        margin: 5px;
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        line-height: 30px;
+        font-size: 10px;
+        color: #ffffff;
+        z-index: 13;
+        text-indent: -9999px;
+        flex-shrink: 0;
+    }
+
+.seattype {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right:5px;
+}
+
+    .sits .chair-row .chair:before {
+        content: '';
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+    }
+
+    .sits .chair-row .chair:hover {
+        text-indent: 0;
+        cursor: pointer;
+    }
+
+    .sits .chair-row .chair:hover:before {
+        background-color: #4c4145;
+    }
+
+    .sits .chair-row .sits-state--not:hover, .block:hover {
+        text-indent: -9999px;
+        cursor: auto;
+    }
+
+    .sits .chair-row .sits-state--not:hover:before, .block:hover:before {
+        background-color: #dbdee1;
+    }
+
+    .sits .chair-row .sits-state--your {
+        text-indent: -9999px;
+    }
+
+    .sits .chair-row .sits-state--your:after {
+        content: "\f00c";
+        font: 13px "FontAwesome";
+        color: #ffffff;
+        position: absolute;
+        top: 7px;
+        left: 9px;
+        z-index: 15;
+        text-indent: 0px;
+    }
+
+    .sits .chair-row .sits-state--your:hover {
+        text-indent: -9999px;
+    }
+
+    .sits .chair-row .sits-state--your:hover:after {
+        content: "\f00d";
+        left: 10px;
+    }
+
+    .additional-margin {
+        margin-top: 20px;
+    }
+
+    .hall_block .additional-margin {
+        margin-top: 25px;
+    }
+
+    .sits-area--mobile {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .sits-area--mobile img {
+        max-width: 100%;
+    }
+
+    .sits-area--mobile .sbHolder {
+        display: block;
+        float: left;
+        margin-right: 15px;
+        width: 140px;
+        height: 35px;
+        border: 1px solid #DBDEE1;
+        background-color: #fff;
+    }
+
+    .sits-area--mobile .sbHolder .sbSelector {
+        margin-top: 4px;
+        margin-left: 5px;
+        color: #4c4145;
+        font-size: 13px;
+    }
+
+    .sits-area--mobile .sbHolder .sbOptions {
+        width: 140px;
+        top: 37px !important;
+        border: none;
+        padding: 14px 7px;
+        z-index: 23;
+        background-color: #4c4145;
+        -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+        -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+    }
+
+    .sits-area--mobile .sbHolder .sbOptions a {
+        color: #b4b1b2;
+        border: none;
+    }
+
+    .sits-area--mobile .sbHolder .sbOptions a:hover,
+    .sits-area--mobile .sbHolder .sbOptions a:focus {
+        color: #ffffff;
+    }
+
+    .sits-area--mobile .sbHolder .sbToggle {
+        top: 10px;
+        right: -2px;
+    }
+
+    .sits-area--mobile .sbHolder .sbToggle:before {
+        content: "\f078";
+        color: #4c4145;
+        font-family: "FontAwesome";
+        font-size: 12px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .sits-area--mobile .sbHolder .sbToggleOpen:before {
+        content: "\f077";
+    }
+
+    .sits-area--mobile .sits-select {
+        margin-bottom: 20px;
+    }
+
+    .sits-area--mobile .watchlist {
+        margin-top: 2px;
+        display: block;
+        margin: 20px 0;
+        width: 120px;
+    }
+
+    .sits-area--mobile .sits__checked {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        background-color: #4c4145;
+        margin-top: 0px;
+        padding: 0px 50px;
+    }
+
+    .sits-area--mobile .sits__checked:before {
+        content: "\f00c";
+        font: 13px "FontAwesome";
+        color: #ffffff;
+        position: absolute;
+        top: 18px;
+        left: 18px;
+    }
+
+    .sits-area--mobile .sits__checked:after {
+        content: "=";
+        font: 13px;
+        color: #ffffff;
+        position: absolute;
+        bottom: 16px;
+        right: 55px;
+    }
+
+    .sits-area--mobile .sits__checked .checked-place {
+        overflow: hidden;
+        max-width: 80%;
+    }
+
+    .sits-area--mobile .sits__checked .checked-result {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: bold;
+        position: absolute;
+        bottom: 15px;
+        right: 20px;
+        width: 100%;
+        text-align: right;
+        padding-top: 5px;
+    }
+
+    .sits-area--mobile .sits__checked .choosen-place {
+        display: inline-block;
+        margin: 0 10px;
+        color: #ffffff;
+        font-size: 12px;
+        padding: 16px 0;
+    }
+
+    @media (max-width: 319px) {
+        .post--preview .post__image {
+            width: 100%;
+        }
+    }
+
+    .choose-sits__info--first {
+        border-right: 1px solid #4c4145;
+    }
+
+    .chair-type-1:before {
+        background-color: #fff0c7;
+    }
+
+    .chair-type-2:before {
+        background-color: #ffc8cb;
+    }
+
+    .chair-type-3:before {
+        background-color: #cdb4bd;
+    }
+
+    .sits-state--not:before, .block:before {
+        background-color: #dbdee1;
+    }
+
+    .sits-state--your:before {
+        background-color: #4c4145;
+    }
+
+.screen-settings {
+    .setting-group{
+        border:1px solid #eee;
+        margin-bottom:10px;
+        padding:10px 15px;
+    } 
+    width: 20%;
+    float: left;
+
+    .label {
+        display: none;
+    }
+}
+
+
+
+    .info-type {
+        .seat-name {
+        }
+    }
+
+    .chair {
+        background: #b8f9cb;
+
+        .selected {
+            color: $brand-primary;
+        }
+    }
+
+    .content-wrapper {
+        .seatHeader {
+            input[type="checkbox"] {
+                width: 30px !important;
+            }
+        }
+    }
+
+    .content-wrapper .seatHeader input[type="checkbox"] {
+        &:first-of-type {
+            margin-top: 0.92857em;
+        }
+    }
+
+    .sits .chair-row, .seatHeader, .chair-no {
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .sits {
+        .chair-no {
+            .hall_block_row {
+                margin-left: 5px !important;
+            }
+        }
+    }
+
+    .sits {
+    }
+
+    .hall_block {
+        height: 68vh;
+        overflow: hidden;
+        background: white;
+    }
+
+    .sits .chair-no .hall_block_row {
+        text-align: center;
+        padding-top: 2px !important;
+        flex-shrink: 0;
+    }
+
+
+    #btnCreateSeats {
+        top: -7px;
+        height: 34px;
+        line-height: 18px;
+    }
+
+    .sits .chair-row {
+        line-height: 0px;
+    }
+
+    #btnSaveLayout {
+    }
+
+    .cancel-selectedseat {
+        position: absolute;
+        right: 25px;
+        display: none;
+    }
+
+    #spanseats {
+        overflow-wrap: break-word;
+    }
+
+    
+
+.booking-area {
+    float: left;
+    width: 80%;
+    padding-right: 30px;
+}
+
+.seatContainer {
+    overflow: auto;
+    height: 68vh;
+    margin-top: 2px;
+}
+
+    .hall_block input[type="checkbox"], .seatHeader input[type="checkbox"] {
+        display: none;
+    }

@@ -1,0 +1,30 @@
+{
+  "KachuwaAppConfig": {
+    "AppName": "Tixalaya",
+    "SiteUrl": "http://localhost:33641",
+    "IsInstalled": true,
+    "DbProvider": "SQLServer",
+    "Framework": "",
+    "Version": "v1.0.0",
+    "EnableLogging": true,
+    "EnableDbLogging": false,
+    "Theme": "Default",
+    "AdminTheme": "Admin",
+    "FacebookAppId": "",
+    "RequireConfirmedEmail": false,
+    "PasswordLength": 8,
+    "RequireNonAlphanumeric": false,
+    "RequireUppercase": false,
+    "SMTMConfig": {
+      "Host": "google.com",
+      "UserName": "binod",
+      "Password": "tamang",
+      "UseSSL": false,
+      "Port": 125
+    }
+  },
+  "DapperIdentityCryptography": {
+    "Key": "FrFE/VtQ5pfNhGYVnyf65Sa6j4h6ion3ItkAnqLsnBE=",
+    "IV": "Ig/YU0tgUqI1u2VzWH0plQ=="
+  }
+}

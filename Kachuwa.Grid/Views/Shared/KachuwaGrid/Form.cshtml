@@ -1,0 +1,511 @@
+﻿@using Kachuwa.Data.Crud.FormBuilder
+@using Kachuwa.Form;
+@model Kachuwa.Form.IForm
+
+<link href="~/module/kachuwagrid/resources/css/kgridstyle.css" rel="stylesheet" />
+@functions
+{
+
+private string[] parseColumnTemplate(string format)
+{
+    var result = format.Split(new char[] { '{', '}' });
+    if (result.Length == 3)
+    {
+        return result;
+    }
+    else
+    {
+        return new string[] { "", "", "" };
+    }
+}
+
+
+
+}
+<div id="@Model.Name" class="kachuwa-form">
+
+    <form name="@Model.Name" asp-antiforgery="true" class="@Model.CssClasses" method="post" action="@Model.Action" enctype="@Model.EncType">
+
+
+
+        @foreach (Kachuwa.Form.IFormSection formSection in Model.Sections)
+        {
+
+            <section name="@formSection.Name" class="@formSection.CssClasses">
+
+
+                @if (!string.IsNullOrEmpty(formSection.Heading))
+                {
+                    <h2 class="formpanel-title">@formSection.Heading</h2>
+                }
+                @if (!string.IsNullOrEmpty(formSection.SubHeading))
+                {
+                    <h4 class="formpanel-subtitle">@formSection.SubHeading</h4>
+                }
+                @if (!string.IsNullOrEmpty(formSection.HelpLine))
+                {
+                    <p class="formpanel-help">@formSection.HelpLine</p>
+                }
+
+                @foreach (var row in formSection.Rows)
+                {
+                    <div class="@row.CssClasses">
+
+                        @if (row.Template != null)
+                        {
+                            @(row.Template)
+
+                        }
+                        @{ int ColumnNo = row.Columns.Count();}
+                        @foreach (var column in row.Columns)
+                        {
+                            @(Html.Raw(parseColumnTemplate(column.ColumnFormat)[0]))
+
+                            @if (column.Template != null)
+                            {<div class="@column.CssClasses">
+                                    @(column.Template)
+                                </div>
+                                continue;
+                            }
+                            if (ColumnNo > 1)
+                            {
+                                <div class="@column.CssClasses">
+
+                                    <div class="@column.Child1Class">
+                                        <div class="@column.Child2Class">
+                                            <div class="@column.Child3Class">
+
+
+                                                @foreach (var control in column.Controls)
+                                                {
+                                                    <div class="@control.Parent3Class">
+
+                                                        <div class="@control.Parent2Class">
+                                                            <div class="@control.Parent1Class">
+
+
+                                                                @if (control.InputType != FormInputControl.Hidden)
+                                                                {
+                                                                    <label for="@control.Id">@control.DisplayName</label>
+                                                                }
+                                                                @if (!string.IsNullOrEmpty(control.Help))
+                                                                {
+                                                                    @*<small class="form-text text-muted control-help">@control.Help</small>*@
+                                                                    <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@control.Help"></i>
+                                                                }
+
+                                                                @switch (control.InputType)
+                                                                {
+                                                                    case FormInputControl.Hidden:
+                                                                        <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" @control.RenderAttributes(this.ViewContext) />
+                                                                        break;
+                                                                    case FormInputControl.CheckBox:
+                                                                        if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                                                        {
+                                                                            <input type="checkbox" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" value="false" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input type="checkbox" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" value="true" checked="checked" />
+                                                                        }
+                                                                        break;
+                                                                    case FormInputControl.CheckBoxList:
+                                                                        <div class="checkbox-wrapper">
+                                                                            @control.RenderControlSource(control.DataSource)
+                                                                        </div>
+
+                                                                        break;
+                                                                    case FormInputControl.Color:
+                                                                        <input type="color" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Date:
+                                                                        <div class='input-group'>
+                                                                            <input type="text" class="date @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                            <span class="input-group-addon">
+                                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.DateTime:
+                                                                        <div class='input-group'>
+                                                                            <input type="text" class="datetimepicker @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                            <span class="input-group-addon">
+                                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Editor:
+                                                                        <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))>@control.ValueFor(Model.FormModel)</textarea>
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Email:
+                                                                        <input type="email" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.File:
+                                                                        <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                                                        break;
+                                                                    case FormInputControl.Image:
+
+                                                                        <div class="uploader image_picker">
+                                                                            <div class="settings_wrap">
+                                                                                <label class="drop_target">
+                                                                                    <div class="image_preview"></div>
+                                                                                    <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+
+                                                                                </label>
+                                                                                <div class="uploader-actions vertical">
+                                                                                    <a data-action="choose_from_uploaded">
+                                                                                        <i class="fa fa-picture-o"></i> Choose from Uploads
+                                                                                    </a>
+                                                                                    <a class="disabled" data-action="remove_current_image">
+                                                                                        <i class="fa fa-ban"></i> Remove Current Image
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="image_details">
+                                                                                    @*<label class="input_line image_title">
+                                                                                            <input type="text" placeholder="Title"/>
+                                                                                        </label>*@
+                                                                                    @if (!string.IsNullOrEmpty(control.ValueFor(Model.FormModel).ToString()))
+                                                                                    {
+                                                                                        <p>Image view</p>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        break;
+                                                                    case FormInputControl.Number:
+                                                                        <input type="number" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Password:
+                                                                        <input type="password" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Radio:
+
+                                                                        if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                                                        {
+                                                                            <input type="radio" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" />
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input type="radio" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                                   name="@control.Name" checked="checked" />
+                                                                        }
+                                                                        break;
+                                                                    case FormInputControl.RadioList:
+                                                                        break;
+                                                                    case FormInputControl.Select:
+                                                                        <select class="@control.CssClasses" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext))>
+                                                                            (@control.RenderControlSource(control.DataSource))
+                                                                        </select>
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Telephone:
+                                                                        <input type="tel" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Url:
+                                                                        <input type="url" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.TextArea:
+                                                                        <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))>@control.ValueFor(Model.FormModel)</textarea>
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.TextBox:
+                                                                        <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               value="@control.ValueFor(Model.FormModel)"
+                                                                               placeholder="@control.PlaceHolder" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                                                        break;
+                                                                    case FormInputControl.Tag:
+                                                                        <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                                               value="@control.ValueFor(Model.FormModel)"
+                                                                               placeholder="@control.PlaceHolder" />
+                                                                        <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+
+                                                                        break;
+                                                                    case FormInputControl.Template:
+
+
+                                                                        break;
+                                                                    case FormInputControl.Switch:
+                                                                        if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                                                        {
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="@control.Name" value="false" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                                                                <div class="switchslider round"></div>
+                                                                            </label>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <label class="switch">
+                                                                                <input type="checkbox" name="@control.Name" value="true" checked="checked" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                                                                <div class="switchslider round"></div>
+                                                                            </label>
+
+                                                                        }
+
+                                                                        break;
+
+                                                                }
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                foreach (var control in column.Controls)
+                                {
+                                    if (control.InputType != FormInputControl.Hidden)
+                                    {
+                                        <label for="@control.Id">@control.DisplayName</label>
+                                    } @if (!string.IsNullOrEmpty(control.Help))
+                                    {
+                                        @*<small class="form-text text-muted control-help">@control.Help</small>*@
+                                        <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@control.Help"></i>
+                                    }
+
+                                    switch (control.InputType)
+                                    {
+                                        case FormInputControl.Hidden:
+                                            <input type="hidden" value="@control.ValueFor(Model.FormModel)" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                            break;
+                                        case FormInputControl.CheckBox:
+                                            if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                            {
+                                                <input type="checkbox" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                       name="@control.Name" value="false" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                       name="@control.Name" value="true" checked="checked" />
+                                            }
+                                            break;
+                                        case FormInputControl.CheckBoxList:
+                                            <div class="checkbox-wrapper">
+                                                @control.RenderControlSource(control.DataSource)
+                                            </div>
+                                            break;
+                                        case FormInputControl.Color:
+                                            <input type="color" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Date:
+                                            <div class='input-group'>
+                                                <input type="text" class="date @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.DateTime:
+                                            <div class='input-group '>
+                                                <input type="text" class="datetimepicker @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                       name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+
+                                            break;
+                                        case FormInputControl.Editor:
+                                            <textarea class="editor @control.CssClasses" name="@control.Name" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))>@control.ValueFor(Model.FormModel)</textarea>
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Email:
+                                            <input type="email" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.File:
+                                            <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                            break;
+                                        case FormInputControl.Image:
+                                            <div class="uploader image_picker">
+                                                <div class="settings_wrap">
+                                                    <label class="drop_target">
+                                                        <div class="image_preview"></div>
+                                                        <input type="file" class="@control.CssClasses" id="@control.Id" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+
+                                                    </label>
+                                                    <div class="uploader-actions vertical">
+                                                        <a data-action="choose_from_uploaded">
+                                                            <i class="fa fa-picture-o"></i> Choose from Uploads
+                                                        </a>
+                                                        <a class="disabled" data-action="remove_current_image">
+                                                            <i class="fa fa-ban"></i> Remove Current Image
+                                                        </a>
+                                                    </div>
+                                                    <div class="image_details">
+                                                        @*<label class="input_line image_title">
+                                                                <input type="text" placeholder="Title"/>
+                                                            </label>*@
+                                                        @if (!string.IsNullOrEmpty(control.ValueFor(Model.FormModel).ToString()))
+                                                        {
+                                                            <p>Image view</p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            break;
+                                        case FormInputControl.Number:
+                                            <input type="number" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Password:
+                                            <input type="password" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Radio:
+
+                                            if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                            {
+                                                <input type="radio" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                       name="@control.Name" />
+
+                                            }
+                                            else
+                                            { <input type="radio" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                     name="@control.Name" checked="checked" />
+                                            }
+                                            break;
+                                        case FormInputControl.RadioList:
+                                            break;
+                                        case FormInputControl.Select:
+                                            <select class="@control.CssClasses" name="@control.Name" @Html.Raw(control.RenderAttributes(this.ViewContext))>
+                                                (@control.RenderControlSource(control.DataSource))
+                                            </select>
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Telephone:
+                                            <input type="tel" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Url:
+                                            <input type="url" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   name="@control.Name" value="@control.ValueFor(Model.FormModel)" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.TextArea:
+                                            <textarea class="@control.CssClasses" name="@control.Name" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))>@control.ValueFor(Model.FormModel)</textarea>
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.TextBox:
+                                            <input name="@control.Name" type="text" class="@control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   value="@control.ValueFor(Model.FormModel)"
+                                                   placeholder="@control.PlaceHolder" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+                                            break;
+                                        case FormInputControl.Tag:
+                                            <input name="@control.Name" type="text" class="kachuwa-tags @control.CssClasses" id="@control.Id" @Html.Raw(control.RenderAttributes(this.ViewContext))
+                                                   value="@control.ValueFor(Model.FormModel)"
+                                                   placeholder="@control.PlaceHolder" />
+                                            <span class="field-validation-valid" data-valmsg-for="@control.Name" data-valmsg-replace="true"></span>
+
+                                            break;
+                                        case FormInputControl.Template:
+
+
+                                            break;
+                                        case FormInputControl.Switch:
+                                            if (control.ValueFor(Model.FormModel).ToString().ToLower() == "false")
+                                            {
+                                                <label class="switch">
+                                                    <input type="checkbox" name="@control.Name" value="false" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                                    <div class="switchslider round"></div>
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="switch">
+                                                    <input type="checkbox" name="@control.Name" value="true" checked="checked" @Html.Raw(control.RenderAttributes(this.ViewContext)) />
+                                                    <div class="switchslider round"></div>
+                                                </label>
+
+                                            }
+
+                                            break;
+
+                                    }
+                                    @*if (!string.IsNullOrEmpty(control.Help))
+                                        {
+                                            <small class="form-text text-muted control-help">@control.Help</small>
+                                        }*@
+
+
+                                }
+                            }
+
+                            @(Html.Raw(parseColumnTemplate(column.ColumnFormat)[2]))
+                        }
+                    </div>
+                }
+
+            </section>
+        }
+        <div class="row">
+            <div class="col-md-12 text-right">
+
+                @if (string.IsNullOrEmpty(Model.SubmitButtonText))
+                {
+
+                    <button type="submit" class="btn btn-primary formsave  has-mdicon"><i class="material-icons md-18">save</i> Save</button>
+                }
+                else
+                {
+
+                    <button type="submit" class="btn btn-primary formsave  has-mdicon"><i class="material-icons md-18">save</i>@Model.SubmitButtonText</button>
+                }
+                @if (!Model.HideCancelButton)
+                {
+                    <a href="@Model.CancelUrl" class="btn btn-default has-mdicon"><i class="material-icons md-18">close</i>Cancel</a>
+                }
+            </div>
+            <div class="col-md-12 clearfix">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+        </div>
+    </form>
+
+    @*<form method="post" enctype="multipart/form-data">
+            <input type="file" id="files" name="files" style="display: none;" />
+        </form>*@
+
+</div>
+<script src="/module/kachuwagrid/resources/js/kachuwagrid.js"></script>
+<script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

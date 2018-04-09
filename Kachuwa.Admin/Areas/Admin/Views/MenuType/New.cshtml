@@ -1,0 +1,80 @@
+﻿@using Kachuwa.Form
+@using Kachuwa.KGrid
+@using Kachuwa.Web
+@using Kachuwa.Web.Model
+@model MenuType
+@{
+    ViewData["Title"] = "New Menu Type";
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Menu Type</h2>
+                            <div class="input-group col-md-9 col-xs-4">
+                                <div class="input-group-btn pull-right">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-collapse" aria-labelledby="headingOne"
+                             aria-expanded="true">
+                            <div class="panel-body">
+                                @(Html.CreateKachuwaForm<MenuType>("pageForm", Model)
+                                      .SetHeading("")
+                                      .ActionUrl("/admin/menu/type/new")
+                                      .CancelUrl("/admin/menu/type")
+                                      .CreateSection(section =>
+                                      {
+                                          // section.Add("section1", "myclass");
+                                          section.Add("section1", "col-md-12", rows =>
+                                          {
+                                              rows.Add("1strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("12strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.MenuTypeId, FormInputControl.Hidden);
+                                                  });
+                                                  columns.Add("1strow1stcol", "", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.Name, FormInputControl.TextBox).SetPlaceHolder("Enter Name");
+                                                  });
+                                              });
+                                             
+                                              rows.Add("2strow", "form-group", columns =>
+                                              {
+                                                  columns.Add("2strow1stcol", "colClass", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.Description, FormInputControl.TextArea);
+
+                                                  });
+                                              });
+                      
+                                              rows.Add("third", "form-group", columns =>
+                                              {
+                                                  columns.Add("2strow1stcol", "colClass", controls =>
+                                                  {
+                                                      controls.Add("form-control", x => x.IsActive, FormInputControl.Switch)
+                                                          .SetDisplayName("Is Active")
+                                                          ;
+
+                                                  });
+                                              });
+                                          }).SetHeading("Add New").SetHelpLine("Create a new menu type");
+
+
+                                      })
+                                      )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

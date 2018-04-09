@@ -1,0 +1,53 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "Themes/Shared/st/css/theme.css",
+    "inputFiles": [
+      "Themes/Shared/st/css/main.css",
+      "Themes/Shared/st/css/slicknav.css",
+      "Themes/Shared/st/css/responsive.css",
+      "Themes/Shared/st/css/colors/green.css"
+    ]
+  },
+  {
+    "outputFileName": "Themes/Shared/st/extras/theme.dep.css",
+    "inputFiles": [
+      "Themes/Shared/st/fonts/simple-line-icons.css",
+      "Themes/Shared/st/extras/owl/owl.carousel.css",
+      "Themes/Shared/st/extras/owl/owl.theme.css",
+      "Themes/Shared/st/extras/normalize.css",
+      "Themes/Shared/st/extras/settings.css"
+    ]
+  },
+  {
+    "outputFileName": "Themes/Shared/st/js/theme.all.js",
+    "inputFiles": [
+      "Themes/Shared/st/js/tether.min.js",
+      "Themes/Shared/st/js/jquery.mixitup.js",
+      "Themes/Shared/st/js/wow.js",
+      "Themes/Shared/st/js/owl.carousel.js",
+      "Themes/Shared/st/js/waypoints.min.js",
+      "Themes/Shared/st/js/jquery.counterup.min.js",
+      "Themes/Shared/st/js/jquery.slicknav.js",
+      "Themes/Shared/st/js/jquery.appear.js",
+      "Themes/Shared/st/js/jquery.vide.js",
+      "Themes/Shared/st/js/bootstrap.min.js",
+      "Themes/Shared/st/js/main.js"
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+﻿@using System.Collections.Generic
+@using System.Globalization
+@using Kachuwa.Localization
+@using System.Linq
+@model LoginViewModel
+@inject SignInManager<Kachuwa.Identity.Models.IdentityUser> SignInManager
+@inject ILocaleResourceProvider LocaleResource;
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<section class="bg-grey">
+    <div class="container">
+        <div class="loginform-wrapper">
+            <div class="image-left">
+                <figure>
+                    <img src="/images/movie-poster.png" alt="">
+                </figure>
+            </div>
+            <div class="form-right register-form">
+                <h3 class="text-uppercase font-nmrl margin-btm-30">Login</h3>
+                <div class="login-form form-1">
+
+                    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+
+                        <div class="form-group">
+                            <input asp-for="Email" class="form-control" placeholder="Enter Your Email Address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @*<label asp-for="Password"></label>*@
+                            <input asp-for="Password" class="form-control" placeholder="******" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                @*<label asp-for="RememberMe">
+                                        <input asp-for="RememberMe" />
+                                        @Html.DisplayNameFor(m => m.RememberMe)
+                                    </label>*@
+                                <input type="checkbox" id="rememberme" />
+                                <label for="rememberme">Remember me</label>
+                            </div>
+                        </div>
+                        <div class="login-button">
+                            <a href="/account/forgotpassword" class="font-nmrl">Forget password</a>
+                            <button type="submit" class="btn-submit margin-15">Login</button>
+                            <button type="button" class="btn-submit btn-facebook mar-btm-15">Connect with facebook</button>
+                            <a href="/account/register" class="font-nmrl">Create an account</a>
+                        </div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

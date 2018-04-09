@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Areas\Admin\Views\Page\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Security.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Web.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Admin\Views\Dashboard\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\MenuSetting\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Menu\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Menu\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Menu\New.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\MenuType\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\MenuType\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\MenuType\New.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Config.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Security.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Web.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\User\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\_ViewImports.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\_ViewStart.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Notification\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\TopBar\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\AdminMenu\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
+    <ProjectReference Include="..\Kachuwa.Grid\Kachuwa.Grid.csproj" />
+    <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
+    <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Views\Role\" />
+    <Folder Include="Model\" />
+    <Folder Include="resources\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+
+</Project>

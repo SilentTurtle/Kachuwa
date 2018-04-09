@@ -1,0 +1,47 @@
+// MARKUP FOR WIZARD
+//
+// <ol class="wizard">
+//   <li class="wizard-step">
+//      ...
+//   </li>
+// </ol>
+//
+//
+
+@mixin clearfix(){
+	clear:both;
+
+}
+
+.wizard-body{
+	list-style: none;
+}
+
+.wizard-step{
+	&:not(.active){
+		display: none;
+	}
+	.wizard-title{
+		display: none;
+	}
+}
+
+.wizard-controls{
+	@include clearfix;
+	.wizard-prev{
+		float: left;
+	}
+	.wizard-next{
+		float: right;
+	}
+	.wizard-prev:hover, .wizard-next:hover{
+		transform: none !important;
+	}
+	.wizard-prev, .wizard-next{
+		&.inactive{
+			pointer-events: none;
+			opacity: .3;
+			cursor: not-allowed;
+		}
+	}
+}

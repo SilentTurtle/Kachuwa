@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Job\**" />
+    <Compile Remove="SEO\Sitemap\Samples\**" />
+    <Compile Remove="Views\Installer\**" />
+    <EmbeddedResource Remove="Job\**" />
+    <EmbeddedResource Remove="SEO\Sitemap\Samples\**" />
+    <EmbeddedResource Remove="Views\Installer\**" />
+    <None Remove="Job\**" />
+    <None Remove="SEO\Sitemap\Samples\**" />
+    <None Remove="Views\Installer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Components\NotificationBar\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SEOForm\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SEO\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Shared\_Installer.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Shared\_Seo.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_Pagination.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\Extension\" />
+    <Folder Include="API\Version\" />
+    <Folder Include="API\Provider\" />
+    <Folder Include="State\" />
+    <Folder Include="EmailTemplate\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="IdentityServer4" Version="2.0.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Mustache" Version="1.0.1" />
+	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+	    <PackageReference Include="MXTires.Microdata.Core" Version="0.1.0" />
+	    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
+    <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
+  </ItemGroup>
+
+</Project>

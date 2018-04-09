@@ -1,0 +1,74 @@
+﻿@model Kachuwa.Web.ViewModels.InstallerViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApp</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+          asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+          asp-fallback-test-class="sr-only" asp-fallback-test-property="position"
+          asp-fallback-test-value="absolute" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet" />
+    <link href="~/Themes/Shared/Default/css/theme.css" rel="stylesheet" />
+    <style>
+        .body-background {
+            background-color: rgb(242,93,72);
+            color: #fff;
+        }
+
+            .body-background h1, .body-background h2, .body-background h3, .body-background h4, .body-background h5, .body-background h6 {
+                color: #fff;
+            }
+    </style>
+</head>
+<body class="container body-background">
+    <section class="kachuwa-installer setup-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 setup-sec">
+                    <h2 class="text-center">Set Up Kachuwa</h2>
+                    <form class="">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1" class="text-uppercase">Website Name</label>
+                            <input type="text" class="form-control" placeholder="" name="AppName">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="text-uppercase">Database </label>
+                            <label><input type="radio" value="mssql" name="DbServerType" />MS-SQL</label>
+                            <label><input type="radio" value="mysql" name="DbServerType" />MYSQL</label>
+                            <label><input type="radio" value="postgres" name="DbServerType" />Postgres</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="text-uppercase">Database Server</label>
+                            <input type="text" class="form-control" placeholder="db server address" name="DbServer">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="text-uppercase">User Name</label>
+                            <input type="text" class="form-control" placeholder="db user name" name="UserName">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="text-uppercase">Password</label>
+                            <input type="password" class="form-control" placeholder="db user password" name="Password">
+                        </div>
+                        OR
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="text-uppercase">Connection String</label>
+                            <textarea class="" placeholder="your db connection strings"></textarea>
+                        </div>
+                        <div class="form-check">
+                            <button type="submit" class="btn btn-setup float-right">Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

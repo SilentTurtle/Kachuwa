@@ -1,0 +1,163 @@
+/*! - Stack Tabs - */
+
+.tabs-container{
+	&.tabs-vertical{
+		overflow: hidden;
+		.tabs{
+			width: 25%;
+			float: left;
+			li{
+				display: block;
+				&:not(:last-child){
+					border-right: none;
+					border-bottom: 1px solid #ECECEC;
+				}
+			}
+		}
+		.tabs-content{
+			width: 70%;
+			float: right;
+			margin-top: 0;
+			> li{
+				&:not(.active){
+					.tab-content{
+						animation: fadeOutUp .5s ease forwards;
+				        -webkit-animation: fadeOutUp .5s ease forwards;
+					}
+				}
+				&.active{
+					.tab-content{
+						animation: fadeInUp .5s ease forwards;
+				        -webkit-animation: fadeInUp .5s ease forwards;
+				        backface-visibility: hidden;
+					}
+				}
+			}
+		}
+		&.tabs-icons{
+			.tabs{
+				width: 15%;
+				text-align: center;
+			}
+			.tabs-content{
+				width: 80%;
+			}
+		}
+	}
+}
+
+@media all and (max-width: 767px){
+	.tabs-container{
+		&.tabs-vertical{
+			.tabs,.tabs-content{
+				width: 100%;
+				float: none;
+			}
+			.tabs{
+				margin-bottom: $base-line-height;
+			}
+			.tabs-content{
+				> li{
+					&:not(.active){
+						.tab-content{
+							animation: fadeOutRight .5s ease forwards;
+				            -webkit-animation: fadeOutRight .5s ease forwards;
+				    	}
+					}
+					&.active{
+						.tab-content{
+							animation: fadeInLeft .5s ease forwards;
+			                -webkit-animation: fadeInLeft .5s ease forwards;
+			                backface-visibility: hidden;
+			        	}
+					}
+				}
+			}
+		}
+	}
+}
+
+.tabs{
+	display: inline-block;
+	border: 1px solid #ECECEC;
+	border-radius: 6px;
+	margin-bottom: $base-line-height;
+	li{
+		@include transition(0.3s,ease);
+		padding: $base-line-height/2 $base-line-height;
+		&:not(:last-child){
+			border-right: 1px solid #ECECEC;
+		}
+		&.active{
+			opacity: 1;
+			.tab-title{
+				color: $color-primary;
+				span{
+					color: $color-primary;
+				}
+			}
+		}
+		&:not(.active){
+			opacity: .5;
+		}
+		&:hover{
+			opacity: 1;
+			cursor: pointer;
+		}
+	}
+	.tab-title{
+		@include transition(0.3s,ease);
+		&:not(.btn){
+			padding-right: 0;
+			padding-left: 0;	
+		}
+		i+span{
+			margin-top: $base-line-height/4;
+			display: inline-block;
+			margin-bottom: 0;
+		}
+	}
+}
+
+@media all and (min-width: 768px){
+	.tabs{
+		&.tabs-spaced{
+			margin-bottom: $base-line-height*2;
+		}
+	}
+}
+
+.tabs-content{
+	position: relative;
+	>li{
+		&:not(.active){
+			.tab-content{
+				position: absolute;
+				left: 0;
+				top: 0;
+				display: block;
+				opacity: 0;
+				pointer-events: none;
+				animation: fadeOutRight .5s ease forwards;
+				-webkit-animation: fadeOutRight .5s ease forwards;
+			}
+		}
+		&.active{
+			animation: fadeInLeft .5s ease forwards;
+			-webkit-animation: fadeInLeft .5s ease forwards;
+			backface-visibility: hidden;
+		}
+	}
+}
+
+@media all and (max-width: 767px){
+	.tabs{
+		li{
+			display: block;
+			&:not(:last-child){
+				border-bottom: 1px solid #ECECEC;
+				border-right: none;
+			}
+		}
+	}
+}

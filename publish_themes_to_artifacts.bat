@@ -1,0 +1,1 @@
+xcopy  /Y /e "kachuwaapp/themes" "artifactspublish/themes"

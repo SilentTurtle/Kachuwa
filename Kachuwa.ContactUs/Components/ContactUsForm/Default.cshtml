@@ -1,0 +1,90 @@
+﻿@using Kachuwa.ContactUs
+@using Kachuwa.Web.Service
+@model Kachuwa.ContactUs.ContactUsInfo
+@inject ISettingService SettingService;
+@{var setting = SettingService.CrudService.Get(1);}
+
+<section class="contact-form-section section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-50 text-center contact-title-text">
+                <h2>Connect with us!</h2>
+                <p>Do you want to know more? We’d love to hear from you!</p>
+            </div>
+            <div class="col-md-4 contact-info-section">
+
+                <h2>Office Location</h2>
+                <address>
+                    <i class="fa fa-map-marker icon-box icon-xs"></i>@setting.Address1,@setting.Address2<br>
+                    <i class="fa fa-phone icon-box icon-xs"></i> @setting.PhoneNumber<br>
+                    <a href="mailto:@setting.Email"><i class="fa fa-envelope icon-box icon-xs"></i> <span class="">@setting.Email</span></a>
+                </address>
+
+                <div class="contact-widget office-location">
+                    <h2>Contact Hours</h2>
+                    <address>
+                        <p><i class="fa fa-clock-o icon-box icon-xs"></i> <span>Mon - Fri:</span> 9.00 AM - 6.00 PM</p>
+                    </address>
+                </div>
+            </div>
+            @*<div class="contact-widget social-contact wow slideInLeft" data-wow-delay="0.4s">
+                    <h2>Social Links</h2>
+                    <a href="contact1.html#"><i class="fa fa-facebook icon-round icon-xs"></i></a>
+                    <a href="contact1.html#"><i class="fa fa-twitter icon-round icon-xs"></i></a>
+                    <a href="contact1.html#"><i class="fa fa-linkedin icon-round icon-xs"></i></a>
+                    <a href="contact1.html#"><i class="fa fa-google-plus icon-round icon-xs"></i></a>
+                    <a href="contact1.html#"><i class="fa fa-github icon-round icon-xs"></i></a>
+                </div>*@
+            <div class="col-md-7 col-md-offset-1 contact-form contact-info-section">
+                <form role="form" method="post" id="contactForm" name="contact-form" action="" data-toggle="validator">
+                    <div class="form-group">
+                        <label for="name" class="sr-only">Name</label>
+                        <input type="text" placeholder="Your Name" class="form-control " name="name" required data-error="Please enter your name">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Email</label>
+                        <input type="email" placeholder="Your Email" class="form-control " name="email" required data-error="Please enter your Email">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject" class="sr-only">Subject</label>
+                        <input type="text" placeholder="Your Subject" class="form-control" name="subject" required data-error="Please enter your message subject">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="sr-only">Message</label>
+                        <textarea placeholder="Your Message" rows="7" class="form-control" name="message" required data-error="Write your message"></textarea>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <button class="btn btn-common btn-lg" type="submit" id="form-submit"><i class="fa fa-envelope"></i> Send</button>
+                    <div id="msgSubmit" class="h3 text-center hidden"></div>
+                    <div class="clearfix"></div>
+                   
+                </form>
+            </div>
+            <div id="dvty" style="display:none;">
+                <div class="col-md-12text-center contact-title-text">
+                    <h2>Thank you for Contacting Us!</h2>
+                    <p>We will reach you as soon as possible.</p>
+                </div>
+            </div>
+        </div>
+
+</section>
+<script >
+
+    $('#contactForm').validate({
+        // other options,
+        errorPlacement: function (error, element) {
+            error.appendTo(element.parents(".form-group:eq(0)").find(".with-errors"));
+        },
+        submitHandler: function (form) {
+            // do other stuff for a valid form
+            $.post("/api/v1/contactus/save", $(form).serialize(), function (data) {
+                $("input[name=subject],textarea[name=message],input[name=name],input[name=email]").val('');
+                $("#dvty").show();
+            });
+        }
+    });
+</script>

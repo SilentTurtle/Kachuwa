@@ -1,0 +1,40 @@
+{
+  "name": "Kachuwa Framework",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "v3.3.7",
+    "jquery": "3.2.1",
+    "jquery-validation": "1.17.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "font-awesome": "Font-Awesome#v4.7.0",
+    "Sortable": "1.6.0",
+    "dropzone": "v5.1.1",
+    "bootstrap-datepicker": "v1.7.1",
+    "tinymce": "4.7.3",
+    "mustache.js": "mustache#v2.3.0",
+    "moment": "2.19.2",
+    "typed.js": "v2.0.6",
+    "flickity": "v2.0.10",
+    "granim": "v1.1.0",
+    "smooth-scroll": "v1.4.0",
+    "parallax": "v3.1",
+    "lightbox2": "lightbox#v2.9.0",
+    "contextMenu": "1.4.0",
+    "jQuery-contextMenu": "v1.10.0",
+    "eonasdan-bootstrap-datetimepicker": "v4.17.45",
+    "animateCSS": "v1.1.5",
+    "jquery-janimate": "1.0",
+    "bootstrap-year-calendar": "v1.1.0",
+    "bootstrap-select": "v1.12.4",
+    "selectize": "v0.12.4",
+    "jquery.nicescroll": "jquery-nicescroll#v3.6.7",
+    "bootstrap-sass": "v3.3.7",
+    "tinyColorPicker": "1.1.1",
+    "JsBarcode": "jsbarcode#v3.8.0",
+    "rangeslider.js": "v2.3.1"
+  },
+  "resolutions": {
+    "jquery": ">=1.8.2",
+    "jquery-validation": "1.17.0"
+  }
+}
