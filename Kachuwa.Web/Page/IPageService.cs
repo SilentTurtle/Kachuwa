@@ -8,16 +8,11 @@ namespace Kachuwa.Web
     {
         CrudService<Page> CrudService { get; set; }
         Task<bool> CheckPageExist(string url);
-
         Task<bool> Save(PageViewModel model);
         Task<PageViewModel> Get(int pageId);
-
         string GetPageNamespaces(bool includeMasterLayout);
-
         Task<bool> SavePageLayout(LayoutContent content);
-
         Task<bool> DeletePageAsync(int pageId);
-
         Task<bool> MakeLandingPage(int pageId);
     }
 }

@@ -11,8 +11,6 @@ namespace Kachuwa.Web.ViewModels
         public string DbUserName { get; set; }
         public string DbPassword { get; set; }
         public string ConnectionString { get; set; }
-
-
         public string Email { get; set; }
         public string Password { get; set; }
     }

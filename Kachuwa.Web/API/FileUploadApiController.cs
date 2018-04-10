@@ -87,10 +87,8 @@ namespace Kachuwa.Web.API
 
         }
 
-
         [HttpPost]
         [Route("remove")]
-
         public dynamic Remove([FromBody]string file)
         {
             try
@@ -110,8 +108,6 @@ namespace Kachuwa.Web.API
             }
 
         }
-
-
 
         public void CopyStream(Stream stream, string destPath)
         {

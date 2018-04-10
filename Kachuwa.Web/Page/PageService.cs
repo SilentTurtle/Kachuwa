@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Kachuwa.Data;
 using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web.Layout;
-using Kachuwa.Web.Razor;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Kachuwa.Extensions;
@@ -17,8 +14,6 @@ using Kachuwa.Web.Model;
 
 namespace Kachuwa.Web
 {
-
-   
     public class PageService : IPageService
     {
         private readonly IHostingEnvironment _hostingEnvironment;

@@ -34,7 +34,7 @@ namespace Kachuwa.Web
             if (string.IsNullOrEmpty(subpath))
                 return (IDirectoryContents)NotFoundDirectoryContents.Singleton;
 
-            if (ignoreFiles.Any(subpath.Contains))
+            if (_ignoreFiles.Any(subpath.Contains))
             {
                 return (IDirectoryContents)NotFoundDirectoryContents.Singleton;
             }
@@ -51,15 +51,13 @@ namespace Kachuwa.Web
 
             return (IDirectoryContents)new KachuwaDirectoryContents((IEnumerable<IFileInfo>)fileInfoList);
         }
-        private string[] ignoreFiles = new string[] { "_PageNotFound","Component", "Plugin","Components","Plugins","_ViewImports", "_ViewStart", "_Layout" };
+        private readonly string[] _ignoreFiles = new string[] { "_PageNotFound","Component", "Plugin","Components","Plugins","_ViewImports", "_ViewStart", "_Layout" };
         public IFileInfo GetFileInfo(string subpath)
         {
-            if (ignoreFiles.Any(subpath.Contains))
+            if (_ignoreFiles.Any(subpath.Contains))
             {
                 return new NotFoundFileInfo(subpath);
             }
-
-            //checking if view request from page controller
             object kpageUrl = null;
             var currentContext = ContextResolver.Context;
             currentContext.Items.TryGetValue("KPageUrl", out kpageUrl);
@@ -77,14 +75,8 @@ namespace Kachuwa.Web
 
         public IChangeToken Watch(string filter)
         {
-           // return NullChangeToken.Singleton;
+           
             return new PageChangeToken(_pageService, _log, _cacheService, filter);
         }
-    }
-    internal class EmptyDisposable : IDisposable
-    {
-        public static EmptyDisposable Instance { get; } = new EmptyDisposable();
-        private EmptyDisposable() { }
-        public void Dispose() { }
     }
 }

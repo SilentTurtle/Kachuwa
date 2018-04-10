@@ -22,8 +22,6 @@ namespace Kachuwa.Web
         [KachuwaPage]
         public async Task<IActionResult> Index(string pageUrl="")
         {
-            
-            //home landing page
             if (string.IsNullOrEmpty(pageUrl))
             {
                 return View();
@@ -32,32 +30,8 @@ namespace Kachuwa.Web
             {
                 return View();
             }
-            return PartialView("_PageNotFound");
+            return Redirect("/page-not-found");
         }
-
-        public async Task<IActionResult> PageNotFound()
-        {
-            return PartialView("_PageNotFound");
-        }
-
-        [HttpGet("page/dev/routes")]
-        public IActionResult GetRoutes()
-        {
-            //var routes = actionDescriptorCollectionProvider.ActionDescriptors.Items.Select(x => new {
-            //    Action = x.RouteValues["Action"],
-            //    Controller = x.RouteValues["Controller"],
-            //    Name = x.AttributeRouteInfo.Name,
-            //    Template = x.AttributeRouteInfo.Template
-            //}).ToList();
-            //var routes = RouteData.Routers.OfType<RouteCollection>().ToList();
-            //return Ok(routes);
-            var routes = actionDescriptorCollectionProvider.ActionDescriptors.Items.Select(x => new {
-                Action = x.RouteValues["Action"],
-                Controller = x.RouteValues["Controller"],
-                Name = x.AttributeRouteInfo.Name,
-                Template = x.AttributeRouteInfo.Template
-            }).ToList();
-            return Ok(routes);
-        }
+      
     }
 }

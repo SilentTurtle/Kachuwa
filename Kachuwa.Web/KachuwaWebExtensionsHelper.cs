@@ -9,10 +9,12 @@ using Kachuwa.Web.Security;
 using Kachuwa.Web.Service;
 using Kachuwa.Web.Service.Installer;
 using Kachuwa.Web.Services;
+using Kachuwa.Web.TagHelpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -49,6 +51,8 @@ namespace Kachuwa.Web
             services.AddSingleton<ITemplateEngine, MustacheTemplateEngine>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
             services.AddSingleton<IFileService, LocalFileService>();
+            services.AddSingleton<ITagHelperComponent, SEOMetaTagHelperComponent>();
+            services.AddSingleton<ITagHelperComponent, JsonLdTagHelperComponent>();
             services.RegisterNotificationService();
 
             //use IEmailServiceProviderService for sender

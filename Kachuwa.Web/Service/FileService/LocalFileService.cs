@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using Kachuwa.Log;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Kachuwa.Web.Services
 {
@@ -48,7 +43,7 @@ namespace Kachuwa.Web.Services
                 try
                 {
                     CopyStream(myFile.OpenReadStream(), physicalfilepath);
-                   return relativePath;
+                    return relativePath;
 
 
                 }
@@ -72,7 +67,7 @@ namespace Kachuwa.Web.Services
 
         public string Save(string dirPath, IFormFile file)
         {
-           string physicallPath= CheckOrCreateDirectory(dirPath);
+            string physicallPath= CheckOrCreateDirectory(dirPath);
             IFormFile myFile = file;
         
             string physicalfilepath = physicallPath+ "\\" + myFile.FileName;

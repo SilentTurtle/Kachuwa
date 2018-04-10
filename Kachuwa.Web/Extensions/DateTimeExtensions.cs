@@ -1,44 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Kachuwa.Web.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Web.Extensions
 {
-    public static class EmailSenderExtensions
-    {
-        public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
-        {
-           var to= new List<EmailAddress>() {
-                    new EmailAddress{
-                    Email=email }
-            };
-            return emailSender.SendEmailAsync("Confirm your email",
-                $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>", to.ToArray() );
-        }
-    }
-    public static class UrlHelperExtensions
-    {
-        public static string EmailConfirmationLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
-        {
-            return urlHelper.Action(
-                action: nameof(AccountController.ConfirmEmail),
-                controller: "Account",
-                values: new { userId, code },
-                protocol: scheme);
-        }
-
-        public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
-        {
-            return urlHelper.Action(
-                action: nameof(AccountController.ResetPassword),
-                controller: "Account",
-                values: new { userId, code },
-                protocol: scheme);
-        }
-    }
     public static  class DateTimeExtensions
     {
         public static string ToAboutAgo(this DateTime dt)
