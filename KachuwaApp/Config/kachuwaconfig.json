@@ -1,11 +1,11 @@
 {
   "KachuwaAppConfig": {
-    "AppName": "Tixalaya",
-    "SiteUrl": "http://localhost:33641",
+    "AppName": "Kachuwa Framework",
+    "SiteUrl": "http://localhost:9876",
     "IsInstalled": true,
     "DbProvider": "SQLServer",
     "Framework": "",
-    "Version": "v1.0.0",
+    "Version": "beta",
     "EnableLogging": true,
     "EnableDbLogging": false,
     "Theme": "Default",

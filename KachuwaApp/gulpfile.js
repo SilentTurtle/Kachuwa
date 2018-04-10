@@ -1,14 +1,43 @@
-var gulp = require('gulp');
+﻿var gulp = require('gulp');
 var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
+var bs = require('browser-sync').create();
 
 gulp.task('sass', function () {
-    console.log(sass);
-    return gulp.src('./themes/shared/default/assets/sass/theme.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./themes/shared/default/assets/css'));
+    return gulp.src('./themes/shared/default/sass/theme.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./themes/shared/default/css'))
+        .pipe(bs.reload({
+            stream: true
+        }));
+});
+ 
+//Watch task
+gulp.task('default',['sass','frontendwtc']);
+
+
+gulp.task('compileadmin', function () {
+    return gulp.src('./themes/shared/admin/sass/theme.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./themes/shared/admin/css'))
+        .pipe(bs.reload({
+            stream: true
+        }));
+});
+//Watch task
+gulp.task('adminwtc',function() {
+    gulp.watch('./themes/shared/admin/**/*.scss',['compileadmin']);
+});
+ 
+//Watch task
+gulp.task('frontendwtc',function() {
+    gulp.watch('./themes/shared/default/**/*.scss',['sass']);
 });
 
-gulp.task('sass:watch', function () {
-    console.log("starting watching...");
-    gulp.watch('./themes/shared/default/assets/sass/framework_components/*.scss', './themes/shared/default/assets/sass/theme_components/*.scss', ['sass']);
-});
+
+
+ 
