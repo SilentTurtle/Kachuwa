@@ -1,0 +1,11 @@
+﻿namespace Kachuwa.Web
+{
+    public class KachuwaRoleNames
+    {
+        public const string SuperAdmin = "SuperAdmin";
+        public const string Admin = "Admin";
+        public const string User = "User";
+        public const string Guest = "Guest";
+
+    }
+}

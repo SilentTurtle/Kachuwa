@@ -4,8 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Kachuwa.Web.Security
@@ -15,7 +17,7 @@ namespace Kachuwa.Web.Security
         private readonly IHostingEnvironment _environment;
         private readonly IAntiforgery _xsrf;
 
-        public TokenGenerator(IHostingEnvironment environment , IAntiforgery xsrf)
+        public TokenGenerator(IHostingEnvironment environment, IAntiforgery xsrf)
         {
             _environment = environment;
             _xsrf = xsrf;
@@ -38,7 +40,7 @@ namespace Kachuwa.Web.Security
                     ? $"{httpContext.Request.Scheme}://{httpContext.Request.Host.Host}"
                     : $"{httpContext.Request.Scheme}://{httpContext.Request.Host.Host}:{httpContext.Request.Host.Port}";
             }
-          
+
             var cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, "damienbodserver.pfx"), "");
 
             var credential = new SigningCredentials(new X509SecurityKey(cert), "RS256");
@@ -65,7 +67,7 @@ namespace Kachuwa.Web.Security
                 var amrValue = jwt.Payload["amr"] as string;
                 if (amrValue != null)
                 {
-                    jwt.Payload["amr"] = new string[] {amrValue};
+                    jwt.Payload["amr"] = new string[] { amrValue };
                 }
 
             }
@@ -78,7 +80,12 @@ namespace Kachuwa.Web.Security
 
         public string RequestAntiforgeryToken()
         {
-           return _xsrf.GetAndStoreTokens(ContextResolver.Context).RequestToken;
+            return _xsrf.GetAndStoreTokens(ContextResolver.Context).RequestToken;
+        }
+        public async Task<bool> ValidateAntiforgeryToken(HttpContext context)
+        {
+            await _xsrf.ValidateRequestAsync(context);
+            return true;
         }
     }
 }

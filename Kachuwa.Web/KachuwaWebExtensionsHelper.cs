@@ -5,6 +5,7 @@ using Kachuwa.Web.Layout;
 using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Notification;
+using Kachuwa.Web.Optimizer;
 using Kachuwa.Web.Security;
 using Kachuwa.Web.Service;
 using Kachuwa.Web.Service.Installer;
@@ -17,6 +18,11 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Smidge;
+using Smidge.CompositeFiles;
+using Smidge.FileProcessors;
+using Smidge.Nuglify;
+using Smidge.Options;
 
 namespace Kachuwa.Web
 {
@@ -62,6 +68,19 @@ namespace Kachuwa.Web
                 var modules = new ModuleRegistrar(services, logger);
             }
 
+            services.AddSmidge();
+            services.Configure<SmidgeOptions>(opt =>
+            {
+                opt.UrlOptions=new UrlManagerOptions
+                {
+                    BundleFilePath = "optimizer",
+                    MaxUrlLength = 2048,
+                    CompositeFilePath = "optimizerx"
+                };
+                
+                opt.PipelineFactory.OnCreateDefault = (type, pipeline) => pipeline.Replace<JsMinifier, NuglifyJs>(opt.PipelineFactory);
+            });
+            services.AddScoped<IKachuwaBundler, SmidgeBundler>();
             return services;
         }
         public static IApplicationBuilder UseKachuwaWeb(this IApplicationBuilder app,bool useDefaultRoute)
@@ -93,9 +112,8 @@ namespace Kachuwa.Web
                     template: "{area:exists}/{controller}/{action}/{id?}",
                     defaults: new { area = "Admin", controller = "Dashboard", action = "Index" });
 
-
-
             });
+            app.UseSmidge();
             return app;
         }
 

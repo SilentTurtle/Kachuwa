@@ -29,6 +29,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Optimizer\smidge.json" />
+    <None Remove="Views\Shared\_Installer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="smidge.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Components\NotificationBar\Default.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
@@ -50,6 +61,8 @@
     <PackageReference Include="Mustache" Version="1.0.1" />
 	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
 	    <PackageReference Include="MXTires.Microdata.Core" Version="0.1.0" />
+	    <PackageReference Include="Smidge" Version="3.0.0" />
+	    <PackageReference Include="Smidge.Nuglify" Version="2.0.0" />
 	    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
