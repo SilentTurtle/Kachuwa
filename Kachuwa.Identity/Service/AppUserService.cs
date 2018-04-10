@@ -52,14 +52,36 @@ namespace Kachuwa.Identity.Service
                         var appUser =model.To<AppUser>();
                         appUser.AutoFill();
                         appUser.IdentityUserId = identityUser.Id;
-                        var id = await AppUserCrudService.InsertAsync<long>(appUser);
+                        var dbFactory = DbFactoryProvider.GetFactory();
+                        using (var db = (DbConnection) dbFactory.GetConnection())
+                        {
+                            await db.OpenAsync();
+                            using (var dbTran = db.BeginTransaction())
+                            {
+                                try
+                                {
+                                    var id = await AppUserCrudService.InsertAsync<long>(db,appUser,dbTran,10);
 
-                        var roleIds = model.UserRoles.Where(z => z.IsSelected == true).Select(x => (int)x.RoleId).ToArray();
-                        await _identityUserService.AddUserRoles(roleIds, identityUser.Id);
+                                    var roleIds = model.UserRoles.Where(z => z.IsSelected == true).Select(x => (int)x.RoleId).ToArray();
+                                    await _identityUserService.AddUserRoles(roleIds, identityUser.Id);
+                                    dbTran.Commit();
+                                    status.HasError = false;
+                                    status.Message = id.ToString();
+                                    return status;
+                                }
+                                catch (Exception e)
+                                {
+                                    dbTran.Rollback();
+                                    status.HasError = true;
+                                    status.Message = e.Message.ToString();
+                                    return status;
+                                }
+                            }
+                        }
                        
-                        status.HasError = false;
-                        status.Message = id.ToString();
-                        return status;
+
+                       
+                       
                     }
                     status.HasError = true;
                     status.Message = string.Join(",", result.Errors);

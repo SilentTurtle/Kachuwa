@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,20 @@ namespace Kachuwa.Identity.Service
 
                 return true;
             }
+        }
+
+        public async Task<bool> AddUserRoles(int[] roleIds, long userId, IDbConnection db, IDbTransaction tran)
+        {
+
+            await db.ExecuteAsync("Delete from IdentityUserRole Where UserId=@UserId;", new { UserId = userId }, tran);
+            foreach (int roleId in roleIds)
+            {
+                await db.ExecuteAsync("Insert into IdentityUserRole( UserId,RoleId )values(@UserId,@RoleId)",
+                    new { UserId = userId, RoleId = roleId }, tran);
+            }
+
+            return true;
+
         }
 
         public async Task DeleteUserRoles(long identityUserId)
