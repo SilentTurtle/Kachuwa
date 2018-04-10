@@ -1,8 +1,20 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Kachuwa.Data.Crud;
 
 namespace Kachuwa.Installer
 {
+
+    public class InstallerUserViewModel
+    {
+        [Required]
+        public string SiteName { get; set; }
+        [EmailAddress]
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; }
+    }
     public class InstallerViewModel
     {
         public string DatabaseServer { get; set; }
@@ -13,9 +25,7 @@ namespace Kachuwa.Installer
         public string DatabaseProvider { get; set; } = "SQLServer";
         public string ConnectionStrings { get; set; }
         public int Port { get; set; }
-        public string SiteName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+       
 
         public override string ToString()
         {
