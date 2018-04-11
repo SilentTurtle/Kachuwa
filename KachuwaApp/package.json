@@ -13,7 +13,9 @@
     "gulp-sourcemaps": "^2.6.4",
     "node-sass": "^4.7.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp-rename": "^1.2.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
