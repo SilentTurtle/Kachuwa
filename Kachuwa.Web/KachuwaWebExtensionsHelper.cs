@@ -69,6 +69,7 @@ namespace Kachuwa.Web
             }
 
             services.AddSmidge();
+            services.AddSmidgeNuglify();
             services.Configure<SmidgeOptions>(opt =>
             {
                 opt.UrlOptions=new UrlManagerOptions
@@ -114,6 +115,7 @@ namespace Kachuwa.Web
 
             });
             app.UseSmidge();
+            app.UseSmidgeNuglify();
             return app;
         }
 
