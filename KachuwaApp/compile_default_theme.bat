@@ -1,2 +1,2 @@
-gulp sass
+gulp compile_default
 pause

@@ -12,6 +12,7 @@ using Kachuwa.Web.Service.Installer;
 using Kachuwa.Web.Services;
 using Kachuwa.Web.TagHelpers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -68,7 +69,8 @@ namespace Kachuwa.Web
                 var modules = new ModuleRegistrar(services, logger);
             }
 
-            services.AddSmidge();
+           var hostingProvider= serviceProvider.GetService<IHostingEnvironment>();
+            services.AddSmidge(null, new SmidgeFileProvider(hostingProvider));
             services.AddSmidgeNuglify();
             services.Configure<SmidgeOptions>(opt =>
             {

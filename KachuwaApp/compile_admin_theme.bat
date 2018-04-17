@@ -1,1 +1,1 @@
-gulp compileadmin
+gulp compile_admin

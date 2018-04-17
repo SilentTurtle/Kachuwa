@@ -1,71 +1,26 @@
-﻿<!DOCTYPE html>
+﻿@using Kachuwa.Web.Optimizer
+@inject IKachuwaBundler  bundler
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-
-    
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/resources/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" 
-              asp-fallback-test-value="absolute" />
-       
-
-    <link href="~/Themes/Shared/Default/assets/css/theme.css" rel="stylesheet" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <title>@ViewData["Title"] - Kachuwa Framework</title>
+    @await bundler.BundleCss("bs4-fa", new string[] { "~/lib/bootstrap/dist/css/bootstrap.min.css", "~/lib/font-awesome/css/font-awesome.min.css" })
+    <link href="~/Themes/Shared/Default/css/theme.min.css" rel="stylesheet" />
+    @await bundler.BundleJs("jquery-default", new string[] { "~/lib/jquery/dist/jquery.min.js", "~/lib/jquery-validation/dist/jquery.validate.js", "~/lib/jquery-validation/dist/additional-methods.min.js" })
 </head>
 <body>
-    <nav class="navbar ">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Default Theme</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-<div class="container ">
-    
-        @if (User.Identity.IsAuthenticated)
-        {
-            <h1>Welcome back @User.Identity.Name</h1>
-            <h2>User Claims</h2>
-            <dl>
-                @foreach (var claim in User.Claims)
-                {
-                    <dt>@claim.Type</dt>
-                    <dd>@claim.Value</dd>
-                }
-            </dl>
-        }
-    @RenderBody()
-    <hr/>
-    <footer>
-        <p>&copy; 2017 - WebApp</p>
-    </footer>
-</div>
+   
+        
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2017 - Kachuwa Framework</p>
+        </footer>
 
+    @RenderSection("Scripts", required: false)
 
-      
-
-        @RenderSection("Scripts", required: false)
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

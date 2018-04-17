@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Kachuwa.Caching;
+using Kachuwa.Extensions;
+using Kachuwa.Web.Module;
 using Microsoft.AspNetCore.Html;
 using Smidge;
 using Smidge.Models;
@@ -76,7 +80,7 @@ namespace Kachuwa.Web.Optimizer
 
         public async Task<HtmlString> BundleJs(string name, string[] files)
         {
-           
+
             var cssFiles = files.Select(x => new JavaScriptFile()
             {
                 FilePath = x
