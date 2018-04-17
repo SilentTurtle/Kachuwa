@@ -30,7 +30,8 @@
     "jquery.nicescroll": "jquery-nicescroll#v3.6.7",
     "tinyColorPicker": "1.1.1",
     "JsBarcode": "jsbarcode#v3.8.0",
-    "rangeslider.js": "v2.3.1"
+    "rangeslider.js": "v2.3.1",
+    "bootstrap-sass": "v3.3.7"
   },
   "resolutions": {
     "jquery": ">=1.8.2",
