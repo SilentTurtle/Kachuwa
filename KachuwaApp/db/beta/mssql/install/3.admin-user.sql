@@ -5,3 +5,4 @@ INSERT dbo.IdentityUser (AccessFailedCount, ConcurrencyStamp, Email, EmailConfir
     0, N'df5b1a7e-e735-4164-8fa0-ec96decf5e4a', 0, N'superuser@kachuwaframework.com');
 
 Insert Into dbo.IdentityUserRole Select 1, 1;
+Insert Into dbo.IdentityUserRole Select 1, 2;
