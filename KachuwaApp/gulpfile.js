@@ -31,7 +31,7 @@ gulp.task('default', ['compile_default', 'compile_default_prod', 'compile_admin'
 
 
 gulp.task('compile_admin', function () {
-    return gulp.src('./themes/shared/admin/sass/theme.scss')
+    return gulp.src('./themes/shared/admin/scss/theme.scss')
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(sourcemaps.write('.'))
@@ -41,7 +41,7 @@ gulp.task('compile_admin', function () {
         }));
 });
 gulp.task('compile_admin_prod', function () {
-    return gulp.src('./themes/shared/admin/sass/theme.scss')
+    return gulp.src('./themes/shared/admin/scss/theme.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(sourcemaps.write('./maps'))
