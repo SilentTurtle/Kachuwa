@@ -9,7 +9,7 @@ $(function () {
     });
 });
 
-$(function(){
+$(function() {
     $('.panel-heading').click(function(e) {
         $('.panel-heading').removeClass('tab-collapsed');
         var collapsCrnt = $(this).find('.collapse-controle').attr('aria-expanded');
@@ -17,9 +17,11 @@ $(function(){
             $(this).addClass('tab-collapsed');
         }
     });
-})
+});
 
-
+$(function () {
+    $('.side-menu').niceScroll();
+});
 
 $(document).ready(function() {
     "use strict";
@@ -62,15 +64,16 @@ $(document).ready(function() {
         height: 78
     });
     setInterval(function() {
-        var i = Math.round(10 * Math.random()),
-            e = t.text().split(",");
-        e.shift(), e.push(i), t.text(e.join(",")).change()
-    }, 1e3),
-     $(".peity-pie-data-attributes").peity("pie"), 
-     $(".peity-donut-data-attributes").peity("donut"), 
-     $(".peity-line-data-attributes").peity("line"), 
-     $(".peity-bar-data-attributes").peity("bar"),
-     $(window).resize(function() {
-        $(".peity-full-width").peity()
-    })
+                var i = Math.round(10 * Math.random()),
+                    e = t.text().split(",");
+                e.shift(), e.push(i), t.text(e.join(",")).change()
+            },
+            1e3),
+        $(".peity-pie-data-attributes").peity("pie"),
+        $(".peity-donut-data-attributes").peity("donut"),
+        $(".peity-line-data-attributes").peity("line"),
+        $(".peity-bar-data-attributes").peity("bar"),
+        $(window).resize(function() {
+            $(".peity-full-width").peity();
+        });
 });

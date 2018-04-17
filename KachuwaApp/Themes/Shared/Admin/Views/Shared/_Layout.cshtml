@@ -1,50 +1,55 @@
-﻿<!DOCTYPE html>
+﻿@using Kachuwa.Web.Optimizer
+@inject IKachuwaBundler bundler
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>@ViewData["Title"] - Tixalaya</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/2.1.19/css/materialdesignicons.min.css"
-          asp-fallback-href="/Themes/Shared/Admin/md/css/materialdesignicons.min.css"
-          asp-fallback-test-class="hidden"
-          asp-fallback-test-property="visibility"
-          asp-fallback-test-value="hidden" />
-    @*<link href="/Themes/Shared/Admin/md/css/materialdesignicons.min.css" rel="stylesheet" />*@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-          asp-fallback-href="/lib/font-awesome/css/font-awesome.min.css"
-          asp-fallback-test-class="hidden"
-          asp-fallback-test-property="visibility"
-          asp-fallback-test-value="hidden" />
-    <link href="/themes/shared/admin/css/theme.css" rel="stylesheet" />
-    <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <title>@ViewData["Title"] - Kachuwa Framework</title>
+
+    @*@await bundler.BundleCss("bs4-fa", new string[] { "~/lib/bootstrap/dist/css/bootstrap.min.css",
+        "~/lib/font-awesome/css/font-awesome.min.css" })*@
+    <link href="~/Themes/Shared/Admin/css/theme.min.css" rel="stylesheet" />
+    @*<script src="/lib/jquery/dist/jquery.min.js"></script>
+        <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>*@
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" />
     <script src="/lib/moment/moment.js"></script>
-    <link href="~/lib/mdi/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    @await bundler.BundleJs("jquery-core", new string[]
+        {
+"~/lib/jquery/dist/jquery.min.js",
+"~/lib/jquery-validation/dist/jquery.validate.min.js"
+,"~/lib/jquery-validation/dist/additional-methods.min.js"
+        })
     @RenderSection("Stylesheet", required: false)
 </head>
 <body class="dashboard">
     <div class="wrapper admin-wrapper">
         <!-- Menu -->
         <component name="AdminMenu"></component>
-     
+
         <div class="side-body">
             <!-- Top Navigation Menu -->
             <component name="TopBar"></component>
             <component name="NotificationBar"></component>
-           
+
             <div class="content-wrapper">
                 @RenderBody()
             </div>
         </div>
     </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    @*@bundler.BundleJs("theme-footer-js", new[]{ "/Themes/Shared/admin/js/peity/jquery.peity.min.js",
+        "/lib/jquery.nicescroll/dist/jquery.nicescroll.min.js",
+        "/themes/shared/admin/js/theme.js",
+        "/lib/bootstrap/dist/js/bootstrap.min.js"
+        })*@
     <script src="~/Themes/Shared/admin/js/peity/jquery.peity.min.js"></script>
     <script src="~/lib/jquery.nicescroll/dist/jquery.nicescroll.min.js"></script>
-    <script src="~/themes/shared/admin/js/main.js"></script>
+    <script src="~/themes/shared/admin/js/theme.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

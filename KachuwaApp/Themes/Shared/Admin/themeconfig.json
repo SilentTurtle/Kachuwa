@@ -1,3 +1,12 @@
 ﻿{
-
+  "themeName": "Admin",
+  "author": "Binod Tamang",
+  "version": "1.0.0",
+  "verificationHash": "unique hash",
+  "layout": "bootstrap", //"google-material","semantic"
+  "layoutVersion": "4.0",
+  "js": [ { "main": [ "", "" ] } ],
+  "css": [ { "theme": [ "", "" ] } ],
+  "themeVariable": "scss/theme-variables.scss",
+  "fonts": [ "" ]
 }
