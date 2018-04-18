@@ -1,13 +1,30 @@
+Insert Into dbo.Page Select 'Dashboard','admin/dashboard','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Page','admin/page','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Module','admin/module','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Plugins','admin/plugin','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'User','admin/user','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Role','admin/role','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Theme Manage','admin/theme','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Dev Tools','admin/dev','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.Page Select 'Web Settings','admin/setting','','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
 
-Insert Into dbo.Page Select 'Home','landing','This is page Content','',1,1,'en-us','2017/1/1','2017/1/1',1,1,0,'2017/1/1','Admin';	
-Insert Into dbo.SEO Select 'Home','home','This is homepage','page','','/landing','','Home', SCOPE_IDENTITY(),0,1,0,'2017/1/1','Admin';
-Insert Into dbo.Page Select 'Access Denied','accessdenied','No Permission','',1,1,'en-us','2017/1/1','2017/1/1',1,1,0,'2017/1/1','Admin';
-Insert Into dbo.SEO Select 'Access Denied','Access Denied','No Permission','page','','/accessdenied','','Access Denied',SCOPE_IDENTITY(),0,1,0,'2017/1/1','Admin';
-Insert Into dbo.Page Select 'Page Not Found','page-not-found','Page Not Found','',1,1,'en-us','2017/1/1','2017/1/1',1,1,0,'2017/1/1','Admin';
-Insert Into dbo.SEO Select 'Page Not Found','Page Not Found','Page Not Found','page','','/page-not-found','','Page Not Found',SCOPE_IDENTITY(),0,1,0,'2017/1/1','Admin';
+
+--superadmin
+INSERT INTO PagePermission 	SELECT PageId,0,1,1,GETUTCDATE(),'system' FROM dbo.Page AS l;
+--admin
+INSERT INTO PagePermission 	SELECT PageId,0,1,2,GETUTCDATE(),'system' FROM dbo.Page AS l;
+
+Insert Into dbo.Page Select 'Home','landing','This is page Content','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';	
+Insert Into dbo.SEO Select 'Home','home','This is homepage','page','','/landing','','Home', SCOPE_IDENTITY(),0,1,0,'2017/1/1','System';
+Insert Into dbo.Page Select 'Access Denied','access-denied','No Permission','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.SEO Select 'Access Denied','Access Denied','No Permission','page','','/access-denied','','Access Denied',SCOPE_IDENTITY(),0,1,0,'2017/1/1','System';
+Insert Into dbo.Page Select 'Page Not Found','page-not-found','Page Not Found','',1,1,'en-us',GETUTCDATE(),GETUTCDATE(),1,1,0,GETUTCDATE(),'System';
+Insert Into dbo.SEO Select 'Page Not Found','Page Not Found','Page Not Found','page','','/page-not-found','','Page Not Found',SCOPE_IDENTITY(),0,1,0,'2017/1/1','System';
+
+INSERT INTO PagePermission 	SELECT PageId,1,0,0,GETUTCDATE(),'system' FROM dbo.Page where Name in('Home','Access Denied','Page Not Found');
+
 
 Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','987654321,987654123','info@kachuwaframework.com','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0;
-
 
 Insert Into dbo.IdentityRole Select  NULL, N'SuperAdmin', N'SUPERADMIN',1;
 Insert Into dbo.IdentityRole Select  NULL, N'Admin', N'ADMIN',1;
@@ -47,7 +64,10 @@ INSERT INTO [dbo].[Menu] Select 'Web Setting','','/admin/setting/web','settings'
 INSERT INTO [dbo].[Menu] Select 'Caching','','/admin/setting/caching','cached','material-icons md-18',0,@menuId,1,'backendnav','en-US',1,1,1,0,GETUTCDATE(),'system';
 
 
+
 --superadmin
-INSERT INTO MenuPermission 	SELECT MenuId,0,1,1,GETUTCDATE(),'system' FROM menu AS l;
+INSERT INTO MenuPermission 	SELECT MenuId,0,1,1,GETUTCDATE(),'system' FROM dbo.Menu AS l;
 --admin
-INSERT INTO MenuPermission 	SELECT MenuId,0,1,2,GETUTCDATE(),'system' FROM menu AS l ;
+INSERT INTO MenuPermission 	SELECT MenuId,0,1,2,GETUTCDATE(),'system' FROM dbo.Menu AS l ;
+
+

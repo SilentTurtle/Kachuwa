@@ -125,6 +125,16 @@ CREATE TABLE dbo.Page
     AddedBy                                 national character varying(256)
 
 );
+Create table dbo.PagePermission
+(
+	PagePermissionId						bigint primary key identity(1,1) not null,
+	PageId									bigint not null default(0),
+	AllowAccessForAll						bit default(0) not null,
+	AllowAccess								bit default(0) not null,
+	RoleId									bigint not null,
+	AddedOn									datetime default(getutcdate()),
+	AddedBy									nvarchar(256)
+);
 CREATE  INDEX idx_page
 	ON dbo.Page(URL);
 	
