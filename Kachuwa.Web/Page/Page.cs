@@ -4,9 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
-using Kachuwa.Web.Layout;
-using Kachuwa.Web.Model;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Web
 {
@@ -53,23 +50,5 @@ namespace Kachuwa.Web
         [IgnoreAll]
         public int RowTotal { get; set; }
 
-    }
-
-    public class PageConfigViewModel: Page
-    {
-        public LayoutContent Layout{ get; set; }
-    }
-    [Table("Page")]
-    public class PageViewModel : SEO
-    {
-        public long PageId { get; set; }
-        [Required]
-        public string Name { get; set; }
-        public string Content { get; set; }
-        public bool UseMasterLayout { get; set; }
-        public bool IsPublished { get; set; }
-        public bool IsNew { get; set; }
-        public string OldUrl { get; set; }
-        public bool IsBackend { get; set; }
     }
 }

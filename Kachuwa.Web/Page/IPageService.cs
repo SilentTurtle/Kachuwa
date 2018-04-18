@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kachuwa.Data;
 using Kachuwa.Web.Layout;
@@ -7,6 +8,7 @@ namespace Kachuwa.Web
     public interface IPageService
     {
         CrudService<Page> CrudService { get; set; }
+        CrudService<PagePermission> PermissionCrudService { get; set; }
         Task<bool> CheckPageExist(string url);
         Task<bool> Save(PageViewModel model);
         Task<PageViewModel> Get(int pageId);
@@ -14,5 +16,8 @@ namespace Kachuwa.Web
         Task<bool> SavePageLayout(LayoutContent content);
         Task<bool> DeletePageAsync(long pageId);
         Task<bool> MakeLandingPage(long pageId);
+
+        Task<IEnumerable<PagePermissionViewModel>> GetPermissionsFromCache();
+        Task<IEnumerable<PagePermissionViewModel>> GetAllPermissions();
     }
 }

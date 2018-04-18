@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Kachuwa.Caching;
 using Kachuwa.Data;
 using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web.Layout;
@@ -11,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Kachuwa.Extensions;
 using Kachuwa.Web.Model;
+using Kachuwa.Web.ViewModels;
 
 namespace Kachuwa.Web
 {
@@ -19,14 +23,20 @@ namespace Kachuwa.Web
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILayoutRenderer _layoutRenderer;
         private readonly ISeoService _seoService;
+        private readonly ICacheService _cacheService;
+        private string _cacheKey = "Kachuwa.Page.Permissions";
 
-        public PageService(IHostingEnvironment hostingEnvironment, ILayoutRenderer layoutRenderer, ISeoService seoService)
+        public PageService(IHostingEnvironment hostingEnvironment, ILayoutRenderer layoutRenderer, ISeoService seoService
+            ,ICacheService cacheService)
         {
             _hostingEnvironment = hostingEnvironment;
             _layoutRenderer = layoutRenderer;
             _seoService = seoService;
+            _cacheService = cacheService;
         }
         public CrudService<Page> CrudService { get; set; } = new CrudService<Page>();
+        public CrudService<PagePermission> PermissionCrudService { get; set; }
+
         public async Task<bool> CheckPageExist(string url)
         {
             var dbFactory = DbFactoryProvider.GetFactory();
@@ -207,6 +217,27 @@ namespace Kachuwa.Web
                     PageId = pageId
                                                    });
                 return true;
+            }
+        }
+
+        public async Task<IEnumerable<PagePermissionViewModel>> GetPermissionsFromCache()
+        {
+            var permissions = await _cacheService.GetAsync<IEnumerable<PagePermissionViewModel>>(_cacheKey, async () =>
+            {
+                return await GetAllPermissions();
+            });
+            return permissions;
+        }
+
+        public async Task<IEnumerable<PagePermissionViewModel>> GetAllPermissions()
+        {
+            var dbFactory = DbFactoryProvider.GetFactory();
+            using (var db = (DbConnection)dbFactory.GetConnection())
+            {
+                await db.OpenAsync();
+                return await db.QueryAsync<PagePermissionViewModel>("select pp.*,p.Name,p.Url,ir.Name as RoleName from dbo.pagepermission as pp " +
+                                                                    " inner join dbo.Page as p on p.PageId=pp.PageId " +
+                                                                    " left join dbo.IdentityRole as ir on pp.RoleId=ir.Id ;");
             }
         }
     }
