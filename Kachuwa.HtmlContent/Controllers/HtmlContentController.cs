@@ -3,37 +3,44 @@ using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.HtmlContent.Service;
 using Kachuwa.Web;
 using Kachuwa.Web.Model;
+using Kachuwa.Web.Notification;
+using Kachuwa.Web.Security;
 using Kachuwa.Web.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.HtmlContent.Controllers
 {
     [Area("Admin")]
+    [Authorize(PolicyConstants.PagePermission)]
     public class HtmlContentController : BaseController
     {
         private readonly IHtmlContentService _htmlContentService;
         private readonly ISettingService _settingService;
+        private readonly INotificationService _notificationService;
         private readonly Setting _webSetting;
 
 
-        public HtmlContentController(IHtmlContentService  htmlContentService,ISettingService settingService)
+        public HtmlContentController(IHtmlContentService htmlContentService,
+            ISettingService settingService, INotificationService notificationService)
         {
             _htmlContentService = htmlContentService;
             _settingService = settingService;
+            _notificationService = notificationService;
             _webSetting = _settingService.CrudService.Get(1);
         }
 
         #region Html Crud
 
-        [Route("admin/html/page/{page?}")]
+        [Route("admin/html/page/{pageNo?}")]
         [Route("admin/html")]//default make it at last
-        public async Task<IActionResult> Index([FromRoute]int page = 1, [FromQuery]string query = "")
+        public async Task<IActionResult> Index([FromRoute]int pageNo = 1, [FromQuery]string query = "")
         {
-            ViewData["Page"] = page;
+            ViewData["Page"] = pageNo;
             int rowsPerPage = 10;
             //customized viewmodel with join
-            var model = await _htmlContentService.HtmlService.GetListPagedAsync(page, rowsPerPage, 1,
-                "Where KeyName like @Query and IsDeleted=0 and Culture=@Culture", "Addedon desc", new { Culture=_webSetting.BaseCulture, Query = "%" + query + "%" });
+            var model = await _htmlContentService.HtmlService.GetListPagedAsync(pageNo, rowsPerPage, 1,
+                "Where KeyName like @Query and IsDeleted=0 and Culture=@Culture", "Addedon desc", new { Culture = _webSetting.BaseCulture, Query = "%" + query + "%" });
             return View(model);
         }
 
@@ -50,13 +57,15 @@ namespace Kachuwa.HtmlContent.Controllers
         {
             if (ModelState.IsValid)
             {
-              
+
                 model.AutoFill();
                 if (model.HtmlContentId == 0)
+                {
                     await _htmlContentService.HtmlService.InsertAsync<int>(model);
-                else
-                    await _htmlContentService.HtmlService.UpdateAsync(model);
-                return RedirectToAction("Index");
+                    _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
+                    return RedirectToAction("Index");
+                }
+                return View(model);
             }
             else
             {
@@ -78,13 +87,15 @@ namespace Kachuwa.HtmlContent.Controllers
         {
             if (ModelState.IsValid)
             {
-            
+
                 model.AutoFill();
-                if (model.HtmlContentId == 0)
-                    await _htmlContentService.HtmlService.InsertAsync<int>(model);
-                else
+                if (model.HtmlContentId != 0)
+                {
                     await _htmlContentService.HtmlService.UpdateAsync(model);
-                return RedirectToAction("Index");
+                    _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
+                    return RedirectToAction("Index");
+                }
+                return View(model);
             }
             else
             {
@@ -97,6 +108,7 @@ namespace Kachuwa.HtmlContent.Controllers
         public async Task<JsonResult> Delete(int id)
         {
             var result = await _htmlContentService.HtmlService.DeleteAsync(id);
+            _notificationService.Notify("Success", "Data deleted successfully!", NotificationType.Success);
             return Json(result);
         }
         #endregion
