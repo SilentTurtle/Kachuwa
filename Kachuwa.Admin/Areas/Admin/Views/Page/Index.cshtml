@@ -4,58 +4,51 @@
 @{
     ViewData["Title"] = "Page";
 }
+
+
+
 <section class="container-fluid">
     <div class="row">
-        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="panel_wrapper">
                 <div class="panel module" aria-multiselectable="true">
                     <div class="panel-inner">
-
-                        <div class="panel-heading clearfix">
-                            <h2 class="panel-title pull-left col-md-2 col-xs-6" style="padding-top: 7.5px;">Page</h2>
-                            <div class="input-group col-md-9 col-xs-4">
-                                <div class="input-group-btn pull-right">
-                                    <a href="/admin/page/new" class="btn btn-primary"><i class="fa fa-plus"></i>Add</a>
-                                </div>
-                            </div>
+                        <div class="panel-heading dflex space-between">
+                            <h2 class="panel-title">Pages</h2>
+                            <a href="/admin/page/new" class="btn btn-primary btn-sm has-mdicon"><i class="material-icons md-18">add</i>Add Page</a>
                         </div>
-                        <div class="panel-collapse" aria-labelledby="headingOne"
-                             aria-expanded="true">
-                            <div class="panel-body">
-                                @(Html
-                                      .CreateKachuwaGrid(Model)
-                                      .Build(columns =>
-                                      {
-                                          columns.Add(model => model.Name).SetTitle("Name");
-                                          columns.Add(model => model.Url).SetTitle("Url");
+                        <div class="panel-body">
+                            @(Html
+                                  .CreateKachuwaGrid(Model)
+                                  .Build(columns =>
+                                  {
+                                      columns.Add(model => model.Name).SetTitle("Name");
+                                      columns.Add(model => model.Url).SetTitle("Url");
+                                      columns.Add(model => model.IsBackend).SetTitle("Is Backend");
+                                      columns.Add(model => model.IsActive).SetTitle("Is Active");
+                                      columns.Add(model => model.IsPublished).SetTitle("Is Published");
 
-                                          columns.Add(model => model.IsActive).SetTitle("Is Active");
-                                          columns.Add(model => model.IsPublished).SetTitle("Is Published");
+                                  }).AddCommands(commands =>
+                                  {
+                                      commands.Add("Module", "Module", "fa fa-cogs", "", "/admin/page/config", model => model.PageId);
+                                      commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/page/edit", model => model.PageId);
+                                      commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
+                                          "/admin/page/delete");
 
-                                      }).AddCommands(commands =>
-                                      {
-                                          commands.Add("Module", "Module", "fa fa-cogs", "", "/admin/page/config", model => model.PageId);
-                                          commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/page/edit", model => model.PageId);
-                                          commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
-                                              "/admin/page/delete");
+                                  }).Css("table-hover")
+                                  .Empty("No Page's added yet.")
+                                  .Pagination(pager =>
+                                  {
+                                      pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                                      pager.Api = "/admin/page/page";
+                                  })
 
-                                      }).Css("table-hover")
-                                      .Empty("No Page's added yet.")
-                                      .Pagination(pager =>
-                                      {
-                                          pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
-                                          pager.Api = "/admin/page/page";
-                                      })
-
-                                      )
-
-                            </div>
+                                  )
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
 

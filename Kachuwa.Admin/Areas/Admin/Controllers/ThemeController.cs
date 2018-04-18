@@ -10,6 +10,10 @@ namespace Kachuwa.Admin.Controllers
     [Authorize(PolicyConstants.PagePermission)]
     public class ThemeController : BaseController
     {
+        public ThemeController()
+        {
+                
+        }
         public async Task<IActionResult> Index()
         {
             return View();

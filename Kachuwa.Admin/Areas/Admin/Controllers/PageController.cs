@@ -27,7 +27,7 @@ namespace Kachuwa.Admin.Controllers
         private readonly INotificationService _notificationService;
 
         public PageController(IPageService pageService,
-            IModuleComponentProvider moduleComponentProvider, ILayoutRenderer layoutRenderer,INotificationService notificationService)
+            IModuleComponentProvider moduleComponentProvider, ILayoutRenderer layoutRenderer, INotificationService notificationService)
         {
             _pageService = pageService;
             _moduleComponentProvider = moduleComponentProvider;
@@ -35,14 +35,16 @@ namespace Kachuwa.Admin.Controllers
             _notificationService = notificationService;
         }
         #region PAge Crud
-        [Route("admin/page/page/{page?}")]
+
+        [Route("admin/page/page/{pageNo?}")]
         [Route("admin/page")]//default make it at last
-        public async Task<IActionResult> Index([FromRoute]int page = 1, [FromQuery]string query = "")
+
+        public async Task<IActionResult> Index([FromRoute]int pageNo = 1, [FromQuery]string query = "")
         {
-            ViewData["Page"] = page;
+            ViewData["Page"] = pageNo;
             int rowsPerPage = 10;
             //customized viewmodel with join
-            var model = await _pageService.CrudService.GetListPagedAsync(page, rowsPerPage, 1,
+            var model = await _pageService.CrudService.GetListPagedAsync(pageNo, rowsPerPage, 1,
                 "Where Name like @Query and IsDeleted=0", "Addedon desc", new { Query = "%" + query + "%" });
             return View(model);
         }
@@ -64,7 +66,9 @@ namespace Kachuwa.Admin.Controllers
                 if (model.Url.ToLower() == "landing")
                 {
 
-                    ModelState.TryAddModelError("System Url", "unable to use this url.enter another url.");
+                    ModelState.TryAddModelError("Url", "Landing url is default,used by system.");
+                    _notificationService.Notify("Warning", "Landing url is default,used by system.",
+                        NotificationType.Warning);
                     return View(model);
                 }
                 if (model.PageId == 0)
@@ -72,11 +76,13 @@ namespace Kachuwa.Admin.Controllers
                     if (!await _pageService.CheckPageExist(model.Url))
                     {
                         await _pageService.Save(model);
-                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                        _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                     }
                     else
                     {
-                        ModelState.TryAddModelError("Existing Url", "url is already in use.");
+                        ModelState.AddModelError("", "url is already in use.");
+                        _notificationService.Notify("Alert", "Url is already in use.",
+                            NotificationType.Warning);
                         return View(model);
                     }
 
@@ -111,7 +117,7 @@ namespace Kachuwa.Admin.Controllers
             }
             else
             {
-                ViewData["Layout"] = (LayoutContent) JsonConvert.DeserializeObject<LayoutContent>(model.ContentConfig);
+                ViewData["Layout"] = (LayoutContent)JsonConvert.DeserializeObject<LayoutContent>(model.ContentConfig);
             }
             return View(model);
         }
@@ -133,7 +139,12 @@ namespace Kachuwa.Admin.Controllers
         public async Task<IActionResult> Edit([FromRoute]int pageId)
         {
             var model = await _pageService.Get(pageId);
-            model.Url = "/" + model.Url;
+            if (model.IsBackend)
+            {
+                _notificationService.Notify("Alert", "Backed pages are not editable.", NotificationType.Warning);
+                return RedirectToAction("Index");
+            }
+            model.Url = model.Url;
             return View(model);
         }
 
@@ -147,7 +158,9 @@ namespace Kachuwa.Admin.Controllers
                 if (model.Url.ToLower() == "landing")
                 {
 
-                    ModelState.TryAddModelError("System Url", "unable to use this url.enter another url.");
+                    ModelState.TryAddModelError("URL", "Landing url is default,used by system.");
+                    _notificationService.Notify("Warning", "Landing url is default,used by system.",
+                        NotificationType.Warning);
                     return View(model);
                 }
                 if (model.PageId != 0)
@@ -155,18 +168,20 @@ namespace Kachuwa.Admin.Controllers
                     if (model.IsNew == false && model.OldUrl == model.Url)
                     {
                         await _pageService.Save(model);
-                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                        _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                     }
                     else
                     {
                         if (!await _pageService.CheckPageExist(model.Url))
                         {
                             await _pageService.Save(model);
-                            _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                            _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                         }
                         else
                         {
-                            ModelState.TryAddModelError("Existing Url", "url is already in use.");
+                            ModelState.TryAddModelError("Url", "url is already in use.");
+                            _notificationService.Notify("Alert", "Url is already in use.",
+                                NotificationType.Warning);
                             return View(model);
                         }
 
@@ -188,15 +203,27 @@ namespace Kachuwa.Admin.Controllers
         {
             try
             {
-                var result = await _pageService.DeletePageAsync(id);
-                _notificationService.Notify("Deleted Successfully!", NotificationType.Success);
-                return Json(new { code = 200, Message = "", Data = result });
+                var pageDetail = await _pageService.CrudService.GetAsync(id);
+                if (pageDetail != null)
+                {
+                    if (pageDetail.IsBackend || pageDetail.IsSystem)
+                    {
+                        _notificationService.Notify("Warning", "Can't delete system or backend page.!", NotificationType.Warning);
+                        return Json(new { code = 403, Message = "Can't delete system or backend page.", Data = false });
+                    }
+                    var result = await _pageService.DeletePageAsync(id);
+                    _notificationService.Notify("Success", "Data deleted successfully!", NotificationType.Success);
+                    return Json(new { code = 200, Message = "", Data = result });
+                }
+                return Json(new { code = 403, Message = "Unable to delete", Data = false });
+
+
             }
             catch (Exception e)
             {
                 return Json(new { code = 200, Message = e.Message, Data = false });
             }
-           
+
         }
         [HttpPost]
         [Route("admin/page/makelanding")]
@@ -205,14 +232,14 @@ namespace Kachuwa.Admin.Controllers
             try
             {
                 var result = await _pageService.MakeLandingPage(id);
-                _notificationService.Notify("Set Landing Page Successfully!", NotificationType.Success);
-                return Json(new{code=200,Message="",Data=result});
+                _notificationService.Notify("Success", "Updated landing page successfully!", NotificationType.Success);
+                return Json(new { code = 200, Message = "", Data = result });
             }
             catch (Exception e)
             {
                 return Json(new { code = 200, Message = e.Message, Data = false });
             }
-         
+
         }
         [HttpGet]
         [Route("admin/page/modulesetting/{name}")]

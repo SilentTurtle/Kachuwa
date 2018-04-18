@@ -40,6 +40,10 @@ namespace Kachuwa.Admin.Controllers
             _diService = diService;
             _notificationService = notificationService;
         }
+        public async Task<IActionResult> Index()
+        {
+            return RedirectToAction("Web");
+        }
         public async Task<IActionResult> Security()
         {
             
@@ -70,7 +74,7 @@ namespace Kachuwa.Admin.Controllers
                 }
                 await _settingService.CrudService.UpdateAsync(model);
                 _diService.TryAddSingleton(model.To<Setting>());
-                _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                 // _diService.BuildServiceProvider(true);
                 // var asdf= serviceProvider.GetService<Setting>();
                 //_diService.TryAddSingleton(model);
@@ -79,7 +83,7 @@ namespace Kachuwa.Admin.Controllers
             }
             else
             {
-                _notificationService.Notify("Validation Error!", NotificationType.Error);
+                _notificationService.Notify("Warning", "Please enter valid values!", NotificationType.Warning);
                 ModelState.AddModelError("Invalid Setting Values","Please enter valid values");
                 return View(model);
             }

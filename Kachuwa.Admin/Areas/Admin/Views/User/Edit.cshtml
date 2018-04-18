@@ -1,6 +1,4 @@
-﻿@using System.ComponentModel
-@using Kachuwa.Identity.ViewModels
-@using Kachuwa.Form
+﻿@using Kachuwa.Form
 @using Kachuwa.KGrid
 @using Kachuwa.Web
 @model UserEditViewModel
@@ -14,8 +12,7 @@
 
             <div class="cardform-wrapper">
 
-                @(
-                                            Html.CreateKachuwaForm<UserEditViewModel>("taxrateForm", Model)
+                @(Html.CreateKachuwaForm<UserEditViewModel>("taxrateForm", Model)
                                                 .SetHeading("")
                                                 .ActionUrl("/admin/user/edit")
                                                 .CancelUrl("/admin/user")
@@ -24,93 +21,93 @@
                                                     section.Add("section1", "cardform-section", rows =>
                                                     {
                                                         rows.Add("1strow", "row", columns =>
-                                                    {
-                                                        columns.Add("left", "col-md-4", @<div class="form-description">
-                                                            <h4>User Info</h4>
-                                                            <p>general information about user</p>
-                                                        </div>);
-                                                        columns.Add("right", "col-md-8", control =>
                                                         {
-                                                            control.Add("form-control", model => model.AppUserId, FormInputControl.Hidden);
-                                                            control.Add("form-control", model => model.IdentityUserId, FormInputControl.Hidden);
+                                                            columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                <h4>User Info</h4>
+                                                                                                <p>general information about user</p>
+                                                                                            </div>);
+                                                            columns.Add("right", "col-md-8", control =>
+                                                            {
+                                                                control.Add("form-control", model => model.AppUserId, FormInputControl.Hidden);
+                                                                control.Add("form-control", model => model.IdentityUserId, FormInputControl.Hidden);
 
-                                                            control.Add("form-control", model => model.FirstName, FormInputControl.TextBox)
-                            .SetFirstParentClass("form-group")
-                            .SetSecondParentClass("col-md-6")
-                            .SetPlaceHolder("Enter First Name");
+                                                                control.Add("form-control", model => model.FirstName, FormInputControl.TextBox)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter First Name");
 
-                                                            control.Add("form-control", model => model.LastName, FormInputControl.TextBox)
-                                                               .SetFirstParentClass("form-group")
-                                                               .SetSecondParentClass("col-md-6")
-                                                               .SetPlaceHolder("Enter Last Name");
+                                                                control.Add("form-control", model => model.LastName, FormInputControl.TextBox)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter Last Name");
 
-                                                            control.Add("form-control", model => model.DOB, FormInputControl.Date)
-                                                              .SetFirstParentClass("form-group")
-                                                              .SetSecondParentClass("col-md-6")
-                                                              .SetPlaceHolder("Enter Date of Birth");
+                                                                control.Add("form-control", model => model.DOB, FormInputControl.Date)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter Date of Birth");
 
-                                                            control.Add("form-control", model => model.PhoneNumber, FormInputControl.Telephone)
-                                                            .SetFirstParentClass("form-group")
-                                                            .SetSecondParentClass("col-md-6")
-                                                            .SetPlaceHolder("Enter Date of Birth");
+                                                                control.Add("form-control", model => model.PhoneNumber, FormInputControl.Telephone)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter Date of Birth");
 
-                                                            control.Add("form-control", model => model.Bio, FormInputControl.TextArea, new { rows = 3 })
-                                                            .SetFirstParentClass("form-group")
-                                                            .SetSecondParentClass("col-md-12")
-                                                            .SetPlaceHolder("Enter Bio");
+                                                                control.Add("form-control", model => model.Bio, FormInputControl.TextArea, new {rows = 3})
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-12")
+                                                                    .SetPlaceHolder("Enter Bio");
 
-                                                            control.Add("form-control", model => model.Address, FormInputControl.TextBox)
-                                                            .SetFirstParentClass("form-group")
-                                                            .SetSecondParentClass("col-md-6")
-                                                            .SetPlaceHolder("Enter Address");
-                                                            control.Add("form-control", model => model.Email, FormInputControl.TextBox,new { disabled="disabled" })
-                                                        .SetFirstParentClass("form-group")
-                                                        .SetSecondParentClass("col-md-6")
-                                                        .SetPlaceHolder("Enter Email");
+                                                                control.Add("form-control", model => model.Address, FormInputControl.TextBox)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter Address");
+                                                                control.Add("form-control", model => model.Email, FormInputControl.TextBox, new {disabled = "disabled"})
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetPlaceHolder("Enter Email");
 
-                                                            control.Add("form-control", model => model.IsActive, FormInputControl.Switch)
-                                                                .SetFirstParentClass("form-group")
-                                                                .SetSecondParentClass("col-md-6")
-                                                                .SetDisplayName("Is Active");
+                                                                control.Add("form-control", model => model.IsActive, FormInputControl.Switch)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-6")
+                                                                    .SetDisplayName("Is Active");
 
-                                                        }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
-                                                    });
+                                                            }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                        });
                                                         rows.Add("2ndRow", "row", columns =>
                                                         {
-                                                        columns.Add("left", "col-md-4", @<div class="form-description">
-                                                                <h4>Roles</h4>
-                                                                <p>a user roles to limit access permisions.</p>
-                                                            </div>);
-                                                                columns.Add("right", "col-md-8", @<div class="col-md-12">                                                                    
-                                                                    <div class="col-md-6">
-                                                                        <label>Roles</label>
-                                                                        <div style="max-height: 200px; overflow: auto;">
-                                                                            <ul class="list-group checked-list-box" style="margin-bottom: 0px;">
-                                                                                @{
-                                                                                    /**/
-                                                                                        var counter = 0;
+                                                            columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                <h4>Roles</h4>
+                                                                                                <p>a user roles to limit access permisions.</p>
+                                                                                            </div>);
+                                                            columns.Add("right", "col-md-8", @<div class="col-md-12">
+                                                                                                 <div class="col-md-6">
+                                                                                                     <label>Roles</label>
+                                                                                                     <div style="max-height: 200px; overflow: auto;">
+                                                                                                         <ul class="list-group checked-list-box" style="margin-bottom: 0px;">
+                                                                                                             @{
+                                                                                                                 /**/
+                                                                                                                 var counter = 0;
 
-                                                                                }
-                                                                                @foreach (var role in Model.UserRoles)
-                                                                                    {
-                                                                                    <li class="list-group-item" data-name="UserRoles[@counter]" data-selected="@role.IsSelected.ToString().ToLower()" data-val="@role.RoleId">
+                                                                                                             }
+                                                                                                             @foreach (var role in Model.UserRoles)
+                                                                                                             {
+                                                                                                                 <li class="list-group-item" data-name="UserRoles[@counter]" data-selected="@role.IsSelected.ToString().ToLower()" data-val="@role.RoleId">
 
-                                                                                        @role.Name
+                                                                                                                     @role.Name
 
-                                                                                    </li>
+                                                                                                                 </li>
 
-                                                                                        counter++;
-                                                                                    }
+                                                                                                                 counter++;
+                                                                                                             }
 
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                                                         </ul>
+                                                                                                     </div>
+                                                                                                 </div>
+                                                                                             </div>
                                                                 ).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
-                                                                });
-                                                                                                        })
-                                                                                                                                    .SetHeading("Add New User");
-                                                                                                    }))
+                                                        });
+                                                    })
+                                                        .SetHeading("Add New User");
+                                                }))
             </div>
         </div>
     </div>

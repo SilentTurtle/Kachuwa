@@ -36,14 +36,14 @@ namespace Kachuwa.Admin.Controllers
         }
 
         #region User Crud
-        [Route("admin/user/page/{page?}")]
+        [Route("admin/user/page/{pageNo?}")]
         [Route("admin/user")]//default make it at last
-        public async Task<IActionResult> Index([FromRoute]int page = 1, [FromQuery]string query = "")
+        public async Task<IActionResult> Index([FromRoute]int pageNo = 1, [FromQuery]string query = "")
         {
-            ViewData["Page"] = page;
+            ViewData["Page"] = pageNo;
             int rowsPerPage = 10;
             //customized viewmodel with join
-            var model = await _appUserService.AppUserCrudService.GetListPagedAsync(page, rowsPerPage, 1,
+            var model = await _appUserService.AppUserCrudService.GetListPagedAsync(pageNo, rowsPerPage, 1,
                 "Where FirstName like @Query and IsDeleted=0", "Addedon desc", new { Query = "%" + query + "%" });
             return View(model);
         }
@@ -87,7 +87,7 @@ namespace Kachuwa.Admin.Controllers
                     }
                     else
                     {
-                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                        _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                         return RedirectToAction("Index");
                     }
                 }
@@ -134,7 +134,7 @@ namespace Kachuwa.Admin.Controllers
                     }
                     else
                     {
-                        _notificationService.Notify("Saved Successfully!", NotificationType.Success);
+                        _notificationService.Notify("Success", "Data has been saved successfully!", NotificationType.Success);
                         return RedirectToAction("Index");
                     }
                 }
@@ -155,7 +155,7 @@ namespace Kachuwa.Admin.Controllers
             try
             {
                 var result = await _appUserService.DeleteUserAsync(id);
-                _notificationService.Notify("Deleted Successfully!", NotificationType.Success);
+                _notificationService.Notify("Success","Data deleted successfully!", NotificationType.Success);
                 return Json(new { code = 200, Message = "", Data = result });
             }
             catch (Exception e)

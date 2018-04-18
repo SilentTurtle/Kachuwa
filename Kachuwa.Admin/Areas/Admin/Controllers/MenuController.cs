@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kachuwa.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
     [Authorize(PolicyConstants.PagePermission)]
     public class MenuController : BaseController
     {
