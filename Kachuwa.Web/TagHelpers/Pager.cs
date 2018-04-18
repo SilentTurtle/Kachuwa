@@ -5,7 +5,7 @@ namespace Kachuwa.Web
     public class Pager
     {
 
-        public Pager(int totalItems, int? page, int pageSize = 10)
+        public Pager(int totalItems, int? page, int pageSize = 10,string api="/")
         {
             // calculate total, start and end pages
             var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
@@ -32,6 +32,7 @@ namespace Kachuwa.Web
             TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;
+            Api = api;
         }
 
         public void Reset()

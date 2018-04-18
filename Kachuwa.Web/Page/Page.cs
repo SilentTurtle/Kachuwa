@@ -23,7 +23,13 @@ namespace Kachuwa.Web
         public string ContentConfig { get; set; }
         public bool UseMasterLayout { get; set; }
         public bool IsPublished { get; set; }
-       
+
+        [AutoFill(false)]
+        public bool IsBackend { get; set; }
+
+        [AutoFill(false)]
+        public bool IsSystem { get; set; }
+
         [AutoFill(AutoFillProperty.CurrentDate)]
         public DateTime LastModified { get; set; }
        
@@ -59,15 +65,11 @@ namespace Kachuwa.Web
         public long PageId { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        [Remote("CheckUrlExist", "Page", HttpMethod = "POST", ErrorMessage = "Url already in use!", AdditionalFields = "IsNew,OldUrl")]
-
-        public new string Url { get; set; }
         public string Content { get; set; }
         public bool UseMasterLayout { get; set; }
         public bool IsPublished { get; set; }
-
         public bool IsNew { get; set; }
         public string OldUrl { get; set; }
+        public bool IsBackend { get; set; }
     }
 }

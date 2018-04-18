@@ -66,8 +66,8 @@ namespace Kachuwa.Web
                 await db.OpenAsync();
                 var result =
                     await db.QueryFirstAsync<PageViewModel>(
-                        "select p.PageId,p.Name,p.Url,p.UseMasterLayout,p.IsActive,p.IsPublished,s.SEOId,s.MetaDescription,s.MetaTitle,s.Image from Page as p left join Seo as s on p.PageId=s.PageId and s.SeoType='page' where  p.IsDeleted = true and p.PageId = @PageId",
-                        new { PageId = pageId });
+                        "select p.PageId,p.Name,p.Url,p.UseMasterLayout,p.IsBackend,p.IsActive,p.IsPublished,s.SEOId,s.MetaDescription,s.MetaTitle,s.Image from Page as p left join Seo as s on p.PageId=s.PageId and s.SeoType='page' where  p.IsDeleted = @IsDeleted and p.PageId = @PageId",
+                        new { IsDeleted=false, PageId = pageId });
                 return result;
             }
         }
@@ -105,6 +105,7 @@ namespace Kachuwa.Web
                                 int pageId = await CrudService.InsertAsync<int>(db, page, tran, 30);
                                 seo.AutoFill();
                                 seo.PageId = pageId;
+                                seo.Url = model.Url.StartsWith("/") ? model.Url : "/" + model.Url;
                                 int seoId = await _seoService.Seo.InsertAsync<int>(db, seo, tran, 30);
                                 //return newProductId;
                                 model.PageId = pageId;
@@ -124,7 +125,7 @@ namespace Kachuwa.Web
                                 page.AutoFill();
                                 await CrudService.UpdateAsync(db, page, tran, 30);
                                 var seo = model.To<SEO>();
-                                seo.Url = model.Url;
+                                seo.Url = model.Url.StartsWith("/") ? model.Url :"/"+ model.Url;
                                 seo.LastUrl = model.Url != model.OldUrl ? model.OldUrl : model.Url;
                                 seo.AutoFill();
                                 seo.PageId = (int)model.PageId;
@@ -171,33 +172,40 @@ namespace Kachuwa.Web
             }
         }
 
-        public async Task<bool> DeletePageAsync(int pageId)
+        public async Task<bool> DeletePageAsync(long pageId)
         {
             var page = await CrudService.GetAsync(pageId);
             if (page.Url.ToLower() == "landing")
             {
-
                 throw new Exception( "unable to use this url.enter another url.");
             }
             var dbFactory = DbFactoryProvider.GetFactory();
             using (var db = (SqlConnection)dbFactory.GetConnection())
             {
                 await db.OpenAsync();
-                var result = await db.ExecuteAsync("Update Page Set IsDeleted=true, IsActive=false Where PageId=@id", new { id = pageId });
-                var seoresult = await db.ExecuteAsync("Update Seo Set IsDeleted=true, IsActive=falseWhere  Url=@Url", new { Url = page.Url });
+                var result = await db.ExecuteAsync("Update Page Set IsDeleted=@IsDeleted, IsActive=@IsActive Where PageId=@PageId", new { IsActive=false, IsDeleted =true, PageId = pageId });
+                var seoresult = await db.ExecuteAsync("Update Seo Set IsDeleted=@IsDeleted, IsActive=@IsActive Where  Url=@Url", new { IsActive = false, IsDeleted =true, Url = page.Url });
                 return true;
             }
 
         }
 
-        public async Task<bool> MakeLandingPage(int pageId)
+        public async Task<bool> MakeLandingPage(long pageId)
         {
             var page = await CrudService.GetAsync(pageId);
             var dbFactory = DbFactoryProvider.GetFactory();
             using (var db = (SqlConnection)dbFactory.GetConnection())
             {
                 await db.OpenAsync();
-                var result = await db.ExecuteAsync("Update Page set IsDeleted=true, IsActive=false,Ispublished=false Where Url='landing';  Update Page set Url='landing',IsDeleted=false, IsActive=true,Ispublished=true  Where PageId=@id", new { id = pageId });
+                var result = await db.ExecuteAsync(" Update Page set Url=@RandomUrl Where Url='landing'; " +
+                                                   " Update Page set Url='landing',IsDeleted=false, IsActive=true,Ispublished=Ispublished " +
+                                                   " Where PageId=@PageId", new
+                {
+                    RandomUrl = "landing-" + new Random().Next(5000, 99999),
+                    IsDeleted = false,
+                    Ispublished = true,
+                    PageId = pageId
+                                                   });
                 return true;
             }
         }

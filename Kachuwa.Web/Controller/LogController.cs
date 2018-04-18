@@ -21,7 +21,7 @@ namespace Kachuwa.Web
             var dailyLogs = LoggerService.GetTodaysLogs(offset, limit);
             return Json(dailyLogs.Logs);
         }
-        [Authorize("CheckUser")]
+      
         [Route("log/ByDate")]
         [Route("log/ByDate/page")]
         [Route("log/ByDate/test")]

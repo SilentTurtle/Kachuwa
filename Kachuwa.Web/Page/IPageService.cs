@@ -12,7 +12,7 @@ namespace Kachuwa.Web
         Task<PageViewModel> Get(int pageId);
         string GetPageNamespaces(bool includeMasterLayout);
         Task<bool> SavePageLayout(LayoutContent content);
-        Task<bool> DeletePageAsync(int pageId);
-        Task<bool> MakeLandingPage(int pageId);
+        Task<bool> DeletePageAsync(long pageId);
+        Task<bool> MakeLandingPage(long pageId);
     }
 }

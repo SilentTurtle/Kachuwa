@@ -1,13 +1,11 @@
-﻿@model  Kachuwa.Web.Pager
+﻿@using Kachuwa.Web
+@model Kachuwa.Web.Pager
 @{
-    var query = this.Context.Request.Query["query"];
+    var query = ContextResolver.Context.Request.QueryString.Value;
     if (string.IsNullOrEmpty(query))
     {
         query = "";
     }
-    else
-    {
-        query = "?query=" + query; }
 }
 <!-- pager -->
 @if (Model.EndPage > 1)
@@ -23,10 +21,10 @@
             </li>
         }
 
-        @for (var page = Model.StartPage; page <= Model.EndPage; page++)
+        @for (var xpage = Model.StartPage; xpage <= Model.EndPage; xpage++)
         {
-            <li class="@(page == Model.CurrentPage ? Model.ActiveClass : "")">
-                <a href="@Model.Api/@page@query">@page</a>
+            <li class="@(xpage == Model.CurrentPage ? Model.ActiveClass : "")">
+                <a href="@Model.Api/@xpage@query">@xpage</a>
             </li>
         }
 

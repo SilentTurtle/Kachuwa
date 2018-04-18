@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Data.Crud.FormBuilder;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Web.Model
 {
@@ -24,6 +25,7 @@ namespace Kachuwa.Web.Model
        
         public string LastUrl { get; set; }
         [Required]
+        //[Remote("CheckUrlExist", "Page", HttpMethod = "POST", ErrorMessage = "Url already in use!", AdditionalFields = "IsNew,OldUrl")]
         public string Url { get; set; }
         public int PageId { get; set; }
         public string PageName { get; set; }

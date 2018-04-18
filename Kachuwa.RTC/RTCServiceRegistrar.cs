@@ -17,7 +17,7 @@ namespace Kachuwa.RTC
         {
             serviceCollection.AddSingleton<IRTCConnectionManager,RTCConnectionManager>();
             serviceCollection.AddSingleton<ITagHelperComponent, RTCNotificationTagHelper>();
-            serviceCollection.AddSingleton<INotificationService, RTCNotificationService>();
+            //serviceCollection.AddSingleton<INotificationService, RTCNotificationService>();
         }
     }
 }

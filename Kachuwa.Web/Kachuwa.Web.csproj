@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Pagination\Default.cshtml" />
     <None Remove="Optimizer\smidge.json" />
     <None Remove="Views\Shared\_Installer.cshtml" />
   </ItemGroup>
@@ -40,13 +41,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Components\Pagination\Default.cshtml" />
     <EmbeddedResource Include="Components\NotificationBar\Default.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Shared\_Installer.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Shared\_Pagination.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
