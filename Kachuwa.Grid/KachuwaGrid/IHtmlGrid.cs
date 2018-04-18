@@ -1,4 +1,5 @@
 ﻿using System;
+using Kachuwa.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Razor;
 
@@ -8,7 +9,7 @@ namespace Kachuwa.KGrid
     {
         IKachuwaGrid<T> Grid { get; }
         string PartialViewName { get; set; }
-        IHtmlGrid<T> Pagination(Action<KachuwaPager> builder);
+        IHtmlGrid<T> Pagination(Action<Pager> builder);
         IHtmlGrid<T> Build(Action<IKachuwaGridColumnsOf<T>> builder);
         //IHtmlGrid<T> ProcessWith(IGridProcessor<T> processor);
 

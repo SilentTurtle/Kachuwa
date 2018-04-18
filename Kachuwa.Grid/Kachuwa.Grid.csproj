@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Components\KachuwaPagination\Default.cshtml" />
     <EmbeddedResource Include="resources\css\kgridstyle.css" />
     <EmbeddedResource Include="resources\css\kgridstyle.min.css" />
     <EmbeddedResource Include="resources\js\kachuwagrid.js" />

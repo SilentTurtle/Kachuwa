@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Kachuwa.Grid;
+using Kachuwa.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,7 +28,7 @@ namespace Kachuwa.KGrid
         IKachuwaGridRows<Object> Rows { get; }
         IKachuwaGridCommands<IKachuwaGridCommand> Commands { get; }
 
-        KachuwaPager Pager { get; set; }
+        Pager Pager { get; set; }
         bool UseCardView { get; set; }
         string SearchBarClasses { get; set; }
     }
@@ -60,7 +61,7 @@ namespace Kachuwa.KGrid
         
 
         public IKachuwaGridRowsOf<T> Rows { get; set; }
-        public KachuwaPager Pager { get; set; }
+        public Pager Pager { get; set; }
         public bool UseCardView { get; set; } = false;
 
         public KachuwaGrid(IEnumerable<T> source)
@@ -72,7 +73,7 @@ namespace Kachuwa.KGrid
             Commands = new KachuwaGridCommands<T>(this);
            var row = Rows.FirstOrDefault();
            int rowTotal=row==null?0: row.GetRowTotal();
-           Pager = new KachuwaPager(rowTotal, 1);
+           Pager = new Pager(rowTotal, 1);
         }
         public string NoDataText { get; set; }
         public string  SearchBarClasses { get; set; }

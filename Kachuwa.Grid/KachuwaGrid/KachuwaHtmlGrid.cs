@@ -24,7 +24,7 @@ namespace Kachuwa.KGrid
             Grid = grid;
         }
         
-          public virtual IHtmlGrid<T> Pagination(Action<KachuwaPager> builder)
+          public virtual IHtmlGrid<T> Pagination(Action<Pager> builder)
         {
             builder(Grid.Pager);
             Grid.Pager.Reset();
@@ -82,9 +82,9 @@ namespace Kachuwa.KGrid
         }
 
 
-        public virtual IHtmlGrid<T> Pageable(Action<KachuwaPager> builder)
+        public virtual IHtmlGrid<T> Pageable(Action<Pager> builder)
         {
-            Grid.Pager = new KachuwaPager(100,1);
+            Grid.Pager = new Pager(100,1);
             builder(Grid.Pager);
             
 
