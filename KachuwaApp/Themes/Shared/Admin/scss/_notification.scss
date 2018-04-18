@@ -3,6 +3,8 @@
 .notification {
     display: inherit;
     width: 100%;
+    position:fixed;
+    bottom:0;
     /* To initially hide the notification .... can be commented if not required.  */
 }
 

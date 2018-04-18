@@ -1,4 +1,5 @@
-﻿@using Kachuwa.Web.Optimizer
+﻿@using Kachuwa.Web
+@using Kachuwa.Web.Optimizer
 @inject IKachuwaBundler  bundler
 <!DOCTYPE html>
 <html>
@@ -16,9 +17,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2017 - Kachuwa Framework</p>
+            <p>&copy; 2018 - Kachuwa Framework</p>
         </footer>
-
     @RenderSection("Scripts", required: false)
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>

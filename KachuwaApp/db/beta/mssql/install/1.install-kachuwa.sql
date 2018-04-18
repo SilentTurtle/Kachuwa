@@ -115,6 +115,7 @@ CREATE TABLE dbo.Page
 	ContentConfig							nvarchar(max)  null,
 	UseMasterLayout							bit default(0) not null,
     IsPublished								bit default(0) not null,
+	IsBackend								bit default(0) not null,
 	Culture									nvarchar (10)  not null,
 	LastModified							datetime NOT NULL,
 	LastRequested							datetime NULL,

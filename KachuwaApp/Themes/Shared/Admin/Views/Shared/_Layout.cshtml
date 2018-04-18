@@ -13,8 +13,8 @@
     <link href="~/Themes/Shared/Admin/css/theme.min.css" rel="stylesheet" />
     @*<script src="/lib/jquery/dist/jquery.min.js"></script>
         <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>*@
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link href="~/lib/font-awesome/css/font-awesome.min.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  rel="stylesheet"/>
+    <link href="~/lib/font-awesome/css/font-awesome.min.css"  rel="stylesheet" />
     <script src="/lib/moment/moment.js"></script>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -27,20 +27,22 @@
     @RenderSection("Stylesheet", required: false)
 </head>
 <body class="dashboard">
-    <div class="wrapper admin-wrapper">
-        <!-- Menu -->
-        <component name="AdminMenu"></component>
+<div class="wrapper admin-wrapper">
+    <!-- Menu -->
+    <component name="AdminMenu"></component>
 
-        <div class="side-body">
-            <!-- Top Navigation Menu -->
-            <component name="TopBar"></component>
+    <div class="side-body">
+        <!-- Top Navigation Menu -->
+        <component name="TopBar"></component>
+            
+
+        <div class="content-wrapper">
+            @RenderBody()
+            
             <component name="NotificationBar"></component>
-
-            <div class="content-wrapper">
-                @RenderBody()
-            </div>
         </div>
     </div>
+</div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     @*@bundler.BundleJs("theme-footer-js", new[]{ "/Themes/Shared/admin/js/peity/jquery.peity.min.js",
         "/lib/jquery.nicescroll/dist/jquery.nicescroll.min.js",
