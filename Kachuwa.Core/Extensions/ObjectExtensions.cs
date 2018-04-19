@@ -176,6 +176,8 @@ namespace Kachuwa.Extensions
                 Type newT = Nullable.GetUnderlyingType(tPropertyType) ?? tPropertyType;
                 string paramType = newT.FullName.ToLower();
 
+                if (paramType.Equals("system.int32[]")) continue;
+
                 //checking and handling nullable type
                 if (newT.IsArray && newT.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {

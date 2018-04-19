@@ -85,7 +85,14 @@ namespace Kachuwa.Log
                     Status = messageFunc(),
                     Error = obj == null
                         ? ""
-                        : ((Exception)obj).Source
+                        : JsonConvert.SerializeObject(new {
+                            s =((Exception)obj).Source ,
+                            st = ((Exception)obj).StackTrace,
+                                ie = ((Exception)obj).InnerException,
+                                data = ((Exception)obj).Data,
+                                ((Exception)obj).HelpLink
+                        }
+                        )
                 };
                 string json = JsonConvert.SerializeObject(log);
 
