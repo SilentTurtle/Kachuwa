@@ -24,19 +24,19 @@ namespace Kachuwa.Web.Security
             var actionProvider = httpContext.RequestServices.GetService<IActionDescriptorCollectionProvider>();
             var permissions = await pageService.GetPermissionsFromCache();
             var cacheService = httpContext.RequestServices.GetService<ICacheService>();
-            var routes = await cacheService.GetAsync<IEnumerable<RouteCollectionViewModel>>(_cachingKey,async() =>
-             {
-                 return actionProvider.ActionDescriptors.Items.Where(z => z.AttributeRouteInfo != null).Select(y => new
-             RouteCollectionViewModel
-                 {
-                     Action = y.RouteValues["Action"],
-                     Controller = y.RouteValues["Controller"],
-                     Area = y.RouteValues["Area"]==null?"":y.RouteValues["Area"],
-                     Name = y.AttributeRouteInfo.Name,
-                     Template = y.AttributeRouteInfo.Template
+            var routes = await cacheService.GetAsync<IEnumerable<RouteCollectionViewModel>>(_cachingKey, async () =>
+              {
+                  return actionProvider.ActionDescriptors.Items.Where(z => z.AttributeRouteInfo != null).Select(y => new
+              RouteCollectionViewModel
+                  {
+                      Action = y.RouteValues["Action"],
+                      Controller = y.RouteValues["Controller"],
+                      Area = y.RouteValues["Area"] == null ? "" : y.RouteValues["Area"],
+                      Name = y.AttributeRouteInfo.Name,
+                      Template = y.AttributeRouteInfo.Template
 
-                 }).ToList();
-             });
+                  }).ToList();
+              });
 
             var actionAccesser = ContextResolver.Context.RequestServices.GetService<IActionContextAccessor>();
             _urlHelper = new UrlHelper(actionAccesser.ActionContext);
@@ -46,14 +46,14 @@ namespace Kachuwa.Web.Security
             //route collection will have only route attribute used
             var currentActionDetails = routes.Where(c => c.Action.ToLower() == ax.ToLower() && c.Controller.ToLower() == ctrl.ToLower() && c.Area.ToLower() == ara.ToLower());
             if (currentActionDetails.Any())
-            {   
+            {
                 var templates = currentActionDetails.Select(x => x.Template).ToArray();
                 var userRoles = context.User.Identity.GetRoles();
                 //checking controller other actions which are sub activities of a page
                 //ie if index has permission then allowing other actions as well
                 if (ax.ToLower() != "index")
                 {
-                   var indexRootActionUrl= _urlHelper.Action("Index", ctrl, new {area = ara});
+                    var indexRootActionUrl = _urlHelper.Action("Index", ctrl, new { area = ara });
                     if (indexRootActionUrl.StartsWith("/"))
                     {
                         indexRootActionUrl = indexRootActionUrl.TrimStart('/');
@@ -78,7 +78,7 @@ namespace Kachuwa.Web.Security
                             break;
                         }
                     }
-                   
+
                 }
 
                 var pagePermissions = permissions.Where(p =>
@@ -93,44 +93,37 @@ namespace Kachuwa.Web.Security
                 });
 
                 var userPagePermision = pagePermissions.Where(z => userRoles.Contains(z.RoleName));
-                foreach (var p in userPagePermision)
+                if (userPagePermision.Any(p => p.AllowAccessForAll || p.AllowAccess))
                 {
-                    if (p.AllowAccessForAll || p.AllowAccess)
-                    {
-                        context.Succeed(requirement);
-                        break;
-                    }
+                    context.Succeed(requirement);
                 }
 
 
             }
             else
-            {
-                //no custom routes inside controllers
-                string url;
-                if (ax.ToLower() == "index")
-                {
-                    url = $"{ara}/{ctrl}";
-                }
-                else
-                {
-                    url = $"{ara}/{ctrl}/{ax}";
-                }
+            {//if no custom routes are used in controller 
+                //ie:checking default or index route only
                 var userRoles = context.User.Identity.GetRoles();
-                var pagePermissions = permissions.Where(p => p.Url.ToLower()== url.ToLower());
+                //no custom routes inside controllers
 
-                var userPagePermision = pagePermissions.Where(z => userRoles.Contains(z.RoleName));
-                foreach (var p in userPagePermision)
+                var indexRootActionUrl = $"{ara}/{ctrl}";//_urlHelper.Action("Index", ctrl, new { area = ara });
+                if (indexRootActionUrl.StartsWith("/"))
                 {
-                    if (p.AllowAccessForAll || p.AllowAccess)
-                    {
-                        context.Succeed(requirement);
-                        break;
-                    }
+                    indexRootActionUrl = indexRootActionUrl.TrimStart('/');
                 }
+
+                var pagerootPermissions = permissions.Where(p =>
+                    p.Url.ToLower() == indexRootActionUrl.ToLower());
+
+                var userrootPagePermision = pagerootPermissions.Where(z => userRoles.Contains(z.RoleName));
+                if (userrootPagePermision.Any(p => p.AllowAccessForAll || p.AllowAccess))
+                {
+                    context.Succeed(requirement);
+                }
+
 
             }
-          
+
         }
     }
 }
