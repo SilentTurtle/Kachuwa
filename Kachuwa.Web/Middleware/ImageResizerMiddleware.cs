@@ -6,8 +6,8 @@ using System.Text;
 using Kachuwa.Caching;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Kachuwa.Log;
 using SkiaSharp;
 
 namespace Kachuwa.Web.Middleware
@@ -16,7 +16,7 @@ namespace Kachuwa.Web.Middleware
     {
         struct ResizeParams
         {
-            public bool hasParams;
+            public bool hasParams ;
             public int w;
             public int h;
             public bool autorotate;
@@ -41,8 +41,8 @@ namespace Kachuwa.Web.Middleware
         }
 
         private readonly RequestDelegate _next;
-        private readonly ILogger<ImageResizerMiddleware> _logger;
         private readonly IHostingEnvironment _env;
+        private readonly ILogger _logger;
         private readonly ICacheService _cacheService;
 
         private static readonly string[] suffixes = new string[] {
@@ -52,7 +52,7 @@ namespace Kachuwa.Web.Middleware
         };
 
         public ImageResizerMiddleware(RequestDelegate next, 
-            IHostingEnvironment env, ILogger<ImageResizerMiddleware> logger,
+            IHostingEnvironment env, ILogger logger,
             ICacheService cacheService)
         {
             _next = next;
@@ -66,23 +66,11 @@ namespace Kachuwa.Web.Middleware
             var path = context.Request.Path;
 
             // hand to next middleware if we are not dealing with an image
-            if (context.Request.Query.Count == 0 || !IsImagePath(path))
+            if ( !IsImagePath(path))//context.Request.Query.Count == 0 ||
             {
                 await _next.Invoke(context);
                 return;
             }
-
-            // hand to next middleware if we are dealing with an image but it doesn't have any usable resize querystring params
-            var resizeParams = GetResizeParams(path, context.Request.Query);
-            if (!resizeParams.hasParams || (resizeParams.w == 0 && resizeParams.h == 0))
-            {
-                await _next.Invoke(context);
-                return;
-            }
-
-            // if we got this far, resize it
-            _logger.LogInformation($"Resizing {path.Value} with params {resizeParams}");
-
             // get the image location on disk
             var imagePath = Path.Combine(
                 _env.WebRootPath,
@@ -95,17 +83,62 @@ namespace Kachuwa.Web.Middleware
                 await _next.Invoke(context);
                 return;
             }
+            // hand to next middleware if we are dealing with an image but it doesn't have any usable resize querystring params
+            var resizeParams = GetResizeParams(path, context.Request.Query);
+            if (!resizeParams.hasParams || (resizeParams.w == 0 && resizeParams.h == 0))
+            {
+                var oriImage = GetOriginalImage(imagePath, lastWriteTimeUtc);
 
+                // write to stream
+                context.Response.ContentType = resizeParams.format == "png" ? "image/png" : "image/jpeg";
+                context.Response.ContentLength = oriImage.Size;
+                await context.Response.Body.WriteAsync(oriImage.ToArray(), 0, (int)oriImage.Size);
+
+                // cleanup
+                oriImage.Dispose();
+                return;
+            }
+
+            // if we got this far, resize it
+            _logger.Log(LogType.Trace,()=> $"Resizing {path.Value} with params {resizeParams}");
             var imageData = GetImageData(imagePath, resizeParams, lastWriteTimeUtc);
-
             // write to stream
-            context.Response.ContentType = resizeParams.format == "png" ? "image/png" : "image/jpeg";
+            context.Response.ContentType = Path.GetExtension(imagePath) == "png" ? "image/png" : "image/jpeg";
             context.Response.ContentLength = imageData.Size;
             await context.Response.Body.WriteAsync(imageData.ToArray(), 0, (int)imageData.Size);
 
             // cleanup
             imageData.Dispose();
 
+        }
+
+        private SKData GetOriginalImage(string imagePath,DateTime lastWriteTimeUtc)
+        {
+            // check cache and return if cached
+
+            var cacheKey = (imagePath.GetHashCode() + lastWriteTimeUtc.ToBinary()).ToString();
+
+
+            SKData imageData;
+            byte[] imageBytes;
+            bool isCached = true;
+            imageBytes = _cacheService.Get<byte[]>(cacheKey, () =>
+            {
+                isCached = false;
+                SKCodecOrigin origin; // this represents the EXIF orientation
+                var bitmap = LoadBitmap(File.OpenRead(imagePath), out origin); // always load as 32bit (to overcome issues with indexed color)
+                // encode
+                var resizedImage = SKImage.FromBitmap(bitmap);
+                var encodeFormat = Path.GetExtension(imagePath)== "png" ? SKEncodedImageFormat.Png : SKEncodedImageFormat.Jpeg;
+                imageData = resizedImage.Encode(encodeFormat, 100);
+                // cleanup
+                resizedImage.Dispose();
+                bitmap.Dispose();
+                // cache the result
+                return imageData.ToArray();
+            });
+            return SKData.CreateCopy(imageBytes);
+           
         }
 
         private SKData GetImageData(string imagePath, ResizeParams resizeParams, DateTime lastWriteTimeUtc)
@@ -353,7 +386,7 @@ namespace Kachuwa.Web.Middleware
             if (path == null || !path.HasValue)
                 return false;
 
-            return suffixes.Any(x => x.EndsWith(x, StringComparison.OrdinalIgnoreCase));
+            return suffixes.Any(x=> path.ToString().EndsWith(x, StringComparison.OrdinalIgnoreCase));
         }
 
         private ResizeParams GetResizeParams(PathString path, IQueryCollection query)

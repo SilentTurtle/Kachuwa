@@ -66,7 +66,7 @@ namespace Kachuwa.Web
             else
             {                
                 //pass pageurl
-                var result = new PageFileInfo(_pageService, _log, _cacheService, kpageUrl.ToString().DecodeUrl(), subpath);
+                var result = new PageFileInfo(_pageService, _log, _cacheService, kpageUrl.ToString().ToUrl(), subpath);
                 return result.Exists ? result as IFileInfo : new NotFoundFileInfo(subpath);
             }
 

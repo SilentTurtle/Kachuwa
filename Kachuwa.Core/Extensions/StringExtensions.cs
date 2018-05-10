@@ -93,9 +93,14 @@ namespace Kachuwa.Extensions
                 return false;
             }
         }
-        public static string DecodeUrl(this string url)
+        public static string ToUrl(this string title)
         {
-            return url;//Replace("-", " ");
+            return title.Replace(" ", "-");
+        }
+
+        public static string UrlToTitle(this string url)
+        {
+            return url.Replace("-", " ");
         }
 
         public static bool IsIPv6(this string ipAddress)

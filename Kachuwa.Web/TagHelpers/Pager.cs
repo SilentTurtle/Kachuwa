@@ -80,5 +80,6 @@ namespace Kachuwa.Web
         public string ActiveClass { get; set; } = "active";
         public string LastClass { get; set; } = "lastpage";
         public string FirstClass { get; set; } = "firstpage";
+        public string ItemClass { get; set; } = "";
     }
 }

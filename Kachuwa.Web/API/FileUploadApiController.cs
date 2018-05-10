@@ -7,7 +7,6 @@ using Kachuwa.Storage;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Kachuwa.Web.API
 {
@@ -18,7 +17,8 @@ namespace Kachuwa.Web.API
         private readonly IStorageProvider _storageProvider;
         public ILogger _logger { get; private set; }
 
-        public FileUploadApiController(IHostingEnvironment hostingEnvironment, ILogger logger, IStorageProvider storageProvider)
+        public FileUploadApiController(IHostingEnvironment hostingEnvironment, ILogger logger, 
+            IStorageProvider storageProvider)
         {
             _hostingEnvironment = hostingEnvironment;
             _storageProvider = storageProvider;
