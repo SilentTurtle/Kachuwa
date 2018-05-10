@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Kachuwa.Data.Crud;
 using Kachuwa.Data.Crud.Attribute;
-using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Web.Theme;
 
 namespace Kachuwa.HtmlContent.Model
@@ -18,7 +17,7 @@ namespace Kachuwa.HtmlContent.Model
         
         [Required]
         public string KeyName { get; set; }
-        [Editor]
+        
         public string Content { get; set; }
 
         public bool IsMarkDown { get; set; }

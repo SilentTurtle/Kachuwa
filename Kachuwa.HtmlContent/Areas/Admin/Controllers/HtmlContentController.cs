@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Kachuwa.Data.Crud.FormBuilder;
+using Kachuwa.Data.Extension;
 using Kachuwa.HtmlContent.Service;
 using Kachuwa.Web;
 using Kachuwa.Web.Model;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kachuwa.HtmlContent.Controllers
 {
     [Area("Admin")]
-    [Authorize(PolicyConstants.PagePermission)]
+   //// [Authorize(PolicyConstants.PagePermission)]
     public class HtmlContentController : BaseController
     {
         private readonly IHtmlContentService _htmlContentService;
