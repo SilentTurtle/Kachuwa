@@ -1,0 +1,60 @@
+﻿@using Kachuwa.Identity.Models
+@using Kachuwa.Web
+@using Kachuwa.KGrid
+@using Kachuwa.Localization
+@inject ILocaleResourceProvider LocaleResource
+@model IEnumerable<Kachuwa.Web.Model.Audit>
+@{
+    ViewData["Title"] = "Audit";
+    LocaleResource.LookUpGroupAt("Audit");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading dflex space-between">
+                            <h2 class="panel-title">@LocaleResource.Get("Audit.Title")</h2>
+
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                                                  .CreateKachuwaGrid(Model)
+                                                  .Build(columns =>
+                                                  {
+                                                      columns.Add(model => model.Url).SetTitle(LocaleResource.Get("Audit.Url"));
+                                                      columns.Add(model => model.Action).SetTitle(LocaleResource.Get("Audit.Action"));
+                                                      columns.Add(model => new{model.UserName,model.Role}).SetTitle(LocaleResource.Get("Audit.UserName"))
+                                                          .Encoding(false)
+                                                          .Template("<p>{{UserName}}</p><p>{{Role}}</p>");
+                                                      columns.Add(model => model.IpAddress).SetTitle(LocaleResource.Get("Audit.IpAddress"));
+                                                      columns.Add(model => model.UserAgent).SetTitle(LocaleResource.Get("Audit.UserAgent"));
+                                                      columns.Add(model =>new{ model.Duration}).SetTitle(LocaleResource.Get("Audit.Duration"))
+                                                          .Encoding(false)
+                                                          .Template("<p>{{Duration}}ms</p>");
+                                                      columns.Add(model => model.AddedOn).SetTitle(LocaleResource.Get("Audit.AddedOn"));
+
+                                                  }).AddCommands(commands =>
+                                                  {
+                                                      commands.Add("Delete", "Delete", "fa fa-trash", "audit.view", Model => Model.AuditId,
+                                                          "/admin/audit/detail");
+
+                                                  }).Css("table-hover")
+                                                  .Empty(LocaleResource.Get("admin.EmptyRecordText."))
+                                                  .Pagination(pager =>
+                                                  {
+                                                      pager.Api = "/admin/audit/page";
+                                                  })
+
+                            )
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

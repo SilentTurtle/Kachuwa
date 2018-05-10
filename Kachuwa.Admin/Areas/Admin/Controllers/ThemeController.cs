@@ -19,6 +19,4 @@ namespace Kachuwa.Admin.Controllers
             return View();
         }
     }
-
-
 }

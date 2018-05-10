@@ -5,14 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Admin\Views\Audit\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Module\Index.cshtml" />
     <None Remove="Areas\Admin\Views\Page\New.cshtml" />
     <None Remove="Areas\Admin\Views\Setting\Caching.cshtml" />
     <None Remove="Areas\Admin\Views\Setting\Security.cshtml" />
     <None Remove="Areas\Admin\Views\Setting\Web.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\Edit.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\New.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Areas\Admin\Views\Dashboard\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Audit\Index.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Admin\Views\MenuSetting\Index.cshtml">
@@ -36,6 +44,9 @@
     <EmbeddedResource Include="Areas\Admin\Views\MenuType\New.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Module\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Admin\Views\Page\Index.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
@@ -49,6 +60,11 @@
     <EmbeddedResource Include="Areas\Admin\Views\Setting\Caching.cshtml" />
     <EmbeddedResource Include="Areas\Admin\Views\Setting\Security.cshtml" />
     <EmbeddedResource Include="Areas\Admin\Views\Setting\Web.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\New.cshtml" />
     <EmbeddedResource Include="Areas\Admin\Views\User\Index.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>

@@ -1,0 +1,68 @@
+﻿@using Kachuwa.Form
+@using Kachuwa.KGrid
+@using Kachuwa.Localization
+@model Kachuwa.Localization.LocaleRegion
+@inject ILocaleResourceProvider LocaleResource
+@{
+    ViewData["Title"] = "New Locale Region";
+    LocaleResource.LookUpGroupAt("Localization");
+    var formDataSource = (FormDatasource) ViewData["FormDataSource"];
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="cardform-wrapper">
+
+                @(Html.CreateKachuwaForm<Kachuwa.Localization.LocaleRegion>("localseForm", Model)
+                                                        .SetHeading("")
+                                                        .ActionUrl("/admin/localization/new")
+                                                        .CancelUrl("/admin/localization")
+                                                        .CreateSection(section =>
+                                                        {
+                                                            section.Add("section1", "cardform-section", rows =>
+                                                            {
+                                                                rows.Add("1strow", "row", columns =>
+                                                                {
+                                                                    columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                        <h4>@LocaleResource.Get("Localization.LocaleRegion")</h4>
+                                                                                                        <p>@LocaleResource.Get("Localization.LocaleRegion.InfoText")</p>
+                                                                                                    </div>);
+                                                                    columns.Add("right", "col-md-8", control =>
+                                                                    {
+                                                                        control.Add("form-control", model => model.LocaleRegionId, FormInputControl.Hidden);
+
+
+
+                                                                        control.Add("form-control", x => x.CountryId, FormInputControl.Select, formDataSource.GetSource("Countries"),new{ xyz=1, data_live_search = true })
+                                                                            .SetFirstParentClass("form-group")
+                                                                            .SetSecondParentClass("col-md-12")
+                                                                            .SetDisplayName(LocaleResource.Get("Localization.Country"))
+                                                                            .SetPlaceHolder(LocaleResource.Get("Localization.SelectCountry"));
+
+
+                                                                        control.Add("form-control", x => x.Culture, FormInputControl.TextBox)
+                                                                            .SetFirstParentClass("form-group")
+                                                                            .SetSecondParentClass("col-md-12")
+                                                                            .SetDisplayName(LocaleResource.Get("Localization.Culture"))
+                                                                            .SetPlaceHolder(LocaleResource.Get("Localization.en-us"));
+
+
+
+                                                                        control.Add("form-control", x => x.IsActive, FormInputControl.Switch)
+                                                                            .SetFirstParentClass("form-group")
+                                                                            .SetSecondParentClass("col-md-12")
+                                                                            .SetDisplayName(LocaleResource.Get("Localization.IsActive"));
+
+
+                                                                    }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                });
+
+                                                            })
+                                                                .SetHeading(LocaleResource.Get("Localization.AddNewLocaleRegion"));
+                                                        }))
+            </div>
+        </div>
+    </div>
+</section>

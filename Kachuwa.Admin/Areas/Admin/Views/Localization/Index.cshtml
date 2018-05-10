@@ -1,0 +1,59 @@
+﻿@using Kachuwa.Identity.Models
+@using Kachuwa.Web
+@using Kachuwa.KGrid
+@using Kachuwa.Localization
+@inject ILocaleResourceProvider LocaleResource
+@model IEnumerable<Kachuwa.Localization.LocaleRegionViewModel>
+@{
+    ViewData["Title"] = "Localization";
+    LocaleResource.LookUpGroupAt("Localization");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading dflex space-between">
+                            <h2 class="panel-title">@LocaleResource.Get("Localization.Title")</h2>
+                            <a href="/admin/localization/new" class="btn btn-primary btn-sm has-mdicon">
+                                <i class="material-icons md-18">add</i>
+                                @LocaleResource.Get("Localization.AddLocaleRegion")
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                                          .CreateKachuwaGrid(Model)
+                                          .Build(columns =>
+                                          {
+                                              columns.Add(model => new { model.CountryName, model.Flag }).SetTitle(LocaleResource.Get("Localization.Country"))
+                                                  .Encoding(false)
+                                                  .Template("<p><img src='/country/flags/{{Flag}}' width='20' />{{CountryName}}</p>");
+                                              columns.Add(model => model.Culture).SetTitle(LocaleResource.Get("Localization.Culture"));
+                                              columns.Add(model => model.IsDefault).SetTitle(LocaleResource.Get("Localization.IsDefault"));
+                                              columns.Add(model => model.IsActive).SetTitle(LocaleResource.Get("Localization.IsActive"));
+
+                                          }).AddCommands(commands =>
+                                          {
+                                              commands.Add("Edit", "Edit", "fa fa-pencil", "", "/admin/localization/edit", model => model.LocaleRegionId);
+                                              commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.LocaleRegionId,
+                                                  "/admin/localization/delete");
+
+                                          }).Css("table-hover")
+                                          .Empty(LocaleResource.Get("Localization.EmptyRecordText."))
+                                          .Pagination(pager =>
+                                          {
+                                              pager.Api = "/admin/localization/page";
+                                          })
+
+                            )
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
