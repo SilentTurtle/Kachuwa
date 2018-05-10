@@ -1,21 +1,21 @@
 using System;
 
-namespace Kachuwa.Data.Crud.FormBuilder
+namespace Kachuwa.Data.Crud.Attribute
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class AutoFillAttribute : InputAttribute
+    public class AutoFillAttribute : System.Attribute
     {
         public object DefaultValue;
         public bool HasFixedValue = false;
 
-        public AutoFillAttribute(object value) : base("hidden")
+        public AutoFillAttribute(object value) 
         {
             DefaultValue = value;
             HasFixedValue = true;
         }
 
         public AutoFillProperty fillBy ;
-        public AutoFillAttribute(AutoFillProperty autofillby) : base("hidden")
+        public AutoFillAttribute(AutoFillProperty autofillby) 
         {
             fillBy = autofillby;
         }

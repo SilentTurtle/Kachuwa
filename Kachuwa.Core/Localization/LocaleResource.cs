@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
 
@@ -14,7 +13,7 @@ namespace Kachuwa.Localization
         public string Name { get; set; }
         public string Value { get; set; }
         public string Culture { get; set; }
-        public string GroupName { get; set; } = "string";
+        public string GroupName { get; set; } = "";
 
         [IgnoreAll]
         public int RowTotal { get; set; }

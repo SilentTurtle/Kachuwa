@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
+using Kachuwa.Data.Crud.Attribute;
 using Kachuwa.Web;
 using Microsoft.AspNetCore.Localization;
 
-namespace Kachuwa.Data.Crud.FormBuilder
+namespace Kachuwa.Data.Extension
 {
     public static class FormBuilerExtentions
     {
@@ -40,7 +43,11 @@ namespace Kachuwa.Data.Crud.FormBuilder
                                 customAtt.DefaultValue = culture;
                                 break;
                             case AutoFillProperty.CurrentUser:
-                                customAtt.DefaultValue = "Admin";// ContextResolver.Context.User.Identity.Name;
+                                var claim=
+                                    ContextResolver.Context.User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name);
+                                customAtt.DefaultValue = claim == null ? "" : claim.Value;
+
+
                                 break;
                             case AutoFillProperty.CurrentDate:
                                 customAtt.DefaultValue = DateTime.Now;

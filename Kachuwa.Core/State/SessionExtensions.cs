@@ -17,7 +17,7 @@ namespace Kachuwa.State
             var value = session.Get(key);
             string json = System.Text.Encoding.UTF8.GetString(value);
 
-            return (T) (value == null ? default(T) : JsonConvert.DeserializeObject(json));
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(json);
         }
 
         public static bool IsExists(this ISession session, string key)

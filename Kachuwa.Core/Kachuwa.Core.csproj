@@ -5,20 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dev\**" />
     <Compile Remove="Plugin\Service\**" />
+    <Compile Remove="Queue\**" />
     <Compile Remove="Service\**" />
     <Compile Remove="Web\ViewEngine\**" />
+    <EmbeddedResource Remove="Dev\**" />
     <EmbeddedResource Remove="Plugin\Service\**" />
+    <EmbeddedResource Remove="Queue\**" />
     <EmbeddedResource Remove="Service\**" />
     <EmbeddedResource Remove="Web\ViewEngine\**" />
+    <None Remove="Dev\**" />
     <None Remove="Plugin\Service\**" />
+    <None Remove="Queue\**" />
     <None Remove="Service\**" />
     <None Remove="Web\ViewEngine\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Queue\" />
-    <Folder Include="Dev\" />
   </ItemGroup>
 
   <ItemGroup>

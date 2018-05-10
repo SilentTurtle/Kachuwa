@@ -14,6 +14,10 @@ namespace Kachuwa.Installer
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        [Range(1,int.MaxValue)]
+        public int TimeZoneId { get; set; }
+        
     }
     public class InstallerViewModel
     {

@@ -10,8 +10,9 @@ namespace Kachuwa.Extensions
         {
             try
             {
+                string dbprovider = "mssql";
                 string assemblyNamespace = assembly.GetName().Name;
-                var resourceName = $"{assemblyNamespace}.db.install.sql";
+                var resourceName = $"{assemblyNamespace}.db.{dbprovider}.install.sql";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
@@ -38,16 +39,16 @@ namespace Kachuwa.Extensions
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                throw e;
             }
         }
         public static string GetDbUnInstallScript(this Assembly assembly)
         {
             try
             {
+                string dbprovider = "mssql";
                 string assemblyNamespace = assembly.GetName().Name;
-                var resourceName = $"{assemblyNamespace}.db.uninstall.sql";
+                var resourceName = $"{assemblyNamespace}.db.{dbprovider}.uninstall.sql";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 {
@@ -64,8 +65,7 @@ namespace Kachuwa.Extensions
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                throw e;
             }
         }
         public static byte[] GetResourceFile(this Assembly assembly, string filepath)
@@ -92,8 +92,7 @@ namespace Kachuwa.Extensions
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                throw e;
             }
         }
     }

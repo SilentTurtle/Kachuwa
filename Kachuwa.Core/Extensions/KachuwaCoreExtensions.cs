@@ -135,8 +135,15 @@ namespace Kachuwa.Core.Extensions
 
 
         }
+        public static IApplicationBuilder UseKachuwaApps(this IApplicationBuilder app,
+            IServiceProvider serviceProvider,IHostingEnvironment hostingEnvironment)
+        {
 
-     
+            new KachuwaAppBuilder(app, serviceProvider, hostingEnvironment);
+            return app;
+
+        }
+
         public static IApplicationBuilder UseKachuwaCore(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
 

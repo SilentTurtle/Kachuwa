@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Kachuwa.Data.Crud.Attribute;
 
 namespace Kachuwa.Data.Crud
 {

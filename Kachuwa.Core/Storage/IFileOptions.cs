@@ -6,23 +6,16 @@
 
         FileType[] AllowedTypes { get; set; }
 
-        IKeyGenerator KeyGenerator { get; set; }
-
-        IStorageProvider StorageProvider { get; set; }
     }
 
     public class DefaultFileOptions : IFileOptions
     {
-        public DefaultFileOptions()
-        {
-            StorageProvider=new LocalStorageProvider(this.Path,"");
-        }
-        public string Path { get; set; }="";
+        public string Path { get; set; }="Uploads";
+
+        //TODO:: list all posible file uploads
         public FileType[] AllowedTypes { get; set; }=new FileType[]
         {
             new FileType(){ContentType = "",FileExtension = ""}, 
         };
-        public IKeyGenerator KeyGenerator { get; set; }=new KeyGenerator();
-        public IStorageProvider StorageProvider { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace Kachuwa.Configuration
         public bool RequireNonAlphanumeric { get; set; }
         public bool RequireUppercase { get; set; }
         public SMTMConfig SMTMConfig { get; set; }
+        public string JobConnection { get; set; }
 
     }
     public class SMTMConfig

@@ -1,6 +1,6 @@
 using System;
 
-namespace Kachuwa.Data.Crud
+namespace Kachuwa.Data.Crud.Attribute
 {
     /// <summary>
     /// Optional Column attribute.

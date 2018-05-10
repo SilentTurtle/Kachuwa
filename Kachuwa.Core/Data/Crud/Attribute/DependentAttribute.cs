@@ -1,6 +1,6 @@
 using System;
 
-namespace Kachuwa.Data.Crud.FormBuilder
+namespace Kachuwa.Data.Crud.Attribute
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class DependentAttribute : System.Attribute

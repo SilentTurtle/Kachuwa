@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Kachuwa.Data.Crud.FormBuilder;
-using Kachuwa.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyModel;
@@ -76,7 +74,7 @@ namespace Kachuwa.Core.DI
             //    serviceInstances.AddRange(instances);
             //}
             foreach (var instance in serviceInstances)
-            {
+            {   //TODO::check module is installed or not
                 instance.Register(_serviceCollection, _configuration);
             }
             //var assemblies = AppDomain.CurrentDomain.GetAssemblies()
