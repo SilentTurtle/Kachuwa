@@ -1,6 +1,5 @@
 ﻿using System;
 using Kachuwa.Data.Crud.Attribute;
-using Kachuwa.Data.Crud.FormBuilder;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,11 +31,9 @@ namespace Kachuwa.Identity.Models
         public string DOB { get; set; }
         public string ProfilePicture { get; set; }
         public string Gender { get; set; }
-
-        //public int TheaterId { get; set; }
+      
         //public string DeviceId { get; set; }
         //public string DeviceOS { get; set; }
-        //public int CompanyId { get; set; }
 
         public bool IsActive { get; set; }
         [IgnoreInsert]

@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
+using IdentityModel;
 using Kachuwa.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kachuwa.Identity.Extensions
 {
-   
+
     public static class IdentityExtensions
     {
         public static long GetIdentityUserId(this IIdentity identity)
         {
-            var claim = ((ClaimsIdentity)identity).FindFirst("IdUid");
-            // Test for null to avoid issues during local testing
+            var claim = ((ClaimsIdentity)identity).FindFirst(ApplicationClaim.IdentityUserId);
             return (claim != null) ? Convert.ToInt64(claim.Value) : 0;
+        }
+        public static string GetUserName(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst(JwtClaimTypes.Name);
+            return (claim != null) ? claim.Value : "";
         }
         public static IEnumerable<string> GetRoles(this IIdentity identity)
         {
@@ -28,244 +33,59 @@ namespace Kachuwa.Identity.Extensions
 
         public static long GetAppUserUserId(this IIdentity identity)
         {
-            //TODO: AppUser ID
-            var claim = ((ClaimsIdentity)identity).FindFirst("IdUid");//((ClaimsIdentity)identity).FindFirst("appuserid");
-            // Test for null to avoid issues during local testing
+            var claim = ((ClaimsIdentity)identity).FindFirst(ApplicationClaim.AppUserId);
             return (claim != null) ? Convert.ToInt64(claim.Value) : 0;
         }
-        public static string GetUserPlatform(this IIdentity identity)
+
+        public static bool IsAdmin(this IIdentity identity)
         {
-            var claim = ((ClaimsIdentity)identity).FindFirst("plat");
-            // Test for null to avoid issues during local testing
-            if ((claim == null))
-            {
-                var clientPlat = ((ClaimsIdentity)identity).FindFirst("client_plat");
-                return (clientPlat != null) ? clientPlat.Value : "Web";
-            }
-            else
-            {
-                return claim.Value;
-            }
-          
+            var roles = ((ClaimsIdentity)identity).Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value);
+            return roles.Contains("Admin");
         }
-        
-
-    }
-
-    public static class UserHelper
-    {
-        
-
-        public static string UserName
+        public static string GetClaimsValue(this IIdentity identity, string claimName)
         {
-            get
-            {
-                string name = GetClaimsValue(ClaimTypes.Name);
-                if (string.IsNullOrEmpty(name))
-                    return "guestuser";
-                return name;
-            }
-        }
+           
 
-        public static bool IsAdmin =>  ContextResolver.Context.User.IsInRole("Admin");
-
-        public static string GetClaimsValue(string key)
-        {
-            try
-            {
-               var _context = ContextResolver.Context;
-                if (_context.User.Identity.IsAuthenticated)
+                IEnumerable<Claim> claims = ((ClaimsIdentity)identity).Claims;
+                foreach (var claim in claims)
                 {
-                    var identity = (ClaimsIdentity)_context.User.Identity;
-                    IEnumerable<Claim> claims = identity.Claims;
-                    foreach (var claim in claims)
-                    {
-                        if (claim.Type == key)
-                            return claim.Value;
-                    }
-
+                    if (claim.Type == claimName)
+                        return claim.Value;
                 }
-                return "";
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            return "";
 
         }
 
-        public static string GetClaimsValue(Claim customClaim)
+        public static string GetClaimsValue(this IIdentity identity, Claim customClaim)
         {
-            try
-            {
-                var _context = ContextResolver.Context;
-                if (_context.User.Identity.IsAuthenticated)
-                {
-                    var identity = (ClaimsIdentity)_context.User.Identity;
-                    IEnumerable<Claim> claims = identity.Claims;
-                    foreach (var claim in claims)
-                    {
-                        if (claim.Type == customClaim.Type)
-                            return claim.Value;
-                    }
 
-                }
-                return "";
-            }
-            catch (Exception ex)
-            {
 
-                throw ex;
+            IEnumerable<Claim> claims = ((ClaimsIdentity) identity).Claims;
+            foreach (var claim in claims)
+            {
+                if (claim.Type == customClaim.Type)
+                    return claim.Value;
             }
+            return "";
 
         }
-
-        public static IEnumerable<Claim> GetClaims()
+        public static Claim FindClaim(this IIdentity identity, string claimValue)
         {
-            try
-            {
-                var _context = ContextResolver.Context;
-                if (_context.User.Identity.IsAuthenticated)
-                {
-                    var identity = (ClaimsIdentity)_context.User.Identity;
-                    return identity.Claims;
-
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-        }
-        public static string GetSessionId()
-        {
-            try
-            {
-                var _context = ContextResolver.Context;
-                if (_context.User.Identity.IsAuthenticated)
-                {
-                    var identity = (ClaimsIdentity)_context.User.Identity;
-                    IEnumerable<Claim> claims = identity.Claims;
-                    foreach (var claim in claims)
-                    {
-                        if (claim.Type == ApplicationClaim.SessionCode)
-                            return claim.Value;
-                    }
-
-                }
-                else
-                {
-                    //var cookie = _context.Request.Cookies.Get(ApplicationClaim.Anonymous);
-                    //if (cookie != null)
-                    //{
-                    //    return cookie.Value;
-
-                    //}
-                    //else
-                    //{
-                    //    var userId = Guid.NewGuid().ToString();
-                    //    HttpCookie gcookie = new HttpCookie(ApplicationClaim.Anonymous);
-                    //    gcookie.HttpOnly = true;
-                    //    gcookie.Expires = DateTime.Now.AddMinutes(30);
-                    //    gcookie.Value = userId;
-                    //    _context.Response.Cookies.Add(gcookie);
-                    //    return userId;
-                    //}
-                }
-                return "";
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-        }
-        private static Claim FindClaim(string value)
-        {
-            try
-            {
-                var _context = ContextResolver.Context;
-                var user = _context.User as ClaimsPrincipal;
-                var claim = (from c in user.Claims
-                             where c.Value == value
+            
+                IEnumerable<Claim> claims = ((ClaimsIdentity)identity).Claims;
+                var claim = (from c in claims
+                             where c.Value == claimValue
                              select c).Single();
                 return claim;
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+          
         }
-        public static void AddRole(string role)
+        public static IEnumerable<Claim> GetAllClaims(this IIdentity identity)
         {
-            if (FindClaim(role) != null)
-                return;
-            var _context = ContextResolver.Context;
-            var user = _context.User as ClaimsPrincipal;
-            if (user == null) return;
-
-            var claimId = new ClaimsIdentity();
-            claimId.AddClaim(new Claim(ClaimTypes.Role, role));
-            user.AddIdentity(claimId);
+            IEnumerable<Claim> claims = ((ClaimsIdentity)identity).Claims;
+            return claims;
         }
 
-        public static void AddClaim(string claimtype, string value)
-        {
-            var _context = ContextResolver.Context;
-            var user = _context.User as ClaimsPrincipal;
-            if (user == null) return;
-            var claimId = new ClaimsIdentity();
-            claimId.AddClaim(new Claim(claimtype, value));
-            user.AddIdentity(claimId);
-        }
-
-        public static void RemoveClaim(string value)
-        {
-            var _context = ContextResolver.Context;
-            var user = _context.User as ClaimsPrincipal;
-            var identity = user.Identity as ClaimsIdentity;
-            var claim = (from c in user.Claims
-                         where c.Value == value
-                         select c).Single();
-            identity.RemoveClaim(claim);
-        }
-
-        public static int GetCustomerId()
-        {
-            try
-            {
-                var _context = ContextResolver.Context;
-                if (_context.User.Identity.IsAuthenticated)
-                {
-                    var identity = (ClaimsIdentity)_context.User.Identity;
-                    IEnumerable<Claim> claims = identity.Claims;
-                    foreach (var claim in claims)
-                    {
-                        if (claim.Type == ApplicationClaim.CustomerId)
-                            return Int32.Parse(claim.Value);
-                    }
-
-                }
-                return 0;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-        }
-    }
-    public class ApplicationClaim
-    {
-        public static readonly string CustomerId = "_customerId";
-        public static readonly string SessionCode = "_sessionCode";
-        public static readonly string Anonymous = "__anonymous";
-        public static readonly string OnlineId = "_onlineId";
     }
 }
