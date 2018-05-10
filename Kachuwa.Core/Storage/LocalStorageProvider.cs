@@ -20,32 +20,10 @@ namespace Kachuwa.Storage
             _environment = environment;
             string rootpath = _environment.WebRootPath;
             _filePath = Path.Combine(rootpath, _fileOptions.Path);
+            RootPath = _filePath;
         }
-
-
-        //public async Task SaveFile(string key, string contentType, Stream stream, IFileOptions options)
-        //{
-        //    if (!Directory.Exists(_filePath))
-        //        Directory.CreateDirectory(_filePath);
-
-        //    using (var f = File.OpenWrite($"{_filePath.TrimEnd('\\')}\\{key}.{ContentTypeToExtension(contentType, options)}"))
-        //    {
-        //        var buffer = new byte[8 * 1024];
-        //        int len;
-        //        while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
-        //        {
-        //            await f.WriteAsync(buffer, 0, len);
-        //        }
-        //    }
-        //}
-
-        //public Task<string> GetRedirectPath(string key)
-        //{
-        //    var file = Path.GetExtension(Directory.GetFiles(_filePath, $"{key}.*").First());
-        //    return Task.FromResult($"{_redirectPath}/{key}{file}");
-        //}
-
-        public async Task<IFile> GetFile(string filePath, IFileOptions options)
+        public string RootPath { get; set; }
+        public async Task<IFile> GetFile(string filePath)
         {
             if (File.Exists(filePath))
             {
@@ -58,7 +36,7 @@ namespace Kachuwa.Storage
 
                     return new KachuwaFile()
                     {
-                        ContentType = ExtensionToContentType(Path.GetExtension(filePath).TrimStart('.'), options),
+                        ContentType = ExtensionToContentType(Path.GetExtension(filePath).TrimStart('.'), _fileOptions),
                         Stream = ms
                     };
                 }
@@ -127,6 +105,22 @@ namespace Kachuwa.Storage
                 //}
             }
             return Task.FromResult("");
+        }
+
+        public async Task SaveFile(string contentType, Stream stream)
+        {
+            if (!Directory.Exists(_filePath))
+                Directory.CreateDirectory(_filePath);
+
+            using (var f = File.OpenWrite($"{_filePath.TrimEnd('\\')}\\{_keyGenerator.GetKey()}.{ContentTypeToExtension(contentType, _fileOptions)}"))
+            {
+                var buffer = new byte[8 * 1024];
+                int len;
+                while ((len = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    await f.WriteAsync(buffer, 0, len);
+                }
+            }
         }
 
         public Task<string> CheckOrCreateDirectory(string path)

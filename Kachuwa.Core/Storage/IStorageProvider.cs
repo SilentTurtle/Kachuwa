@@ -6,13 +6,10 @@ namespace Kachuwa.Storage
 {
     public interface IStorageProvider
     {
-        //Task<bool> CheckIfKeyExists(string key);
-
-       // Task<string> GetRedirectPath(string key);
-
-       // Task SaveFile(string key, string contentType, Stream stream, IFileOptions options);
-        Task<IFile> GetFile(string filePath, IFileOptions options);
+        string RootPath { get; set; }
+        Task<IFile> GetFile(string filePath);
         Task<string> Save(IFormFile file);
+        Task SaveFile(string contentType, Stream stream);
         Task<string> Save(string dirPath, IFormFile file);
         Task<string> CheckOrCreateDirectory(string path);
         Task<bool> Delete(string dirPath, string filePath);
