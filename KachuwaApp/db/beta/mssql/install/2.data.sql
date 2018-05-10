@@ -23,8 +23,7 @@ Insert Into dbo.SEO Select 'Page Not Found','Page Not Found','Page Not Found','p
 
 INSERT INTO PagePermission 	SELECT PageId,1,0,0,GETUTCDATE(),'system' FROM dbo.Page where Name in('Home','Access Denied','Page Not Found');
 
-
-Insert Into dbo.Setting Select 'Kachuwa Demo Website','This is demo website.','Nepal','Kathmandu','Balkumari','987654321,987654123','info@kachuwaframework.com','Bagmati','Ktm',0,0,'/images/logo.png','en-us',N'$','USD','',0;
+Insert Into dbo.Setting Select 'Kachuwa App','This is kachuwa web app..','Nepal','Kathmandu','Balkumari','987654321,987654123','info@kachuwaframework.com','Bagmati','Ktm',0,0,0,'/images/logo.png','en-us',N'$','USD','',0,'info@kachuwaframework.com','support@kachuwaframework.com','sales@kachuwaframework.com','marketing@kachuwaframework.com';
 
 Insert Into dbo.IdentityRole Select  NULL, N'SuperAdmin', N'SUPERADMIN',1;
 Insert Into dbo.IdentityRole Select  NULL, N'Admin', N'ADMIN',1;

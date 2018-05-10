@@ -94,6 +94,18 @@ CREATE TABLE dbo.AppUser
 		AddedOn                                 datetime NOT NULL Default(GETUTCDATE()),
 		AddedBy                                 national character varying(256)
 );
+CREATE TABLE dbo.LocaleRegion
+(
+	LocaleRegionId							int primary key identity(1,1),
+	CountryId								int not null,
+	Flag 									nvarchar(256) not null,
+	Culture									varchar(10) not null,
+	IsDefault								bit default(0),
+	IsActive                                bit NOT NULL Default(1),
+	IsDeleted                               bit NOT NULL Default(0),
+	AddedOn                                 datetime NOT NULL Default(GETUTCDATE()),
+	AddedBy                                 national character varying(256)
+);
 CREATE TABLE dbo.LocaleResource 
 (
     LocaleResourceId				int primary key identity(1,1) not null,
@@ -147,6 +159,7 @@ CREATE TABLE dbo.Module
 	Version									nvarchar(256) not null,
 	IsInstalled								bit default(0) not null,
 	Author									nvarchar(256),
+	IsBuiltIn								bit default(0) not null,
 	IsActive                                bit NOT NULL Default(1),
     IsDeleted								bit NOT NULL DEFAULT(0),
     AddedOn									datetime NOT NULL DEFAULT(GETUTCDATE()),
@@ -265,6 +278,7 @@ CREATE table dbo.Setting
 	Email									nvarchar(256), 	
 	State 									nvarchar(256),
 	City									nvarchar(256),
+	TimeZoneId								bigint,
 	Longitude								decimal(16,4) default(0),
 	Lattitude								decimal(16,4) default(0),	
 	Logo									nvarchar(256) not null,
@@ -272,6 +286,23 @@ CREATE table dbo.Setting
 	BaseCurrency							nvarchar(5) not null,		
 	CurrencyCode							nvarchar(5) not null,
 	GoogleAnalyticScript 					nvarchar(1000) null,
-	UseHttps								bit default(0) NOT NULL	
+	UseHttps								bit default(0) NOT NULL,
+	DefaultEmail							nvarchar(256),
+	SupportEmail							nvarchar(256),
+	SalesEmail								nvarchar(256),
+	MarketingEmail							nvarchar(256)
 
+);
+Create table dbo.AuditLog
+(
+	AuditId									bigint primary key identity(1,1) not null,
+	Url										nvarchar(500),
+	Action									nvarchar(500),
+	Duration								int not null default(0),
+	UserName								nvarchar(500),
+	Role 									nvarchar(500),
+	IpAddress								nvarchar(500),
+	UserAgent								nvarchar(1000),
+	RequestObject							nvarchar(max),
+	AddedOn									datetime default(getutcdate())
 );
