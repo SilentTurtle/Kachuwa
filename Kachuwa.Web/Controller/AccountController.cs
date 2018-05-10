@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using Kachuwa.Configuration;
 using Kachuwa.Identity.Models;
 using Kachuwa.Identity.Service;
 using Kachuwa.Identity.ViewModels;
+using Kachuwa.Localization;
 using Kachuwa.Web.Extensions;
 using Kachuwa.Web.Services;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +35,8 @@ namespace Kachuwa.Web
         private readonly ILogger _logger;
 
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly ILocaleResourceProvider _localeResourceProvider;
+        private readonly KachuwaAppConfig _kachuwaConfig;
         private readonly AccountService _account;
 
         public AccountController(
@@ -43,6 +48,7 @@ namespace Kachuwa.Web
             IClientStore clientStore,
             IHttpContextAccessor httpContextAccessor,
             IAuthenticationSchemeProvider schemeProvider
+            ,IOptionsSnapshot<KachuwaAppConfig> kachuwaConfig,ILocaleResourceProvider localeResourceProvider
         )
         {
             _userManager = userManager;
@@ -52,6 +58,8 @@ namespace Kachuwa.Web
             _logger = logger;
 
             _interaction = interaction;
+            _localeResourceProvider = localeResourceProvider;
+            _kachuwaConfig = kachuwaConfig.Value;
             _account = new AccountService(interaction, httpContextAccessor, schemeProvider, clientStore);
         }
 
@@ -96,7 +104,7 @@ namespace Kachuwa.Web
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, _localeResourceProvider.Get("Invalid username or password."));
                     return View(model);
                 }
             }
@@ -242,15 +250,23 @@ namespace Kachuwa.Web
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    //_logger.LogInformation("User created a new account with password.");
+                    if (_kachuwaConfig.RequireConfirmedEmail)
+                    {
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                        return View("RegisterConfirm");
+                    }
+                    else
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User created a new account with password.");
+                        return RedirectToLocal(returnUrl);
+                    }
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    // _logger.LogInformation("User created a new account with password.");
-                    return View("RegisterConfirm");
-                    //return RedirectToLocal(returnUrl);
+
+
                 }
                 AddErrors(result);
             }

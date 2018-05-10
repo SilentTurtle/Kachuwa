@@ -32,7 +32,7 @@ namespace Kachuwa.Web
             TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;
-            Api = api;
+            //Api = api;
         }
 
         public void Reset()

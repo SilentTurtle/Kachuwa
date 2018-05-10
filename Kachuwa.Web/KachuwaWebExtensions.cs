@@ -1,8 +1,6 @@
 using Kachuwa.Caching;
-using Kachuwa.Installer;
 using Kachuwa.Log;
 using Kachuwa.Web.Layout;
-using Kachuwa.Web.Middleware;
 using Kachuwa.Web.Module;
 using Kachuwa.Web.Notification;
 using Kachuwa.Web.Optimizer;
@@ -17,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Smidge;
@@ -27,15 +26,18 @@ using Smidge.Options;
 
 namespace Kachuwa.Web
 {
-    public static class KachuwaWebExtensionsHelper
+    public static class KachuwaWebExtensions
     {
-        public static IServiceCollection RegisterKachuwaWebServices(this IServiceCollection services,bool isInstalled)
+        public static IServiceCollection RegisterKachuwaWebServices(this IServiceCollection services,
+            bool isInstalled, IConfiguration configuration)
         {
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<ISettingService, SettingService>();
             services.TryAddSingleton<ILayoutRenderer, LayoutContentRenderer>();
             services.TryAddSingleton<ISeoService, SeoService>();
             services.TryAddSingleton<IPageService, PageService>();
+            services.AddSingleton<ICountryService, CountryService>();
+            services.AddSingleton<IAuditService, AuditService>();
             services.AddScoped<IKachuwaConfigurationManager, KachuwaConfigurationManager>();
             var serviceProvider = services.BuildServiceProvider();
             var logger = serviceProvider.GetService<ILogger>();
@@ -63,14 +65,14 @@ namespace Kachuwa.Web
             services.RegisterNotificationService();
 
             //use IEmailServiceProviderService for sender
-             services.AddSingleton<IEmailSender, SmtpEmailSender>();          
+            services.AddSingleton<IEmailSender, SmtpEmailSender>();          
             if (isInstalled)
             {
                 var modules = new ModuleRegistrar(services, logger);
             }
 
-           var hostingProvider= serviceProvider.GetService<IHostingEnvironment>();
-            services.AddSmidge(null, new SmidgeFileProvider(hostingProvider));
+            var hostingProvider= serviceProvider.GetService<IHostingEnvironment>();
+            services.AddSmidge(configuration.GetSection("smidge"), new SmidgeFileProvider(hostingProvider));
             services.AddSmidgeNuglify();
             services.Configure<SmidgeOptions>(opt =>
             {
@@ -94,6 +96,7 @@ namespace Kachuwa.Web
             {
                 app.UseRoutes();
             }
+            
             return app;
         }
         public static IApplicationBuilder UseRoutes(this IApplicationBuilder app)
@@ -101,11 +104,11 @@ namespace Kachuwa.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                  name: "default",
-                  template: "{pageUrl?}",
-                  defaults: new { controller = "KachuwPage", action = "Index" }
-                 // , constraints: new { pageUrl = @"\w+" }
-                 );
+                    name: "default",
+                    template: "{pageUrl?}",
+                    defaults: new { controller = "KachuwPage", action = "Index" }
+                    // , constraints: new { pageUrl = @"\w+" }
+                );
 
                 routes.MapRoute(
                     name: "default1",

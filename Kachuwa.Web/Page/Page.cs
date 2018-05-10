@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
-using Kachuwa.Data.Crud.FormBuilder;
 
 namespace Kachuwa.Web
 {

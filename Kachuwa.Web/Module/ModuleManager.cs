@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Kachuwa.Data.Crud.FormBuilder;
 using Kachuwa.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,17 +28,7 @@ namespace Kachuwa.Web.Module
                 module.IsInstalled = status;
                 if (status)
                 {
-                    var moduleinfo = new ModuleInfo
-                    {
-                        Name = module.Name,
-                        IsInstalled = true,
-                        Author = module.Author,
-                        Version = module.Version,
-                        IsActive = true,
-                        Description = ""
-                    };
-                    moduleinfo.AutoFill();
-                    await _moduleService.Service.InsertAsync<int>(moduleinfo);
+                    await _moduleService.Save(module);
                 }
                 return status;
             }
@@ -52,22 +41,12 @@ namespace Kachuwa.Web.Module
             {
                 string script = module.Assembly.GetDbUnInstallScript();
                 var status = await _scriptRunner.Run(script);
-                module.IsInstalled = status;
+                module.IsInstalled = false;
                 if (status)
                 {
-                    var moduleinfo = new ModuleInfo
-                    {
-                        Name = module.Name,
-                        IsInstalled = false,
-                        Author = module.Author,
-                        Version = module.Version,
-                        IsActive = true,
-                        Description = ""
-                    };
-                    moduleinfo.AutoFill();
-                    await _moduleService.Service.UpdateAsync(moduleinfo,"Where Name=@Name",new{Name=moduleinfo.Name});
+                   return await _moduleService.Uninstall(module.Name);
                 }
-                return status;
+                return false;
             }
             return false;
         }

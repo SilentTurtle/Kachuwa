@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Kachuwa.Log;
@@ -6,6 +7,7 @@ using Kachuwa.Storage;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Kachuwa.Web.API
 {
@@ -30,54 +32,14 @@ namespace Kachuwa.Web.API
             try
             {
                 var files = Request.Form.Files;
-                var path = "Uploads";
-                string folder = "Default";
-                if (Request.Form.ContainsKey("fdr"))
-                {
-                    folder = Request.Form["fdr"].ToString();
-                    path = path + "\\" + folder;
-                }
-
-                bool isUploaded = false;
-
-                string rootpath = _hostingEnvironment.WebRootPath;
-                string filepath = Path.Combine(rootpath, path);
-                if (!Directory.Exists(filepath))
-                {
-                    Directory.CreateDirectory(filepath);
-                }
-
-                var tempFolderName = Path.GetTempFileName();
-                string physicalfilepath = "";
+                List<string> paths = new List<string>();
                 foreach (var file in files)
                 {
-                    var filename = ContentDispositionHeaderValue
-                        .Parse(file.ContentDisposition)
-                        .FileName.Trim();
-                        //.Trim('"');
-                    physicalfilepath = filepath + "\\" + file.FileName;
-
-
-                    //bool key=  await _storageProvider.CheckIfKeyExists(file.FileName);
-                    //   _storageProvider.SaveFile(key,);
-                    //_storageProvider.CheckIfKeyExists()
-                    try
-                    {
-                        CopyStream(file.OpenReadStream(), physicalfilepath);
-                        isUploaded = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Log(LogType.Error, () => ex.Message, ex);
-                    }
+                    string relativePath = await _storageProvider.Save(file);
+                    paths.Add(relativePath);
                 }
-                int w = 0, h = 0;
-                System.Drawing.Image img = System.Drawing.Image.FromFile(physicalfilepath);
-                w = img.Width;
-                h = img.Height;
-                img.Dispose();
-                string savedFilePath = physicalfilepath.Replace(rootpath, "").Replace("\\", "/");
-                return HttpResponse(200, "", new { isUploaded, savedFilePath, w, h });
+
+                return HttpResponse(200, "", paths);
             }
             catch (Exception e)
             {
@@ -109,14 +71,7 @@ namespace Kachuwa.Web.API
 
         }
 
-        public void CopyStream(Stream stream, string destPath)
-        {
-            using (var fileStream = new FileStream(destPath, FileMode.Create, FileAccess.Write))
-            {
-                stream.CopyTo(fileStream);
-            }
-        }
-
+      
 
         //[HttpPost]
         //[Route("crop")]

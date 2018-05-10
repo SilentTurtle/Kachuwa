@@ -27,6 +27,7 @@ namespace Kachuwa.Web.Model
         public string State { get; set; }
 
         public string City { get; set; }
+        public int TimeZoneId { get; set; }
 
         public decimal Longitude { get; set; }
 
@@ -44,5 +45,9 @@ namespace Kachuwa.Web.Model
         public string GoogleAnalyticScript { get; set; }
 
         public bool UseHttps { get; set; }
+        public string DefaultEmail { get; set; }
+        public string SupportEmail { get; set; }
+        public string MarketingEmail { get; set; }
+        public string SalesEmail { get; set; }
     }
 }

@@ -124,14 +124,10 @@ namespace Kachuwa.Web.Module
 
         public IEnumerable<ModuleComponentDescription> GetComponents(string moduleName)
         {
-            if (_modulesComponent == null)
-                return null;
-            return _modulesComponent[moduleName];
+            return _modulesComponent?[moduleName];
         }
         public Dictionary<string, List<ModuleComponentDescription>> GetComponents()
         {
-            if (_modulesComponent == null)
-                return null;
             return _modulesComponent;
         }
 

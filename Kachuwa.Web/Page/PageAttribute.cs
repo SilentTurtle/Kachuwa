@@ -40,10 +40,10 @@ namespace Kachuwa.Web
             {
                 result = context.Result as PartialViewResult;
             }
-            if (result != null && result.ViewName == "_PageNotFound")
+            if (result != null && result.ViewName == "page-not-found")
             {
                 context.HttpContext.Items.Remove("KPageUrl");
-                context.HttpContext.Items.Add("KPageUrl", "_PageNotFound");
+                context.HttpContext.Items.Add("KPageUrl", "page-not-found");
             }
             base.OnActionExecuted(context);
         }

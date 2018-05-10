@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Kachuwa.Caching;
 using Kachuwa.Core.DI;
 using Kachuwa.Log;
@@ -55,12 +56,18 @@ namespace Kachuwa.Web.Module
                 //    modules.AddRange(instances);
                 //}
                 modules.AddRange(instances);
-                var installedModules = moduleService.Service.GetList("Where IsInstalled=@isInstalled",new{ isInstalled =true});
+                foreach (var module in modules)
+                {
+                    Task.Run(async () => await moduleService.Save(module)).Wait();
+                }
+
+                var installedModules = moduleService.Service.GetList("Where IsInstalled=@isInstalled", new { isInstalled = true });
                 if (installedModules.Any())
                 {
                     foreach (var installed in installedModules)
                     {
-                        modules.Find(e => e.Name.ToLower() == installed.Name.ToLower()).IsInstalled = true;
+                        var module = modules.Find(e => e.Name.ToLower() == installed.Name.ToLower());
+                        if (module != null) module.IsInstalled = true;
                     }
                 }
                 _services.TryAddSingleton(new ModuleContainer(modules));

@@ -14,27 +14,27 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="@Model.FirstClass">
-                <a href="@Model.Api@query">First</a>
+                <a href="@Model.Api/page/@query">First</a>
             </li>
             <li class="@Model.PrevClass">
-                <a href="@Model.Api/@(Model.CurrentPage - 1)@query">Previous</a>
+                <a href="@Model.Api/page/@(Model.CurrentPage - 1)@query">Previous</a>
             </li>
         }
 
         @for (var xpage = Model.StartPage; xpage <= Model.EndPage; xpage++)
         {
             <li class="@(xpage == Model.CurrentPage ? Model.ActiveClass : "")">
-                <a href="@Model.Api/@xpage@query">@xpage</a>
+                <a href="@Model.Api/page/@xpage@query">@xpage</a>
             </li>
         }
 
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="@Model.NextClass">
-                <a href="@Model.Api/@(Model.CurrentPage + 1)@query">Next</a>
+                <a href="@Model.Api/page/@(Model.CurrentPage + 1)@query">Next</a>
             </li>
             <li class="@Model.LastClass">
-                <a href="@Model.Api/@(Model.TotalPages)@query">Last</a>
+                <a href="@Model.Api/page/@(Model.TotalPages)@query">Last</a>
             </li>
         }
     </ul>

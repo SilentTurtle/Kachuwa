@@ -44,14 +44,15 @@
                                 <div class="summary">
                                 </div>
                             </div>
-                            
-                            
-                            
-                            
-
                             <div class="form-group">
                                 <label for="SiteName">Site Name</label>
                                 <input type="text" id="SiteName" name="SiteName" placeholder="Enter Web Site Name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="ddlTimeZone">Time Zone</label>
+                                <select id="ddlTimeZone" name="ddlTimeZone" class="form-control" placeholder="Time Zone">
+                                    <option>Select</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="Email">Email</label>
@@ -187,7 +188,8 @@
                     var model = {
                         Email: $.trim($("#Email").val()),
                         Password: $.trim($("#Password").val()),
-                        SiteName: $.trim($("input[name=SiteName]").val())
+                        SiteName: $.trim($("input[name=SiteName]").val()),
+                        TimeZoneId:$.trim($("#ddlTimeZone").val())
                     };
                     $ajaxCall("/install/setupadmin",
                         { model: model },
@@ -231,17 +233,23 @@
                         }
                     );
                 };
-              
-                var ping = function() {
-                    interval= setInterval(function() {
-                            try {
-                                $.get("/install/ping",
-                                    function(data) {
-                                        if (data == "pong") {
-                                            setupAdmin();
-                                        }
-                                    });
-                            } catch (e) {
+                var getTimeZones = function () {
+                    var $timeZones = "<option>Select</option>";
+                    $timeZones += "<option value=\"" + 1 + "\">" + "(UTC+05:30) Sri Jayawardenepura" + "</option>";
+                    $timeZones += "<option value=\"" + 1 + "\">" + "(UTC+05:45) Kathmandu" + "</option>";
+                    $timeZones += "<option value=\"" + 1 + "\">" + "(UTC+06:00) Astana" + "</option>";
+                    $("#ddlTimeZone").empty().append($timeZones);
+                };
+                var ping = function () {
+                    interval = setInterval(function () {
+                        try {
+                            $.get("/install/ping",
+                                function (data) {
+                                    if (data == "pong") {
+                                        setupAdmin();
+                                    }
+                                });
+                        } catch (e) {
 
                             }
                         },
@@ -339,17 +347,19 @@
                     );
                 };
                 var uiEvents = function () {
-
+                    getTimeZones();
                     var frmSetupUserRegistration = $('#frmSetupUserRegistration').validate({
                         rules: {
                             SiteName: { required: true },
                             Email: { required: true, email: true },
-                            Password: { required: true, minlength: 8 }
+                            Password: { required: true, minlength: 8 },
+                            ddlTimeZone: { required: true, min: 1 }
                         },
                         messages: {
                             SiteName: '',
                             Email: '',
-                            Password: ''
+                            Password: '',
+                            ddlTimeZone: ''
                         },
                         highlight: function (input) {
                             $(input).parents('.form-group:eq(0)').addClass('has-error');

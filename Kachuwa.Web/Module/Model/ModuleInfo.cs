@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kachuwa.Data.Crud.Attribute;
-using Kachuwa.Data.Crud.FormBuilder;
 
 namespace Kachuwa.Web.Module
 {
@@ -17,6 +16,7 @@ namespace Kachuwa.Web.Module
         public bool IsInstalled { get; set; }
         public string Author { get; set; }
         public bool IsActive { get; set; }
+        public bool IsBuiltIn { get; set; }
         [IgnoreUpdate]
         public bool IsDeleted { get; set; }
         [AutoFill(AutoFillProperty.CurrentDate)]
@@ -26,5 +26,8 @@ namespace Kachuwa.Web.Module
         [AutoFill(AutoFillProperty.CurrentUser)]
         [IgnoreUpdate]
         public string AddedBy { get; set; }
+
+        [IgnoreAll]
+        public int RowTotal { get; set; }
     }
 }

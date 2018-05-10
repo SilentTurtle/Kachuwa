@@ -35,12 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="smidge.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Components\Pagination\Default.cshtml" />
     <EmbeddedResource Include="Components\NotificationBar\Default.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -62,6 +56,7 @@
     <PackageReference Include="Mustache" Version="1.0.1" />
 	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
 	    <PackageReference Include="MXTires.Microdata.Core" Version="0.1.0" />
+	    <PackageReference Include="SkiaSharp" Version="1.60.0" />
 	    <PackageReference Include="Smidge" Version="3.0.0" />
 	    <PackageReference Include="Smidge.Nuglify" Version="2.0.0" />
 	    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
@@ -73,6 +68,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\windowsazure.storage\8.1.4\lib\netstandard1.3\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Windows.Forms.dll</HintPath>
     </Reference>

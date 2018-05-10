@@ -1,6 +1,8 @@
 using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Dapper;
 using Kachuwa.Data;
 using Kachuwa.Data.Crud;
 using Kachuwa.Log;
@@ -31,19 +33,18 @@ namespace Kachuwa.Web.Module
                 var sqlqueries = scripts.Split(new[] { " GO " }, StringSplitOptions.RemoveEmptyEntries);
 
                 var dbFactory = DbFactoryProvider.GetFactory();
-                using (var db = (SqlConnection)dbFactory.GetConnection())
+                using (var db = (DbConnection)dbFactory.GetConnection())
                 {
                     await db.OpenAsync();
                     using (var tran = db.BeginTransaction())
                     {
                         try
                         {
-                            var cmd = new SqlCommand("query", db, tran);
                             foreach (var query in sqlqueries)
                             {
-                                cmd.CommandText = query;
-                                await cmd.ExecuteNonQueryAsync();
+                                await db.ExecuteAsync(query,transaction:tran);
                             }
+                          
                             tran.Commit();
                             isRun = true;
                         }

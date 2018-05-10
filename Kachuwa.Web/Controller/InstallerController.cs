@@ -142,6 +142,7 @@ namespace Kachuwa.Web
                         await _signInManager.PasswordSignInAsync(model.Email, model.Password,true, lockoutOnFailure: false);
                         var defaultSetting = await _settingService.GetSetting();
                         defaultSetting.WebsiteName = model.SiteName;
+                        defaultSetting.TimeZoneId = model.TimeZoneId;
                         await _settingService.SaveSetting(defaultSetting);
                         return Json(
                             new

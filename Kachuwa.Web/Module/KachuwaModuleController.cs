@@ -24,7 +24,7 @@ namespace Kachuwa.Web.Module
 
             if (!_module.IsInstalled)
             {
-                filterContext.Result = new RedirectToActionResult("PageNotFound", "KachuwaPage", new {});
+                filterContext.Result = new RedirectResult("/page-not-found");
             }
         }
     }

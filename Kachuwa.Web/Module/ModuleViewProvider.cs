@@ -56,7 +56,10 @@ namespace Kachuwa.Web.Module
 
             //module/pluginname/home/index
             //module/pluginname/shared/index=>//module/pluginname/index
-            if (subpath.ToLower().Contains("module") == false || subpath.ToLower().StartsWith("/area") || subpath.ToLower().Contains("admin"))
+            if (subpath.ToLower().Contains("module") == false ||
+                subpath.ToLower().StartsWith("/overrides") ||
+                subpath.ToLower().StartsWith("/area") ||
+                subpath.ToLower().Contains("admin"))
             {
                 return new NotFoundFileInfo(subpath);
             }
