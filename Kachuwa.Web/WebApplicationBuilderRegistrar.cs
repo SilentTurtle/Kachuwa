@@ -11,6 +11,7 @@ namespace Kachuwa.Web
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, IHostingEnvironment env)
         {
             app.UseMiddleware<ImageResizerMiddleware>();
+            app.UseStaticHttpContext();
         }
     }
 }

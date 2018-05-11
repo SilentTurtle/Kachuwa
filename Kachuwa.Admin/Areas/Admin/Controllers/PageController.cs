@@ -97,6 +97,12 @@ namespace Kachuwa.Admin.Controllers
         [Route("admin/page/config/{pageId}")]
         public async Task<IActionResult> Config([FromRoute]int pageId)
         {
+            var page = await _pageService.CrudService.GetAsync(pageId);
+            if (page.IsBackend && page.IsSystem)
+            {
+                _notificationService.Notify("Alert", "Backend pages are not configurable.", NotificationType.Warning);
+                return RedirectToAction("Index");
+            }
             var model = await _pageService.CrudService.GetAsync(pageId);
             var moduleComponents = _moduleComponentProvider.GetComponents();
             var moduleList = new List<ModuleViewModel>();
@@ -140,7 +146,7 @@ namespace Kachuwa.Admin.Controllers
             var model = await _pageService.Get(pageId);
             if (model.IsBackend)
             {
-                _notificationService.Notify("Alert", "Backed pages are not editable.", NotificationType.Warning);
+                _notificationService.Notify("Alert", "Backend pages are not editable.", NotificationType.Warning);
                 return RedirectToAction("Index");
             }
             model.Url = model.Url;

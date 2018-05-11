@@ -19,5 +19,6 @@ namespace Kachuwa.Web
         public bool IsNew { get; set; }
         public string OldUrl { get; set; }
         public bool IsBackend { get; set; }
+        public bool IsSystem { get; set; }
     }
 }

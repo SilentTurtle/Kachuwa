@@ -42,9 +42,11 @@ namespace Kachuwa.Web
         public bool IsDeleted { get; set; }
 
         [AutoFill(AutoFillProperty.CurrentDate)]
+        [IgnoreUpdate]
         public DateTime AddedOn { get; set; }
 
         [AutoFill(AutoFillProperty.CurrentUser)]
+        [IgnoreUpdate]
         public string AddedBy { get; set; }
         [IgnoreAll]
         public int RowTotal { get; set; }

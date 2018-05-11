@@ -240,7 +240,12 @@ namespace KachuwaApp
                 //app.UseExceptionHandler("/Home/Error");
             }
             app.UseSession();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot","lib")),
+                RequestPath = new PathString("/lib")
+            });
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
@@ -255,24 +260,24 @@ namespace KachuwaApp
             // });
             //app.UseStaticFiles(); // For the wwwroot folder
 
-            var provider = new FileExtensionContentTypeProvider();
-            // Add new mappings
-            provider.Mappings[".log"] = "text/plain";
-            provider.Mappings[".txt"] = "text/plain";
-            app.UseFileServer(new FileServerOptions()
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
-                RequestPath = new PathString("/dev/logs"),
-                EnableDirectoryBrowsing = true,
-                StaticFileOptions =
-                {
-                    DefaultContentType = "text/plain",
-                    ContentTypeProvider = provider
+            //var provider = new FileExtensionContentTypeProvider();
+            //// Add new mappings
+            //provider.Mappings[".log"] = "text/plain";
+            //provider.Mappings[".txt"] = "text/plain";
+            //app.UseFileServer(new FileServerOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(Directory.GetCurrentDirectory(), @"Logs")),
+            //    RequestPath = new PathString("/dev/logs"),
+            //    EnableDirectoryBrowsing = true,
+            //    StaticFileOptions =
+            //    {
+            //        DefaultContentType = "text/plain",
+            //        ContentTypeProvider = provider
 
-                }
+            //    }
 
-            });
+            //});
             app.UseAuthentication();
 
             app.UseIdentityServer();
@@ -302,7 +307,7 @@ namespace KachuwaApp
             //    context.Response.Headers.Add("Access-Control-Allow-Origin", "SAMEORIGIN");
             //    await next();
             //});
-            app.UseStaticHttpContext();
+          
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             //var externalCookieScheme = app.ApplicationServices.GetRequiredService<IOptions<IdentityOptions>>().Value.Cookies.ExternalCookieAuthenticationScheme;
             //app.UseGoogleAuthentication(new GoogleOptions
@@ -338,16 +343,13 @@ namespace KachuwaApp
                 // UI strings that we have localized.
                 SupportedUICultures = supportedCultures
             });
+            app.UseKachuwaApps(serviceProvider, hostingEnvironment);
             //core
             app.UseKachuwaCore(serviceProvider);
             //web
             app.UseKachuwaWeb(true);
 
-            app.UseSignalR(routes =>  // <-- SignalR
-            {
-                routes.MapHub<KachuwaNotificationHub>("/hubs/kachuwanotification");              
-
-            });
+           
             //on client side
             //let logger: ILogger;
             //let transportType: TransportType;
