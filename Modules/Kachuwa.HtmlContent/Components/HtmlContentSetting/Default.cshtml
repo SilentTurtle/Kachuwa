@@ -1,0 +1,46 @@
+﻿@using Kachuwa.Web
+@using Kachuwa.Web.Grid
+@using Kachuwa.Extensions
+@model IEnumerable<Kachuwa.HtmlContent.Model.HtmlContent>
+
+    <section class="container-fluid">
+        <div class="row">
+            <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h2>Settings</h2>
+                <table class="table table-bordered" id="tblHtmlModuleSeletion">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @foreach (var content in Model)
+                    {
+                        <tr>
+                            <td>@content.KeyName</td>
+                          
+                            <td>
+                                <label>Select<input type="checkbox" name="useme" value="@content.KeyName"/></label>
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+
+    </section>
+
+    <script type="text/javascript" asp-add-nonce="true">
+
+        pageLayoutManager.ModuleSetting.onload = function () {
+            $(document).off("change", "input[name=useme]").on("change",
+                "input[name=useme]",
+                function () {
+                    var keyValue = $(this).val();
+                    pageLayoutManager.ModuleSetting.CurrentModule('key="' + keyValue + '"');
+
+                });
+        };
+        pageLayoutManager.ModuleSetting.run();
+    </script>

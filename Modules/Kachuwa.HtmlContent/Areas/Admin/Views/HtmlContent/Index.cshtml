@@ -1,0 +1,47 @@
+﻿@using Kachuwa.Web
+@using Kachuwa.Web.Grid
+@model IEnumerable<Kachuwa.HtmlContent.Model.HtmlContent>
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel_wrapper">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading dflex space-between">
+                            <h2 class="panel-title">Html Content</h2>
+                            <a href="/admin/html/new" class="btn btn-primary btn-sm has-mdicon"><i class="material-icons md-18">add</i>Add Html Content</a>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                          .CreateKachuwaGrid(Model)
+                          .Build(columns =>
+                          {
+                              columns.Add(model => model.KeyName).SetTitle("Key Name");
+                              columns.Add(model => model.IsActive).SetTitle("Is Active");
+                              columns.Add(model => model.AddedOn).SetTitle("Added On");
+
+                          }).AddCommands(commands =>
+                          {
+                              commands.Add("Edit", "Edit", "fa fa-edit", "", "/admin/html/edit", model => model.HtmlContentId);
+                              commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.HtmlContentId,
+                                  "/admin/html/delete");
+
+                          }).Css("table-hover")
+                          .Empty("No Html Content's added yet.")
+                          .Pagination(pager =>
+                          {
+                              pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                              pager.Api = "/admin/html/page";
+                          })
+
+                            )
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

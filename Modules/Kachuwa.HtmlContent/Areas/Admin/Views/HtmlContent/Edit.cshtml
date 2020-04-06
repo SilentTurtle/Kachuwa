@@ -1,0 +1,56 @@
+﻿@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Web
+@using Kachuwa.HtmlContent.Model
+@model HtmlContent
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="cardform-wrapper">
+
+                @(
+                                                Html.CreateKachuwaForm<HtmlContent>("htmlform", Model)
+                                                .SetHeading("")
+                                                    .ActionUrl("/admin/html/edit")
+                                                    .CancelUrl("/admin/html")
+                                                .CreateSection(section =>
+                                                {
+                                                    section.Add("section1", "cardform-section", rows =>
+                                                    {
+                                                        rows.Add("1strow", "row", columns =>
+                                                        {
+                                                            columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                <h4>Html</h4>
+                                                                                                <p>provide very beatiful and meaning full content.</p>
+                                                                                            </div>);
+                                                            columns.Add("right", "col-md-8", control =>
+                                                            {
+                                                                control.Add("form-control", model => model.HtmlContentId, FormInputControl.Hidden);
+                                                                control.Add("form-control", model => model.KeyName, FormInputControl.TextBox)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-12")
+                                                                    .SetPlaceHolder("Key");
+                                                                control.Add("form-control", model => model.Content, FormInputControl.Editor)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-12")
+                                                                    .SetPlaceHolder("Content");
+                                                                control.Add("form-control", model => model.IsMarkDown, FormInputControl.Switch)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-12")
+                                                                    .SetDisplayName("Is MarkDown");
+                                                                control.Add("form-control", model => model.IsActive, FormInputControl.Switch)
+                                                                    .SetFirstParentClass("form-group")
+                                                                    .SetSecondParentClass("col-md-12")
+                                                                    .SetDisplayName("Is Active");
+                                                                ;
+
+                                                            }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                        });
+                                                    })
+                                                        .SetHeading("Edit Html Content");
+                                                }))
+            </div>
+        </div>
+    </div>
+</section>
