@@ -1,0 +1,833 @@
+
+$heading-weight: 300;
+$font-medium: 500;
+$color-dark: #212121;
+$color-bg-site: #FFFFFF;
+$color-primary: #fc6f00;
+$form-button-radius: 6px * 4.16;
+$input-border-radius: 6px;
+$input-border: 1px solid #e7e7e7;
+$color-grey: #ebebeb;
+$base-line-height: 1.85714285714286em;
+$color-on-dark: #a9a9a9;
+$body-font-weight: 400;
+@mixin box-shadow($level: 1) {
+    @if($level==1) {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+
+    @if($level==2) {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    @if($level==3) {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    @if($level==4) {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+
+    @if($level==5) {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+    }
+}
+
+@mixin forminput {
+    border: 0px;
+    height: 40px;
+    width: 100%;
+    line-height: 40px;
+    padding-left: 15px;
+    box-shadow: none;
+    font-size: $p-lead-size;
+    font-weight: $body-font-weight;
+    color: #212121;
+    border-bottom: $input-border;
+    @content;
+}
+
+@mixin centeredall {
+    @media(max-width: 767px) {
+        width: 400px;
+        margin: 0 auto 20px;
+    }
+}
+
+@mixin fullwidth {
+    @media(max-width: 450px) {
+        width: 100%;
+        @content;
+    }
+}
+
+@mixin images {
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+@mixin errorsummary {
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 5px;
+    top: 0px;
+    background: #EE464B;
+    @content;
+}
+
+.installer-wrapper {
+    background: linear-gradient(to bottom, #f15b48 0%, #ec3f4c 100%);
+    background-repeat: no-repeat;
+    background-color: #ec3f4c;
+}
+@media(max-width:1400px){
+    .fixed-height{
+        height:750px;
+    }
+}
+@media(max-width:767px){
+    .fixed-height{
+        height:auto;
+    }
+}
+.clearfix {
+    overflow: hidden;
+}
+%clearfix {
+    &::after {
+        clear: both;
+        display: block;
+        content: '';
+    }
+}
+.installer-content {
+    h2 {
+        text-transform: capitalize;
+        margin-bottom: 15px;
+    }
+}
+
+.installer-content {
+  p {
+      font-size: 21px;
+      font-weight: $heading-weight;
+      @media(max-width:991px){
+          font-size:16px;
+      }
+  }
+}
+
+.access-key {
+  width: 283px;
+  margin: 0 auto;
+  margin-top: 40px;
+  h6 {
+      font-weight: $font-medium;
+      text-align: left;
+      margin-bottom: 20px;
+      line-height: 0px;
+  }
+  .fa {
+      display: inline-block;
+      color: $color-dark;
+      margin-left: 5px;
+      cursor:pointer;
+  }
+  form {
+      .form-control {
+          border-radius: 20px;
+          height: 47px;
+      }
+  }
+}
+
+.installation-content {
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 30px;
+  @extend %clearfix;
+  @media(max-width:991px){
+      width:670px
+  }
+  @media(max-width:767px){
+      width:100%;
+  }
+  .installation-left {
+      width: 40%;
+      float: left;
+      background: #f6f6f6;
+      padding: 20px;
+      height: 550px;
+      overflow: hidden;
+      @media(max-width:767px){
+          width:100%;
+          float:none;
+          height:330px;
+      }
+  }
+
+  .installation-right {
+      width: 60%;
+      float: right;
+      background: $color-bg-site;
+      padding: 20px;
+      height: 550px;
+      overflow-y: auto;
+      @media(max-width:767px){
+          width:100%;
+          float:none;
+          height:auto;
+      }
+  }
+}
+.installation-right {
+    h3 {
+        font-weight: $body-font-weight;
+    }
+}
+.installation-inner {
+  height: 550px;
+  background: $color-bg-site;
+  padding: 30px;
+  @media(max-width:767px){
+      height:auto;
+  }
+}
+
+.installation-inner {
+position: relative;
+overflow: hidden;
+&::before{
+  position: absolute;
+  content: '';
+  width: 145px;
+  height: 175px;
+  background: url(../images/vedio-before.png);
+  top: 100px;	
+  left: -20px;
+}
+&::after{
+  position: absolute;
+  content: '';
+  width: 190px;
+  height: 162px;
+  background: url(../images/vedio-after.png);
+  top: 100px;	
+  right: -75px;
+}
+h2{
+  margin-bottom: 20px;
+  color:$color-dark !important;
+}
+  p {
+      margin-bottom: 30px;
+      line-height: 0px;
+      text-transform: capitalize;
+      font-size: 21px;
+      color: $color-dark !important;
+      @media(max-width:767px){
+          line-height:initial;
+          font-size:16px;
+      }
+  }
+  figure{
+    height: 300px;
+    img{
+      @include images;
+    }
+  }
+}
+
+.enter-btn {
+  .enterbtn {
+      background: #1865cd;
+      border: 0px;
+      color: #FFFFFF;
+      border-radius: 20px;
+      width: 200px !important;
+      display: inline-block;
+      height: 50px;
+      line-height: 50px;
+      margin-top: 30px;
+      text-decoration: none;
+      &:focus{
+        text-decoration: none;
+      }
+  }
+}
+
+.installation-left {
+    figure{
+        position:relative;
+        top:50%;
+        transform:translateY(-50%);
+        -webkit-transform:translateY(-50%);
+        @media(max-width:767px){
+            width:300px;
+            margin:0 auto;
+        }
+        @media(max-width:420px){
+            width:240px;
+        }
+        img{
+            height:100%;
+            width:100%;
+            object-fit:cover;
+            object-position:center;
+        }
+    }
+}
+.installation-right {
+    h2 {
+        color: $color-dark !important;
+        
+    }
+}
+
+.installation-form {
+  form {
+      .form-group {
+          label {
+              font-weight: $font-medium;
+              color: $color-dark;
+              margin-bottom: 0px;
+              font-size: 13px;
+          }
+          .form-control {
+              border: $input-border;
+              box-shadow:none !important;
+              font-size:13px;
+          }
+          textarea {
+              border: $input-border;
+              &:focus {
+                  outline: 1px solid $color-primary;
+              }
+          }
+      }
+  }
+}
+
+.validate-btn {
+    background: #1865cd;
+    position: relative;
+    border: 0px;
+    color: $color-bg-site;
+    border-radius: 20px;
+    width: 283px !important;
+    -webkit-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+
+    &:focus {
+        outline: none;
+    }
+
+    .button-content {
+        color: $color-bg-site;
+        text-transform: capitalize;
+    }
+
+    .spinner {
+        .fa {
+            color: $color-bg-site;
+        }
+
+        opacity: 0;
+    }
+}
+
+
+.install-btn {
+  .validate-btn {
+      width: 200px !important;
+      @media(max-width:570px){
+          width:100% !important;
+      }
+  }
+}
+
+.box {
+  margin: 100px auto;
+  width: 100px;
+}
+
+input[type="file"] {
+  opacity: 0;
+  z-index: -1;
+  cursor: pointer;
+}
+
+.fileupload {
+  label,
+  input[type="file"] {
+      display: block;
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+      border: rgba(81, 81, 81, 0.3);
+      position: relative;
+      z-index: 9999;
+      @media(max-width:991px){
+          width:100px;
+          height:100px;
+      }
+      @media(max-width:767px){
+          margin:0 auto;
+          width:125px;
+          height:125px;
+      }
+  }
+}
+
+.vedio-upload {
+  label,
+  input[type="file"] {
+      display: block;
+      width: 200px;
+      height: 150px;
+      border-radius: 0;
+      box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+      border: rgba(81, 81, 81, 0.3);
+      position: relative;
+      z-index: 9999;
+  }
+  .lbl {
+      left: 80px;
+      top: 55px;
+  }
+  .label-title {
+      position: absolute;
+      top: -30px;
+  }
+}
+
+.poster-upload {
+  label,
+  input[type="file"] {
+      display: block;
+      width: 130px;
+      height: 150px;
+      border-radius: 0;
+      box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.4);
+      border: rgba(81, 81, 81, 0.3);
+      position: relative;
+      z-index: 9999;
+  }
+  .lbl {
+      top: 55px;
+  }
+  .label-title {
+      position: absolute;
+      top: -30px;
+  }
+}
+
+label {
+  position: relative;
+}
+
+.lbl {
+  position: absolute;
+  top: 45px;
+  left: 45px;
+  line-height: 1.5;
+  z-index: 9;
+  @media(max-width:991px){
+      top:30px;
+      left:30px;
+  }
+  @media(max-width:767px){
+      top:45px;
+      left:45px;
+  }
+}
+.lbl.upload-img {
+    top: unset;
+    left: unset;
+    width: 125px;
+    height: 125px;
+    margin: 0 auto;
+    position: absolute;
+    left: -1px;
+    top: -2px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    @media(max-width:1300px) {
+        left: 0px;
+        top: 0px;
+    }
+
+    @media(max-width:991px) {
+        height: 100px;
+        width: 100px;
+    }
+
+    @media(max-width:767px) {
+        height: 125px;
+        width: 125px;
+    }
+}
+.lbl.upload-img {
+    img{
+        @include images;
+    }
+}
+.screen-btn {
+    margin-top: 160px;
+
+    @media(max-width:767px) {
+        margin-top: 30px;
+    }
+}
+
+.installation-right {
+  p {
+      margin-bottom: 0px;
+      line-height: 0px;
+  }
+}
+.installation-form{
+  .form-group{
+    .form-control{
+      box-shadow: none;
+    }
+  }
+}
+.install-btn {
+    margin-bottom:10px;
+}
+#btnTestConnection {
+    font-weight: $font-medium !important;
+}
+.enterbtn{
+    font-weight:$font-medium !important;
+}
+.has-error {
+    .error {
+        display: none !important;
+    }
+}
+.has-error {
+    #txtLicenseKey {
+        /*background: #a94442;*/
+        /*border:$color-primary;*/
+        transition: all 0.25s ease-in-out;
+        -webkit-transition: all 0.25s ease-in-out;
+        box-shadow: none;
+        border: 0px;
+        -webkit-animation: bounce 2s ease-in-out;
+        animation: bounce 2s ease-in-out;
+    }
+}
+
+@-webkit-keyframes bounce {
+    0%, 20%, 40%, 60%, 80%, 100% {
+        -webkit-transform: translateX(0);
+    }
+
+    50% {
+        -webkit-transform: translateX(-1.5px);
+    }
+}
+@keyframes bounce {
+    0%, 20%, 40%, 60%, 80%, 100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-1.5px);
+    }
+} 
+
+.has-error {
+    .form-control {
+        border-color: $color-primary !important;
+        transition: all 0.25s ease-in-out;
+        -webkit-transition: all 0.25s ease-in-out;
+    }
+}
+.validate-btn {
+    &::after {
+        position: absolute;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f061";
+        color: $color-bg-site;
+        right:15px;
+    }
+}
+
+
+.validate-btn.loader{
+    opacity:1 !important;
+}
+.validate-btn.formloader {
+    opacity:1 !important;
+}
+.loader {
+    border: 0px !important;
+    border-radius: 20px !important;
+    height: 47px !important;
+    margin: unset !important;
+    opacity: 1 !important;
+    position: relative !important;
+    top: unset !important;
+    left: unset !important;
+    width: 200px !important;
+    cursor: default;
+    display: inline-block !important;
+    opacity:0;
+    @media(max-width:767px){
+       width:100% !important;
+    }
+}
+#btnValidateLicense.loader{
+    width:283px !important;
+    @media(max-width:767px){
+        width:100% !important;
+    }
+}
+.validate-btn.loader {
+    background: #DDDDDD !important;    
+    .button-content {
+        color: $color-dark;
+    }
+}
+
+.validate-btn.loader {
+    &::after {
+        content: "";
+    }
+}
+
+@keyframes spinnerloader {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+#btnTestConnection.btn-primary {
+    height: 47px;
+    line-height: 5px;
+    @media(max-width:991px) {
+        margin-bottom: 15px;
+    }
+
+    &:hover {
+        box-shadow: none;
+        transform: unset;
+        border: 0px;
+    }
+
+    &:active {
+        background: #DDDDDD !important;
+        color: $color-dark;
+    }
+
+    @media(max-width:767px) {
+        margin-bottom: 15px;
+    }
+
+    .fa {
+        opacity: 0;
+    }
+}
+#btnTestConnection.btn-primary {
+    background: linear-gradient(to bottom, #f15b48 0%, #ec3f4c 100%);
+    transition: all 200ms ease-in-out;
+    -webkit-transition: all 200ms ease-in-out;
+
+    .button-content {
+        position: relative;
+        top: -2px;
+    }
+}
+#btnTestConnection.btn-primary.loader {
+    background: #DDDDDD !important;
+
+    .fa {
+        opacity: 1;
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        color: $color-dark !important;
+        animation: spinnerloader 5s infinite;
+    }
+
+    .button-content {
+        color: $color-dark !important;
+    }
+}
+#btnTestConnection.btn-error {
+    background: #EE464B !important;
+} 
+.validate-btn.btn-error {
+    background: #EE464B !important;
+}
+#btnValidateLicense.validate-btn.btn-error {
+    background: #1865cd !important;
+}
+.summary-error {
+    border-top: 2px solid #fc6f00 !important;
+    color: #fc6f00 !important;
+    line-height: 20px;
+    padding-top: 5px;
+    padding-left: 15px;
+    font-size: 12px;
+    position: relative;
+}
+.summary-error::before {
+    @include errorsummary;
+    left: 0px;
+}
+.summary-error::after {
+    @include errorsummary;
+    right: 0px;
+}
+.summary-success {
+    border-top: 2px solid green;
+    color: green;
+    line-height: 20px;
+}
+
+.font-red {
+    color: red;
+}
+.installation-content .installation-right::-webkit-scrollbar{
+    display:none;
+}
+
+/* Absolute Center Spinner */
+.loading {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3);
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+    /* hide "loading..." text */
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+
+.loading:not(:required):after {
+    content: '';
+    display: block;
+    font-size: 10px;
+    width: 1em;
+    height: 1em;
+    margin-top: -0.5em;
+    -webkit-animation: spinner 1500ms infinite linear;
+    -moz-animation: spinner 1500ms infinite linear;
+    -ms-animation: spinner 1500ms infinite linear;
+    -o-animation: spinner 1500ms infinite linear;
+    animation: spinner 1500ms infinite linear;
+    border-radius: 0.5em;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+    box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,36 @@
+﻿@using Kachuwa.Web.Optimizer
+@using Microsoft.AspNetCore.Routing
+@inject IKachuwaBundler bundler
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kachuwa Framewrok</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link href="" rel="stylesheet" />
+    @await bundler.BundleCss("theme-core", new string[] { "~/lib/bootstrap/dist/css/bootstrap.min.css", "~/lib/font-awesome/css/all.css" })
+
+    <link href="~/Themes/Shared/Default/css/theme.min.css" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+    @await bundler.BundleJs("jquery-core", new string[]
+                {
+        "~/lib/jquery/dist/jquery.min.js",
+        "~/lib/jquery-validation/dist/jquery.validate.min.js"
+        ,"~/lib/jquery-validation/dist/additional-methods.min.js"
+                })
+
+</head>
+<body>
+
+
+    @RenderBody()
+
+
+    @RenderSection("Scripts", required: false)
+    @await bundler.BundleJs("bs-default", new string[] { "~/lib/bootstrap/dist/js/bootstrap.min.js" })
+</body>
+</html>

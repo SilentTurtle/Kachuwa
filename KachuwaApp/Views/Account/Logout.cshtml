@@ -1,0 +1,19 @@
+﻿@model LogoutViewModel
+
+    <div class="row justify-content-md-center px-4">
+        <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+            <h3 class="mb-4">@ViewData["Title"]</h3>
+            <div class="card p-4">
+
+                <p>Would you like to logout of this server?</p>
+                <form asp-action="Logout">
+                    <input type="hidden" name="logoutId" value="@Model.LogoutId" />
+                    <fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-primary">Yes</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>

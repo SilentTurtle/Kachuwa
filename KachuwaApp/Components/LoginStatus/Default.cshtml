@@ -1,0 +1,49 @@
+﻿
+@if (User.Identity.IsAuthenticated)
+{
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <div class="container">
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope" aria-value="true"></i>
+                    </a>
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell" aria-value="true"></i>
+                        <span class="badge up pull-right-xs">2</span>
+                    </a>
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg" alt=""><i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li>
+                                <a href="/admin/dashboard"><i class="fa fa-th-large fa-fw"></i>Dashboard</a>
+                            </li>
+                        }
+                       
+                        <li>
+                            <a href="/user/profile"><i class="fa fa-user fa-fw"></i>Profile</a>
+                        </li>
+                        <li>
+                            <a href="/account/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+        </div>
+    </nav>
+}

@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.4.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jquery-validate@1.19.1",
+      "destination": "wwwroot/lib/jquery-validate/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "font-awesome@5.12.1",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "typed.js@2.0.11",
+      "destination": "wwwroot/lib/typed.js/"
+    },
+    {
+      "library": "tinymce@5.2.0",
+      "destination": "wwwroot/lib/tinymce"
+    },
+    {
+      "library": "moment.js@2.24.0",
+      "destination": "wwwroot/lib/moment.js/"
+    },
+    {
+      "library": "jquery.nicescroll@3.7.6",
+      "destination": "wwwroot/lib/jquery.nicescroll/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@4.4.1",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "animate.css@3.7.2",
+      "destination": "wwwroot/lib/animate.css/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "janimate@0.2.1",
+      "destination": "wwwroot/lib/janimate/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "gridstack@1.1.1",
+      "destination": "wwwroot/lib/gridstack/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@oroinc/jquery.nicescroll@3.6.6",
+      "destination": "wwwroot/lib/@oroinc/jquery.nicescroll/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery-ui@1.12.1",
+      "destination": "wwwroot/lib/jquery-ui/"
+    },
+    {
+      "library": "lodash.js@4.17.15",
+      "destination": "wwwroot/lib/lodash.js/"
+    },
+    {
+      "library": "Chart.js@2.9.3",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "microsoft-signalr@5.0.0-preview.1.20124.5",
+      "destination": "wwwroot/lib/microsoft-signalr/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sortablejs@1.10.2",
+      "destination": "wwwroot/lib/sortablejs/"
+    },
+    {
+      "library": "jquery-contextmenu@2.9.0",
+      "destination": "wwwroot/lib/jquery-contextmenu/"
+    },  
+    {
+      "library": "popper.js@1.16.1",
+      "destination": "wwwroot/lib/popper.js/"
+    }
+  ]
+}

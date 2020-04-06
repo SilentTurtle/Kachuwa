@@ -1,0 +1,41 @@
+﻿@model LoggedOutViewModel
+
+@{
+    // set this so the layout rendering sees an anonymous user
+    ViewData["signed-out"] = true;
+}
+    <div class="row justify-content-md-center px-4">
+        <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+
+            <div class="card p-4">
+                <h3 class="section-title text-center m-5">You are now logged out</h3>
+                <div class="container py-4">
+                    <div class="row justify-content-md-center px-4">
+
+
+                        @if (Model.PostLogoutRedirectUri != null)
+                        {
+                            <div>
+                                Click <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">here</a> to return to the
+                                <span>@Model.ClientName</span> application.
+                            </div>
+                        }
+
+                        @if (Model.SignOutIframeUrl != null)
+                        {
+                            <iframe width="0" height="0" class="signout" src="@Model.SignOutIframeUrl"></iframe>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @section scripts
+{
+            @if (Model.AutomaticRedirectAfterSignOut)
+            {
+                <script src="~/js/signout-redirect.js"></script>
+            }
+        }
