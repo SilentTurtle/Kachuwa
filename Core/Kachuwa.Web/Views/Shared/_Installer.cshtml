@@ -1,0 +1,480 @@
+﻿@using Kachuwa.Web.Security
+@using Kachuwa.Identity.ViewModels
+@using Kachuwa.Web.Optimizer
+@using Microsoft.AspNetCore.Identity
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kachuwa.Web
+@inject IKachuwaBundler bundler
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kachuwa Installer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @await bundler.BundleCss("bs4-fa-animate",new string[]{ "~/lib/bootstrap/dist/css/bootstrap.min.css",
+        "~/lib/font-awesome/css/font-awesome.min.css",
+        "~/lib/animate.css/animate.min.css"
+    })
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/themes/shared/default/css/theme.css" />
+   
+    @await bundler.BundleJs("jquery-default",new string[]{ "~/lib/jquery/dist/jquery.min.js",
+        "~/lib/jquery-validation/dist/jquery.validate.js",
+        "~/lib/jquery-validation/dist/additional-methods.min.js"
+    })
+    </head>
+<body>
+    <div class="container">
+        <div class="text-center">
+            <figure>
+                <img src="/images/kachuwa.png" alt="kachuwa framework">
+            </figure>
+        </div>
+        <section id="user-registration" class="imagebg text-center license-form animated bounceInUp" style="padding: 0px;">
+            <div class="installation-content">
+                <div class="installation-left">
+                    <figure>
+                        <img src="/images/installation-kachuwa.png" alt="">
+                    </figure>
+                </div>
+                <div class="installation-right text-left">
+                    <h2>User Registration</h2>
+                    <div class="installation-form">
+                        <form id="frmSetupUserRegistration" asp-antiforgery="true">
+                            <div class="form-group">
+                                <div class="summary">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="SiteName">Site Name</label>
+                                <input type="text" id="SiteName" name="SiteName" placeholder="Enter Web Site Name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="ddlTimeZone">Time Zone</label>
+                                <select id="ddlTimeZone" name="ddlTimeZone" class="form-control" placeholder="Time Zone">
+                                    <option value="">Select</option>
+                                    @{
+                                        var timeZones = TimeZoneInfo.GetSystemTimeZones();
+                                        foreach (var timeZone in timeZones)
+                                        {
+                                            DateTime ts = Convert.ToDateTime("05:00:00");
+                                            <option value="@timeZone.BaseUtcOffset" stime="@timeZone.StandardName">@timeZone.DisplayName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="Email">Email</label>
+                                <input type="email" id="Email" name="Email" placeholder="admin@kachuwaframework.com" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="Password">Password</label>
+                                <input type="password" id="Password" name="Password" placeholder="*******" class="form-control">
+                            </div>
+                            <div class="install-btn float-right">
+                                <button type="button" id="btnRegisterUser" class="btn validate-btn pos-relative">
+                                    <span class="button-content">Next</span>
+                                    <span class="spinner">
+                                        <i class="fa fa-spinner" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kachuwa-installation" class="imagebg text-center license-form animated bounceInUp" style="padding: 0px;display: none;">
+            <div class="installation-content">
+                <div class="installation-left">
+                    <figure>
+                        <img src="/imagesinstallation-kachuwa2.png" alt="">
+                    </figure>
+                </div>
+                <div class="installation-right text-left">
+                    <h2>Installation</h2>
+                    <div class="installation-form">
+                        <form id="frmSetupDBConnection" asp-antiforgery="true">
+
+                            <div class="form-group">
+                                <div class="summary">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="DatabaseServer">Server</label>
+                                <input type="text" id="DatabaseServer" name="DatabaseServer" placeholder="ie IpAddress or Machine Name" class="form-control" style="opacity: 1;">
+                            </div>
+                            <div class="form-group">
+                                <label for="DatabaseProvider">Database Provider</label>
+                                <select class="form-control" id="DatabaseProvider" name="DatabaseProvider" style="opacity: 1;">
+                                    <option value="SQLServer" selected="selected">MSSQL Server</option>
+                                    <option value="PostgreSQL">Postgres</option>
+                                    <option value="MySQL">MySQL</option>
+                                    <option value="SQLite">SQLLite</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="Port">Port</label>
+                                        <input type="text" id="Port" name="Port" placeholder="1434" class="form-control" style="opacity: 1;">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="DatabaseUser">Db User Name</label>
+                                        <input type="text" id="DatabaseUser" name="DatabaseUser" placeholder="sa" class="form-control" aria-invalid="false" style="opacity: 1;">
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label for="DatabasePassword">Db Password</label>
+                                        <input type="password" id="DatabasePassword" name="DatabasePassword" placeholder="*******" class="form-control" aria-invalid="false" style="opacity: 1;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="DatabaseName">Database</label>
+                                <input type="text" name="DatabaseName" placeholder="Tixalaya" class="form-control" style="opacity: 1;">
+                            </div>
+                            <div class="install-btn float-right">
+                                <button type="button" id="btnTestConnection" class="btn btn-primary pos-relative">
+                                    <span class="button-content">Test Connection</span>
+                                    <span class="spinner">
+                                        <i class="fa fa-spinner" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                                <button type="button" id="btnInstallKachuwa" class="btn validate-btn pos-relative">
+                                    <span class="button-content">Install</span>
+                                    <span class="spinner">
+                                        <i class="fa fa-spinner" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="setup-complete" class="imagebg text-center license-form animated bounceInUp" style="padding: 0px;display: none;">
+            <div class="installation-content">
+                <div class="installation-inner text-center">
+                    <h2>Setup completed successfully</h2>
+                    <p>here is the quick intro to video</p>
+                    <figure>
+                        <img src="/images/installation-kachuwa-finished.png" alt="kachuwa installation finished">
+                    </figure>
+                    <div class="enter-btn text-center">
+                        <a href="/admin/dashboard" id="btnEnter" class="enterbtn btn">Enter</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="~/lib/jquery-janimate/dist/janimate.min.js" type="text/javascript"></script>
+    <script type="text/javascript" asp-nonce="true">
+        (function ($) {
+            var installer = function () {
+                var setupData = {
+                    RegisterTryCount: 0
+                };
+                var $ajaxCall = function (url, data, success, error, beforeSend, complete) {
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: url,
+                        data: data,
+                        success: success,
+                        error: error,
+                        beforeSend: beforeSend,
+                        complete: complete
+                    });
+                };
+                var interval;
+                var setupAdmin = function () {
+                    var model = {
+                        Email: $.trim($("#Email").val()),
+                        Password: $.trim($("#Password").val()),
+                        SiteName: $.trim($("input[name=SiteName]").val()),
+                        TimeOffset: $.trim($("#ddlTimeZone").val()),
+                        TimeZoneName: $.trim($("#ddlTimeZone option:selected").attr('stime'))
+                    };
+                    $ajaxCall("/install/setupadmin",
+                        { model: model },
+                        function (response) {
+                            if (response.Code == 201) {
+                                clearInterval(interval);
+                                if (setupData.IsInstalled) {
+                                    $('#kachuwa-installation').hide();
+                                    $('#user-registration').hide();
+                                }
+                                if ($("#user-registration").find("div.summary").hasClass('summary-error')) {
+                                    $("#user-registration").find("div.summary").removeClass("summary-error").html('');
+                                }
+                                setupData.User = response.Data.Username;
+                                $('#setup-complete').show().jAnimate('bounceInUp');
+                            } else {
+                                //if (setupData.IsInstalled) {
+                                //    if ($.isArray(response.Data)) {
+                                //        $("#user-registration").find("div.summary").append("<ul></ul>");
+                                //        //$(response.Data).each(function (i, v) {
+                                //        $("#user-registration").find("div.summary").addClass("summary-error").find('ul').append('<li>' + response.Message + '</li>');
+                                //       // });
+                                //    }
+                                //   // $('#kachuwa-installation').hide();
+                                //   // $('#user-registration').show().jAnimate('bounceInUp');
+                                //    //$("#user-registration").find("div.summary").addClass("summary-error").html(response.Message);
+                                //   // $("#btnRegisterUser").removeClass("loader");
+                                //}
+                            }
+                        },
+                        function (jqXhr, response) {
+
+                        }, function (xhr) {
+                            $("#btnRegisterUser").addClass("loader").attr("disabled", "disabled");
+                            xhr.setRequestHeader(
+                                'RequestVerificationToken',
+                                $('#frmSetupUserRegistration input:hidden').val()
+                            );
+                        }, function() {
+                            $("#btnRegisterUser").addClass("loader").attr("disabled", "disabled");
+                        }
+                    );
+                };
+              
+                var ping = function() {
+                    interval= setInterval(function() {
+                            try {
+                                $.get("/install/ping",
+                                    function(data) {
+                                        if (data == "pong") {
+                                            setupAdmin();
+                                        }
+                                    });
+                            } catch (e) {
+
+                            }
+                        },
+                        4000);
+                };
+                var installKachuwa = function () {
+                    var model = {
+                        DatabaseServer: $.trim($("input[name=DatabaseServer]").val()),
+                        DatabaseName: $.trim($("input[name=DatabaseName]").val()),
+                        DatabaseUser: $.trim($("input[name=DatabaseUser]").val()),
+                        DatabasePassword: $.trim($("input[name=DatabasePassword]").val()),
+                        DatabaseProvider: $.trim($("select[name=DatabaseProvider]").val()),
+                        ConnectionStrings: $.trim($("textarea[name=ConnectionStrings]").val()),
+                        Port: $.trim($("input[name=Port]").val()),
+                        SiteName: $.trim($("input[name=SiteName]").val()),
+                        Email: $.trim($("input[name=Email]").val()),
+                        Password: $.trim($("input[name=Password]").val())
+                    };
+                    $ajaxCall("/install",
+                        { model: model },
+                        function (response) {
+                            if (response.Code == 200) {
+                                setupData.KachuwaInstall = response.Data;
+                                setupData.IsInstalled = true;
+                                ping();
+                            }
+                            else if (response.Code == 500) {
+                                setupData.IsInstalled = false;
+                                $("#kachuwa-installation").find("div.summary").addClass("summary-error").html(response.Message);
+                                if ($.isArray(response.Data)) {
+                                    $("#kachuwa-installation").find("div.summary").append("<ul></ul>");
+                                    $(response.Data).each(function (i, v) {
+                                        $("#kachuwa-installation").find("div.summary").addClass("summary-error").find('ul').append('<li>' + v + '</li>');
+                                    });
+                                }
+                            }
+                        },
+                        function (response) {
+                            console.log(response);
+                            $("#kachuwa-installation").find("div.summary").addClass("summary-error").html('Oops! Something went wrong. Try again');
+                        },
+                        function (xhr) {
+                            $("#btnInstallKachuwa").addClass("loader").attr("disabled", "disabled");
+                            xhr.setRequestHeader(
+                                'RequestVerificationToken',
+                                $('#frmSetupDBConnection input:hidden').val()
+                            );
+                        },
+                        function () {
+                            $("#btnInstallKachuwa").removeClass("loader").removeAttr("disabled");
+                        }
+                    );
+                }
+                var checkKachuwaConnection = function (e) {
+                    var model = {
+                        DatabaseServer: $.trim($("input[name=DatabaseServer]").val()),
+                        DatabaseName: $.trim($("input[name=DatabaseName]").val()),
+                        DatabaseUser: $.trim($("input[name=DatabaseUser]").val()),
+                        DatabasePassword: $.trim($("input[name=DatabasePassword]").val()),
+                        DatabaseProvider: $.trim($("select[name=DatabaseProvider]").val()),
+                        ConnectionStrings: $.trim($("textarea[name=ConnectionStrings]").val()),
+                        Port: $.trim($("input[name=Port]").val()),
+                        SiteName: $.trim($("input[name=SiteName]").val()),
+                        Email: $.trim($("input[name=Email]").val()),
+                        Password: $.trim($("input[name=Password]").val())
+                    };
+                    $ajaxCall("/install/checkconnection",
+                        { model: model },
+                        function (response) {
+                            console.log(response);
+                            if (response.Code == 200) {
+                                setupData.ConnectionTest = response.Data;
+                                if ($("#kachuwa-installation").find("div.summary").hasClass('summary-error')) {
+                                    $("#kachuwa-installation").find("div.summary").removeClass("summary-error").html('');
+                                }
+                                $("#kachuwa-installation").find("div.summary").addClass("summary-success").html(response.Message);
+                            } else {
+                                $("#kachuwa-installation").find("div.summary").addClass("summary-error").html(response.Message);
+                            }
+                        },
+                        function (response) {
+                            console.log(response);
+                            $("#kachuwa-installation").find("div.summary").addClass("summary-error").html('Connection Error!');
+                        },
+                        function (xhr) {
+                            $("#btnTestConnection").addClass("loader").attr("disabled", "disabled");
+                            xhr.setRequestHeader(
+                                'RequestVerificationToken',
+                                $('#frmSetupDBConnection input:hidden').val()
+                            );
+                        },
+                        function () {
+                            $("#btnTestConnection").removeClass("loader").removeAttr("disabled");
+                        }
+                    );
+                };
+                var uiEvents = function () {
+                    var frmSetupUserRegistration = $('#frmSetupUserRegistration').validate({
+                        rules: {
+                            SiteName: { required: true },
+                            Email: { required: true, email: true },
+                            Password: { required: true, minlength: 8 },
+                            ddlTimeZone: { required: true }
+                        },
+                        messages: {
+                            SiteName: '',
+                            Email: '',
+                            Password: '',
+                            ddlTimeZone: ''
+                        },
+                        highlight: function (input) {
+                            $(input).parents('.form-group:eq(0)').addClass('has-error');
+                        },
+                        unhighlight: function (input) {
+                            $(input).parents('.form-group:eq(0)').removeClass('has-error');
+                        },
+                        errorPlacement: function (error, element) {
+                            //$(element).parents('div:eq(0)').append(error);
+                        }
+                    });
+
+                    var frmSetupDbConnection = $('#frmSetupDBConnection').validate({
+                        ignore: '.ignore',
+                        rules: {
+                            DatabaseServer: { required: true },
+                            DatabaseUser: { required: true },
+                            DatabasePassword: { required: true },
+                            DatabaseName: { required: true },
+                            ConnectionStrings: { required: true, minlength: 1 }
+                        },
+                        messages: {
+                            DatabaseServer: { required: '' },
+                            DatabaseUser: { required: '' },
+                            DatabasePassword: { required: '' },
+                            DatabaseName: { required: '' },
+                            ConnectionStrings: { required: '' }
+                        },
+                        highlight: function (input) {
+                            //for horizontal form
+                            $(input).parents('.form-group:eq(0)').addClass('has-error');
+                            //for vertical form
+                            // $(input).parents('div:eq(0)').addClass('has-error');
+                        },
+                        unhighlight: function (input) {
+                            // if()
+                            $(input).parents('.form-group:eq(0)').removeClass('has-error');
+                            // $(input).parents('div:eq(0)').removeClass('has-error');
+                        },
+                        errorPlacement: function (error, element) {
+                            //$(element).parents('div:eq(0)').append(error);
+                        }
+                    });
+
+                    $(document).off("click", "#btnRegisterUser").on("click",
+                        "#btnRegisterUser",
+                        function () {
+                            if (frmSetupUserRegistration.form()) {
+
+                                $(this).addClass("loader").removeClass("btn-error");
+                                if (setupData.IsInstalled) {
+                                    setupAdmin();
+                                } else {
+                                    $('#user-registration').hide();
+                                    $('#kachuwa-installation').show().jAnimate('bounceInUp');
+                                }
+                                //window.location.hash = "setup";
+                            } else {
+                                $(this).removeClass("loader").addClass("btn-error");
+                            }
+                        });
+
+                    $(document).off("click", "#btnTestConnection").on("click", "#btnTestConnection", function (e) {
+                        checkKachuwaConnection(e);
+                    });
+                    $(document).off("click", "#btnInstallKachuwa").on("click",
+                        "#btnInstallKachuwa",
+                        function () {
+                            $("#kachuwa-installation").find("div.summary").removeClass("summary-success").empty();
+                            if (frmSetupDbConnection.form()) {
+                                $(this).addClass("loader").removeClass("btn-error");
+                                installKachuwa();
+                            } else {
+                                $(this).removeClass("loader").addClass("btn-error");
+                            }
+                        });
+                    $(document).off("keypress", "#Password, #DatabaseName");
+                    $(document).on("keypress", "#Password, #DatabaseName", function (e) {
+                        var idVal = e.currentTarget.id;
+                        if (e.which === 13) {
+                            switch (idVal) {
+                                case "Password":
+                                    $("#btnRegisterUser").trigger("click");
+                                    break;
+                                case "DatabaseName":
+                                    $("#btnInstallKachuwa").trigger("click");
+                                    break;
+                                default:
+                                    alert("Warning");
+                            }
+                        }
+                    });
+                    $("select[name=DatabaseProvider]").change(
+                        function () {
+                            var selected = $(this).val();
+                            if (selected == "SQLServer") {
+                                $("input[name=Port]").val('');
+                            } else if (selected == "PostgreSQL") {
+
+                                $("input[name=Port]").val(5432);
+                            } else if (selected == "MySQL") {
+                                $("input[name=Port]").val(3306);
+                            } else {
+                                $("input[name=Port]").val('');
+                            }
+
+                        });
+                };
+                uiEvents();
+
+            };
+            installer();
+        })(jQuery);
+    </script>
+</body>
+</html>
