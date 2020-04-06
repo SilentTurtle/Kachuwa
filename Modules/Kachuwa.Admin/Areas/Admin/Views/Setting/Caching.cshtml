@@ -1,0 +1,100 @@
+﻿@using Kachuwa.Caching
+@using Kachuwa.Web.Form
+@using Kachuwa.Localization
+@using Kachuwa.Web
+@model IEnumerable<Kachuwa.Caching.ICacheService>
+@inject ILocaleResourceProvider LocaleResource
+@inject ICacheService CurrentCacheService
+@{
+
+    LocaleResource.LookUpGroupAt("Setting");
+    ViewData["Title"] = LocaleResource.Get("Setting.Caching.PageTitle");
+
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                       
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Setting.Caching.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="kachuwa-grid">
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="" data-name="Name">
+                                                <span class="kachuwa-grid-header">@LocaleResource.Get("Setting.Caching.CacheEngine")</span>
+                                            </th>
+                                            <th class="">
+                                                <span class="kachuwa-grid-header">@LocaleResource.Get("Setting.Caching.InUse")</span>
+                                            </th>
+                                            <th style="width: 15%;">
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            @foreach (var cacheService in Model)
+                                            {
+                                                if (cacheService.GetType() == CurrentCacheService.GetType())
+                                                {
+                                                    <td>@cacheService.GetType().FullName</td>
+
+                                                    <td>
+                                                        Yes
+                                                    </td>
+                                                    <td style="width: 15%;">
+                                                        <a href="/admin/setting/caching/ResetCacheAll" title="@LocaleResource.Get("Setting.Caching.ResetTitle")">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-sync-alt"></i>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@cacheService.GetType().FullName</td>
+
+                                                    <td>
+                                                        No
+                                                    </td>
+                                                    <td style="width: 15%;">
+                                                        <a disabled="disabled" href="/admin/setting/caching/ResetCacheAll" title="@LocaleResource.Get("Setting.Caching.ResetTitle")">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-sync-alt  "></i>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                }
+                                            }
+
+
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

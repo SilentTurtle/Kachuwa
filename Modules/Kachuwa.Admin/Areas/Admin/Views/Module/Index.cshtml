@@ -1,0 +1,164 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Web.Module
+@model IEnumerable<ModuleInfo>
+@inject ILocaleResourceProvider LocaleResource
+@{
+
+    LocaleResource.LookUpGroupAt("Module");
+    ViewData["Title"] = LocaleResource.Get("Module.PageTitle");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Module.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+
+                                    @*<a href="#" class="btn btn-primary btn-sm has-mdicon">
+                                            <i class="material-icons md-18">add</i>
+                                            @LocaleResource.Get("Module.AddNewButtonText")
+                                        </a>*@
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
+
+                            @foreach (var module in Model)
+                            {
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title"> @module.Name</h4>
+                                            <p class="card-text">
+                                                @module.Version
+                                            </p>
+                                            <p class="card-text">
+                                                @module.Author
+                                            </p>
+                                            <p class="install">Is Installed:- @module.IsInstalled</p>
+                                            <p> Is BuiltIn:-@module.IsBuiltIn</p>
+
+                                            @if (module.IsInstalled)
+                                            {
+                                                if (module.IsBuiltIn)
+                                                {
+
+                                                    <button data-module="@module.Name" class="btn btn-block btn-danger has-mdicon disabled ">
+                                                        <i class="material-icons md-18">ic_close</i> @LocaleResource.Get("Module.Grid.Uninstall")
+                                                    </button>
+
+                                                }
+                                                else
+                                                {
+
+                                                    <button data-module="@module.Name" class="btn btn-block btn-danger has-mdicon uninstall">
+                                                        <i class="material-icons md-18">ic_close</i> @LocaleResource.Get("Module.Grid.Uninstall")
+                                                    </button>
+
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                <button data-module="@module.Name" class="btn btn-block btn-success has-mdicon install">
+                                                    <i class="material-icons md-18">save</i> @LocaleResource.Get("Module.Grid.Install")
+                                                </button>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            <pagination page="@ViewBag.Page" api="/admin/module/page" pageSize="8" rowTotal="@ViewBag.Page"></pagination>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script asp-add-nonce="true">
+    (function () {
+        var moduleManager = function () {
+            var ajaxCall = function (url, param, successFx, error) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: url,
+                    data: param,
+                    success: successFx,
+                    error: error
+                });
+            };
+
+            var uiEvents = function () {
+                $(document).off("click", ".install").on("click",
+                    ".install",
+                    function () {
+                        var btn = $(this);
+                        var moduleName = btn.data('module');
+                        if (confirm("Are you sure you want to install this module?")) {
+                            console.log(moduleName)
+                            ajaxCall("/admin/module/install",
+                                { moduleName: moduleName },
+                                function (response) {
+                                    if (response.Code == 200) {
+                                        btn.removeClass("install")
+                                            .removeClass("btn-success")
+                                            .addClass("btn-danger")
+                                            .addClass("uninstall");
+                                        btn.parents("div:eq(0)").find(".install").html("Is Installed:- True");
+                                        btn.html("<i class=\"material-icons md-18\">ic_close</i>" + Locale.Get("Module.Grid.Uninstall", "Module"));
+                                    }
+
+                                },
+                                function () { });
+                        }
+                    });
+                $(document).off("click", ".uninstall").on("click",
+                    ".uninstall",
+                    function () {
+                        var btn = $(this);
+                        if (confirm("Are you sure you want to uninstall this module?")) {
+                            var moduleName = $(this).data('module');
+
+                            ajaxCall("/admin/module/uninstall",
+                                { moduleName: moduleName },
+                                function (response) {
+                                    if (response.Code == 200) {
+                                        btn.removeClass("uninstall")
+                                            .removeClass("btn-danger")
+                                            .addClass("btn-success").addClass("install");
+                                        btn.parents("div:eq(0)").find(".install").html("Is Installed:-False");
+                                        btn.html("<i class=\"material-icons md-18\">save</i>" + Locale.Get("Module.Grid.Install", "Module"));
+                                    }
+
+                                },
+                                function () { });
+                        }
+                    });
+            };
+
+            var init = function () {
+                uiEvents();
+            }
+            return { init: init };
+        }();
+        moduleManager.init();
+
+    })();
+
+</script>
+

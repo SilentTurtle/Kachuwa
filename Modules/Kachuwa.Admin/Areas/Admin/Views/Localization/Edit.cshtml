@@ -1,0 +1,139 @@
+﻿@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model Kachuwa.Localization.LocaleRegionEditViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Localization");
+    ViewData["Title"] = LocaleResource.Get("Localization.PageTitle.Edit");
+    var formDataSource = (FormDatasource)ViewData["FormDataSource"];
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="cardform-wrapper">
+                @(Html.CreateKachuwaForm<Kachuwa.Localization.LocaleRegion>
+                                                            ("localseForm", Model)
+                                                            .SetHeading("")
+                                                            .ActionUrl("/admin/localization/edit")
+                                                            .CancelUrl("/admin/localization")
+                                                            .CreateSection(section =>
+                                                            {
+                                                                section.Add("section1", "form-section", rows =>
+                                                                {
+                                                                    rows.Add("1strow", "row", columns =>
+                                                                    {
+                                                                        columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                            <h4>@LocaleResource.Get("Localization.LocaleRegion")</h4>
+                                                                                                            <p>@LocaleResource.Get("Localization.LocaleRegion.InfoText")</p>
+                                                                                                        </div>);
+                                                                        columns.Add("right", "col-md-8", control =>
+                                                                        {
+                                                                            control.Add("form-control", model => model.LocaleRegionId, FormInputControl.Hidden);
+                                                                            control.Add("form-control", x => x.CountryId, FormInputControl.Select, formDataSource.GetSource("Countries"), new {disabled = true, data_live_search = true})
+                                                                                .SetFirstParentClass("form-group")
+                                                                                .SetSecondParentClass("col-md-12")
+                                                                                .SetHelp(LocaleResource.Get("Localization.Help.CountryId"))
+                                                                                .SetPlaceHolder(LocaleResource.Get("Localization.PlaceHolder.CountryId"))
+                                                                                .SetDisplayName(LocaleResource.Get("Localization.Form.CountryId"));
+                                                                            control.Add("form-control", x => x.Culture, FormInputControl.TextBox, new {disabled = true})
+                                                                                .SetFirstParentClass("form-group")
+                                                                                .SetSecondParentClass("col-md-12")
+                                                                                .SetHelp(LocaleResource.Get("Localization.Help.CountryId"))
+                                                                                .SetPlaceHolder(LocaleResource.Get("Localization.PlaceHolder.CountryId"))
+                                                                                .SetDisplayName(LocaleResource.Get("Localization.Form.CountryId"));
+                                                                            control.Add("form-control", x => x.IsActive, FormInputControl.Switch)
+                                                                                .SetFirstParentClass("form-group")
+                                                                                .SetSecondParentClass("col-md-12")
+                                                                                .SetHelp(LocaleResource.Get("Localization.Help.CountryId"))
+                                                                                .SetPlaceHolder(LocaleResource.Get("Localization.PlaceHolder.CountryId"))
+                                                                                .SetDisplayName(LocaleResource.Get("Localization.Form.CountryId"));
+                                                                        }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                    });
+                                                                    rows.Add("resouces", "row", @<div class="col-md-12">
+                                                                                                    <table class="table">
+                                                                                                        <thead>
+                                                                                                        <tr>
+                                                                                                            <th>@LocaleResource.Get("Localization.Form.Key")</th>
+                                                                                                            <th>@LocaleResource.Get("Localization.Form.BaseLocaleValue")</th>
+                                                                                                            <th>@LocaleResource.Get("Localization.Form.LocaleValue")</th>
+                                                                                                        </tr>
+                                                                                                        </thead>
+                                                                                                        @foreach (var resource in Model.Resources)
+                                                                                                        {
+                                                                                                            <tr data-id="@resource.LocaleResourceId" data-group="@resource.GroupName" data-culture="@resource.Culture" data-name="@resource.Name">
+                                                                                                                <td>
+                                                                                                                    <p>@resource.Name <span>(@resource.GroupName)</span></p>
+                                                                                                                </td>
+                                                                                                                <td>@resource.BaseValue</td>
+                                                                                                                <td class="editable">@resource.Value</td>
+                                                                                                            </tr>
+                                                                                                        }
+                                                                                                    </table>
+                                                                                                    <div class="row">
+                                                                                                        <pagination api="/admin/localization/edit/@ViewBag.localRegionId" page="@ViewBag.Page" rowTotal="@ViewBag.RowTotal" pageSize="20"></pagination>
+                                                                                                    </div>
+                                                                                                </div>);
+                                                                })
+                                                                    .SetHeading(LocaleResource.Get("Localization.Form.Title.Edit"));
+                                                            }))
+            </div>
+        </div>
+    </div>
+</section>
+<script asp-add-nonce="true">
+    (function () {
+        var ajaxCall = function (url, param, successFx, error) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: url,
+                data: param,
+                success: successFx,
+                error: error
+            });
+        };
+        $(document).off("click", "td.editable").on("click",
+            "td.editable",
+            function (e) {
+                var target = $(e.target);
+                if (target.is("td")) {
+                    if ($(this).find("div").length == 0) {
+                        var html = $(this).html();
+                        var template = '<div class="input-group"><input type="text" class="form-control localevalue" placeholder="" value="' +
+                            html + '" />' +
+                            '<span class="input-group-btn">' +
+                            '<button class="btn btn-primary has-mdicon savelocale" type="button"><i class="material-icons md-18">save</i></button></span>' +
+                            '</div>';
+                        $(this).html(template);
+                    }
+                }
+            });;
+        $(document).off("click", "button.savelocale").on("click",
+            "button.savelocale",
+            function (e) {
+                var target = $(e.target);
+                if (target.is("button")) {
+                    var btn = $(this);
+                    var resourceValue = $(this).parents("tr:eq(0)").find(".localevalue").val();
+                    var data = $(this).parents("tr:eq(0)").data();
+                    var param = {
+                        LocaleResourceId: data.id,
+                        Name: data.name,
+                        Value: resourceValue,
+                        Culture: data.culture,
+                        GroupName: data.group
+                    };
+                    ajaxCall("/admin/localization/update/locale",
+                        param,
+                        function (response) {
+                            if (response.Code == 200) {
+                                btn.parents("td:eq(0)").html('').html(resourceValue);
+                            }
+                        },
+                        function () {
+                        });
+                }
+            });
+    })();
+</script>

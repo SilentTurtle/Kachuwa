@@ -1,0 +1,220 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Plugin
+@using Kachuwa.Web.Payment
+@model IEnumerable<IPlugin>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("PaymentGateway");
+    ViewData["Title"] = LocaleResource.Get("PaymentGateway.PageTitle");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">                       
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("PaymentGateway.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    <a href="/admin/paymentgateway/new" class="btn btn-primary btn-sm has-mdicon">
+                                        <i class="material-icons md-18">add</i>
+                                        @LocaleResource.Get("PaymentGateway.AddNewButtonText")
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>
+                                        <span class="kachuwa-grid-header">@LocaleResource.Get("PaymentGateway.Grid.Name")</span>
+                                    </th>
+
+                                    <th>
+                                        <span class="kachuwa-grid-header">@LocaleResource.Get("PaymentGateway.Grid.Version")</span>
+                                    </th>
+                                    <th>
+                                        <span class="kachuwa-grid-header">@LocaleResource.Get("PaymentGateway.Grid.IsUsed")</span>
+                                    </th>
+                                    <th></th>
+
+                                </tr>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr data-item="@item.SystemName">
+                                        <td>
+                                            @item.Configuration.Name
+                                        </td>
+
+
+                                        <td>
+                                            @item.Configuration.Version
+                                        </td>
+                                        <td>
+                                            @if (item.Configuration.IsInstalled)
+                                            {
+                                                <label class="switch">
+                                                    <input type="checkbox" name="useinsystem" checked="checked" />
+                                                    <div class="switchslider round"></div>
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="switch">
+                                                    <input type="checkbox" name="useinsystem" />
+                                                    <div class="switchslider round"></div>
+                                                </label>
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @if (item.Configuration.IsInstalled)
+                                            {
+                                                if (((IPaymentMethod)item).HasSettings)
+                                                {
+                                                    <a href="/admin/paymentgateway/setting?sysName=@item.SystemName"><i class="fa fa-cog"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="#" class="disabled"><i class="fa fa-cog"></i></a>
+
+                                                }
+                                            }
+                                        </td>
+
+
+                                    </tr>
+                                }
+
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<link href="/module/KachuwaGrid/resources/css/kgridstyle.min.css" rel="stylesheet" />
+@section scripts{
+
+    <script type="text/javascript">
+        var pg = function() {
+            var $ajaxCall = function(data, url, success, error) {
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: url,
+                    data: data,
+                    success: success,
+                    error: error
+                });
+            };
+            var install = function (item) {
+
+                $ajaxCall({ SystemName: item }, '/admin/PaymentGateway/install', function(response) {
+                     if (response.Data) {
+                        $.toast({
+                            heading: "Success",
+                            text: response.Message,
+                            position: 'bottom-right',
+                            stack: false,
+                            bgColor: '#80A001',
+                            allowToastClose: false,
+                            loader: true, // Change it to false to disable loader
+                            loaderBg: '#9EC600' // To change the background
+
+                        });
+                        //window.location.href = '@Url.Action("index", "PaymentGateway", new {area = "Admin"})';
+                    } else {
+                        $.toast({
+                            heading: 'Error',
+                            text: 'Something went wrong :(',
+                            showHideTransition: 'fade',
+                            position: 'bottom-right',
+                            stack: false,
+                            icon: 'error'
+                        });
+                    }
+
+                }, function(response) {
+
+                });
+            };
+            var uninstall = function(item) {
+                $ajaxCall({ SystemName: item }, '/admin/PaymentGateway/uninstall', function(response) {
+                    if (response.Data) {
+                        $.toast({
+                            heading: "Success",
+                            text: response.Message,
+                            position: 'bottom-right',
+                            stack: false,
+                            bgColor: '#80A001',
+                            allowToastClose: false,
+                            loader: true, // Change it to false to disable loader
+                            loaderBg: '#9EC600' // To change the background
+
+                        });
+                       // window.location.href = '@Url.Action("index", "PaymentGateway", new {area = "Admin"})';
+                    } else {
+                        $.toast({
+                            heading: 'Error',
+                            text: 'Something went wrong :(',
+                            showHideTransition: 'fade',
+                            position: 'bottom-right',
+                            stack: false,
+                            icon: 'error'
+                        });
+                    }
+
+                }, function (response) {
+                    $.toast({
+                        heading: 'Error',
+                        text: 'Something went wrong :(',
+                        showHideTransition: 'fade',
+                        position: 'bottom-right',
+                        stack: false,
+                        icon: 'error'
+                    });
+
+                });
+            };
+            var init = function() {
+
+                $(document).off("change", ".switch input").on("change", ".switch input", function() {
+
+                    var ischecked = $(this).is(":checked");
+                    var item = $(this).parents("tr:eq(0)").data('item');
+                    if (ischecked) {
+                        if (confirm("Are you sure want to start using?")) {
+                            install(item);
+                        } else {
+
+                            $(this).prop("checked", false);
+                        }
+                    } else {
+                        if (confirm("Are you sure want to stop using?")) {
+                            uninstall(item);
+                        } else {
+                            $(this).prop("checked", true);
+
+                        }
+                    }
+
+                });
+
+            }();
+
+        }();
+    </script>
+
+}
+
+

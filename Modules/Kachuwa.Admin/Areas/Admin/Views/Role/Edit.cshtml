@@ -1,0 +1,56 @@
+﻿@using Kachuwa.Admin.ViewModel
+@using Kachuwa.Web.Form
+@using Kachuwa.Identity.Models
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model Kachuwa.Identity.Models.IdentityRole
+@inject ILocaleResourceProvider LocaleResource
+    ViewData["Title"] = LocaleResource.Get("Role.PageTitle.Edit");
+    @inject ILocaleResourceProvider LocaleResource
+    @{
+
+        LocaleResource.LookUpGroupAt("Role");
+        ViewData["Title"] = @LocaleResource.Get("Role.PageTitle.Edit");
+    }
+
+    <section class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <div class="cardform-wrapper">
+
+                    @(Html.CreateKachuwaForm<Kachuwa.Identity.Models.IdentityRole>("newRoleForm", Model)
+                                                                                    .SetHeading("")
+                                                                                    .ActionUrl("/admin/role/edit")
+                                                                                    .CancelUrl("/admin/role")
+                                                                                    .CreateSection(section =>
+                                                                                    {
+                                                                                        section.Add("section1", "form-section", rows =>
+                                                                                        {
+                                                                                            rows.Add("1strow", "row", columns =>
+                                                                                            {
+                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                    <h4>@LocaleResource.Get("Role.Info.Title")</h4>
+                                                                                                                                    <p>@LocaleResource.Get("Role.Info.InfoText")</p>
+                                                                                                                                </div>);
+                                                                                                columns.Add("right", "col-md-8", control =>
+                                                                                                {
+                                                                                                    control.Add("form-control", model => model.Id, FormInputControl.Hidden);
+
+                                                                                                    control.Add("form-control", x => x.Name, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                        .SetHelp(LocaleResource.Get("Role.Help.Name"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Role.PlaceHolder.Name"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Role.Form.Name"));
+
+                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                            });
+
+                                                                                        })
+                                                                                            .SetHeading(LocaleResource.Get("Role.Form.Title.Edit"));
+                                                                                    }))
+                </div>
+            </div>
+        </div>
+    </section>

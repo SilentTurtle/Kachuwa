@@ -1,0 +1,56 @@
+﻿@using Kachuwa.Web.Model
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@using Kachuwa.Plugin
+@using Kachuwa.Web.Theme
+@model Kachuwa.Web.Theme.ThemeViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Themes");
+    ViewData["Title"] = LocaleResource.Get("Themes.PageTitle.New");
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="cardform-wrapper">
+                @(
+                                                    Html.CreateKachuwaForm<ThemeViewModel>("pgfrom", Model)
+                                                    .SetHeading("")
+                                                        .EncType("multipart/form-data")
+                                                        .ActionUrl("/admin/theme/new")
+                                                        .CancelUrl("/admin/theme/manage")
+                                                    .CreateSection(section =>
+                                                    {
+                                                        section.Add("section1", "form-section", rows =>
+                                                        {
+                                                            rows.Add("1strow", "row", columns =>
+                                                            {
+                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                    <h4>@LocaleResource.Get("Themes.Info.Themes")</h4>
+
+                                                                                                    <p>
+                                                                                                        @LocaleResource.Get("Themes.Info.ThemesText")
+                                                                                                    </p>
+                                                                                                    <p>
+                                                                                                        @LocaleResource.Get("Themes.Info.ThemesText2")
+                                                                                                    </p>
+                                                                                                </div>);
+                                                                columns.Add("right", "col-md-8", control =>
+                                                                {
+                                                                    control.Add("form-control", model => model.ThemeZip, FormInputControl.File)
+                                                                        .SetFirstParentClass("form-group")
+                                                                        .SetSecondParentClass("col-md-12")
+                                                                        .SetHelp(LocaleResource.Get("Themes.Help.ThemeZipFile"))
+                                                                        .SetPlaceHolder(LocaleResource.Get("Themes.PlaceHolder.ThemeZipFile"))
+                                                                        .SetDisplayName(LocaleResource.Get("Themes.Form.ThemeZipFile"));
+
+                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                            });
+                                                        })
+                                                            .SetHeading(LocaleResource.Get("Themes.Form.Title.New"));
+                                                    }))
+            </div>
+        </div>
+    </div>
+</section>

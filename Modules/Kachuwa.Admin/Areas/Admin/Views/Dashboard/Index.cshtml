@@ -1,0 +1,499 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Web
+@using Newtonsoft.Json
+@inject IWidgetRenderer Renderer
+@model List<DashboardWidgetConfigViewModel>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Dashboard");
+    ViewData["Title"] = LocaleResource.Get("Dashboard");
+    var widgets = (IEnumerable<IWidget>)ViewData["Widgets"];
+}
+@section Stylesheet{
+    <link href="~/lib/gridstack/dist/gridstack.min.css" rel="stylesheet" />
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <h2 class="view-title">Dashboard</h2>
+        <div class="pull-right">
+            <div class="dashboard-timeselection">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-info" id="btnAddNewWidget"><i class="fas fa-cogs"></i></button>
+                    <button type="button" class="btn btn-danger" id="btnReset"><i class="fas fa-sync-alt "></i></button>
+                    <button type="button" class="btn btn-success widgetLayoutSave" style="display: none;" id="btnSaveWidgetLayout"><i class="fas fa-save"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="grid-stack">
+            @foreach (var widgetConfig in Model)
+            {
+                <div data-wn="@widgetConfig.Widget.SystemName" class="grid-stack-item ui-draggable ui-resizable ui-resizable-autohide" data-gs-auto-position="1" data-gs-widget="@widgetConfig.WidgetSystemName" data-gs-x="@widgetConfig.x" data-gs-y="@widgetConfig.y" data-gs-width="@widgetConfig.width" data-gs-height="@widgetConfig.height">
+                    <div class="grid-stack-item-content ui-draggable-handle">
+
+                        @await Renderer.Render(widgetConfig.Widget, this.ViewContext)
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="modal right fade" id="widgetsModal" tabindex="-1" role="dialog" aria-labelledby="theaterModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>*@
+                    <button type="button" class="btn btn-primary widgetLayoutSave  has-mdicon pull-right" style="display: none;"><i class="material-icons md-18">save</i> </button>
+
+                    <h4 class="modal-title">
+                        <i class="fa fa-cog"></i> @LocaleResource.Get("Widgets")
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="row">
+                                @foreach (var wd in widgets)
+                                {
+                                    <div class="card">
+                                        <div class="box">
+
+                                            <h2>@wd.SystemName<br><span>Author:@wd.Author</span></h2>
+                                            <p>
+                                                @wd.Description
+                                            </p>
+                                            <span>
+                                                <ul>
+                                                    <li><a class="addwidget" data-wn="@wd.SystemName" title="Add to dashboard" href="javascript:void(0);"><i class="fas fa-plus" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </span>
+                                            <div class="hidden-w" style="display: none;">
+                                                @await Renderer.Render(wd, this.ViewContext)
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/lodash.js/lodash.min.js"></script>
+    <script src="~/lib/gridstack/dist/gridstack.all.js"></script>
+    @*<script src="~/lib/gridstack/dist/gridstack.all.js"></script>
+        <script src="/lib/chart.js/dist/Chart.bundle.js"></script>*@
+    <script type="text/javascript">
+            (function (global) {
+                var Months = [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December'
+                ];
+
+                var COLORS = [
+                    '#4dc9f6',
+                    '#f67019',
+                    '#f53794',
+                    '#537bc4',
+                    '#acc236',
+                    '#166a8f',
+                    '#00a950',
+                    '#58595b',
+                    '#8549ba'
+                ];
+
+                var Samples = global.Samples || (global.Samples = {});
+                var Color = global.Color;
+
+                Samples.utils = {
+                    // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+                    srand: function (seed) {
+                        this._seed = seed;
+                    },
+
+                    rand: function (min, max) {
+                        var seed = this._seed;
+                        min = min === undefined ? 0 : min;
+                        max = max === undefined ? 1 : max;
+                        this._seed = (seed * 9301 + 49297) % 233280;
+                        return min + (this._seed / 233280) * (max - min);
+                    },
+
+                    numbers: function (config) {
+                        var cfg = config || {};
+                        var min = cfg.min || 0;
+                        var max = cfg.max || 1;
+                        var from = cfg.from || [];
+                        var count = cfg.count || 8;
+                        var decimals = cfg.decimals || 8;
+                        var continuity = cfg.continuity || 1;
+                        var dfactor = Math.pow(10, decimals) || 0;
+                        var data = [];
+                        var i, value;
+
+                        for (i = 0; i < count; ++i) {
+                            value = (from[i] || 0) + this.rand(min, max);
+                            if (this.rand() <= continuity) {
+                                data.push(Math.round(dfactor * value) / dfactor);
+                            } else {
+                                data.push(null);
+                            }
+                        }
+
+                        return data;
+                    },
+
+                    labels: function (config) {
+                        var cfg = config || {};
+                        var min = cfg.min || 0;
+                        var max = cfg.max || 100;
+                        var count = cfg.count || 8;
+                        var step = (max - min) / count;
+                        var decimals = cfg.decimals || 8;
+                        var dfactor = Math.pow(10, decimals) || 0;
+                        var prefix = cfg.prefix || '';
+                        var values = [];
+                        var i;
+
+                        for (i = min; i < max; i += step) {
+                            values.push(prefix + Math.round(dfactor * i) / dfactor);
+                        }
+
+                        return values;
+                    },
+
+                    months: function (config) {
+                        var cfg = config || {};
+                        var count = cfg.count || 12;
+                        var section = cfg.section;
+                        var values = [];
+                        var i, value;
+
+                        for (i = 0; i < count; ++i) {
+                            value = Months[Math.ceil(i) % 12];
+                            values.push(value.substring(0, section));
+                        }
+
+                        return values;
+                    },
+
+                    color: function (index) {
+                        return COLORS[index % COLORS.length];
+                    },
+
+                    transparentize: function (color, opacity) {
+                        var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+                        return Color(color).alpha(alpha).rgbString();
+                    }
+                };
+
+                // DEPRECATED
+                window.randomScalingFactor = function () {
+                    return Math.round(Samples.utils.rand(-100, 100));
+                };
+
+                // INITIALIZATION
+
+                Samples.utils.srand(Date.now());
+
+            }(this));
+            var dashboardManager = function () {
+                var globalConnection;
+
+                var initRtc = function () {
+                    var hubRoute = "/hubs/dashboard";
+                    var protocol = new signalR.JsonHubProtocol(); // new signalR.protocols.msgpack.MessagePackHubProtocol();
+                    // new signalR.JsonHubProtocol();
+
+                    var options = {};
+                    var connection = connection = new signalR.HubConnectionBuilder()
+                        .configureLogging(signalR.LogLevel.None) // Critical,Debug,Error,Information,None,Trace,Warning
+                        .withUrl(hubRoute, options)
+                        .withHubProtocol(protocol)
+                        .build();
+                    connection.start()
+                        .then(function (xx) {
+                            console.log(xx, connection);
+                            globalConnection = connection;
+                            $(document).trigger("onDashboardReady", [dashboardManager]);
+                        })
+                        .catch(error => {
+                            console.error(error.message);
+                            globalConnection = null;
+                        });
+
+
+                };
+                var getRtcConnetion = function () {
+                    if (globalConnection == null) {
+                        initRtc();
+                    }
+                    return globalConnection;
+                }
+                var init = function () {
+                    //initRtc();
+                }
+                var widgetManager = function () {
+                    var widgets =@Html.Raw(JsonConvert.SerializeObject(Model));
+                    console.log(widgets);
+                    var isLayoutChanged = false;
+                    var dashboardWidgets = [];
+                    var hideShowSaveButton = function() {
+                        if (isLayoutChanged) {
+                            $(".widgetLayoutSave").show();
+                        } else {
+                            $(".widgetLayoutSave").hide();
+                        }
+                    }
+                    var $ajaxCall = function(method, url, data, success, error) {
+                       $.ajax({
+                            type: method,
+                            async: true,
+                            url: url,
+                            data: data,
+                            success: success,
+                            error: error
+                        });
+                    };
+                    var resetLayout = function() {
+                       $ajaxCall("POST",
+                            "/admin/dashboard/widget/reset",
+                            { configs: dashboardWidgets },
+                            function(response) {
+                                if (response) {
+                                    new kachuwaNotification().Success(Locale.Get("Success"), Locale.Get("Widget configuration reset successfully."));
+                                    window.location.href = window.location.href;
+                                }
+
+                            },
+                            function() {});
+                    }
+                    var saveLayout = function() {
+                       $ajaxCall("POST",
+                            "/admin/dashboard/widget/save",
+                            { configs: dashboardWidgets },
+                            function(response) {
+                                if (response) {
+                                    new kachuwaNotification().Success(Locale.Get("Success"), Locale.Get("Widget configuration save successfully."));
+                                    window.location.href = window.location.href;
+                                }
+
+                            },
+                            function() {});
+                    }
+                    var init = function () {
+                        var waitForFinalEvent = function () {
+                            var b = {};
+                            return function (c, d, a) {
+                                a || (a = "I am a banana!");
+                                b[a] && clearTimeout(b[a]);
+                                b[a] = setTimeout(c, d);
+                            }
+                        }();
+                        var fullDateString = new Date();
+
+                        function isBreakpoint(alias) {
+                            return $('.device-' + alias).is(':visible');
+                        }
+                        var options = {
+                            float: false,
+                            animate: true
+                        };
+                        // $('.grid-stack').gridstack(options);
+                        GridStack.init();
+
+                        var serializeWidgetMap = function (items) {
+                            dashboardWidgets = [];
+                            $.each(items,
+                                function(i, item) {
+                                    var wn = $(item.el).find(".widget").data('wn');
+                                    dashboardWidgets.push({
+                                        x: item.x,
+                                        y: item.y,
+                                        width: item.width,
+                                        height: item.height,
+                                        WidgetSystemName: wn,
+                                        DisplayName: wn
+                                    });
+
+                                });
+                            console.log(dashboardWidgets);
+                        };
+
+                        $('.grid-stack').on('change',
+                            function (event, items) {
+                                isLayoutChanged = true;
+                                hideShowSaveButton();
+                                //serializeWidgetMap($('.grid-stack').data('gridstack').grid.nodes);
+                                serializeWidgetMap(GridStack.init().grid.nodes)
+                            });
+
+                        function resizeGrid() {
+                            var grid = $('.grid-stack').data('gridstack');
+                            if (isBreakpoint('xs')) {
+                                $('#grid-size').text('One column mode');
+                            } else if (isBreakpoint('sm')) {
+                                grid.setGridWidth(3);
+                                $('#grid-size').text(3);
+                            } else if (isBreakpoint('md')) {
+                                grid.setGridWidth(6);
+                                $('#grid-size').text(6);
+                            } else if (isBreakpoint('lg')) {
+                                grid.setGridWidth(12);
+                                $('#grid-size').text(12);
+                            }
+                        };
+
+                        $(window).resize(function () {
+                            waitForFinalEvent(function () {
+                                resizeGrid();
+                            },
+                                300,
+                                fullDateString.getTime());
+                        });
+
+                        this.serializedData = [
+                            { x: 0, y: 0, width: 4, height: 2 },
+                            // { x: 3, y: 1, width: 4, height: 2 },
+                            // { x: 4, y: 1, width: 4, height: 1 },
+                            //{ x: 2, y: 3, width: 8, height: 1 },
+                            //{ x: 0, y: 4, width: 4, height: 1 },
+                            //{ x: 0, y: 3, width: 4, height: 1 },
+                            //{ x: 2, y: 4, width: 4, height: 1 },
+                            //{ x: 2, y: 5, width: 4, height: 1 },
+                            //{ x: 0, y: 6, width: 12, height: 1 }
+                        ];
+
+                        this.grid = GridStack.init();//$('.grid-stack').data('gridstack');
+
+                        this.loadGrid = function () {
+                            //this.grid.removeAll();
+                            //var items = GridStackUI.Utils.sort(this.serializedData);
+                            //_.each(items, function (node, i) {
+                            //    this.grid.addWidget($('<div><div class="grid-stack-item-content">' + i + '</div></div>'),
+                            //        node.x, node.y, node.width, node.height);
+                            // }, this);
+                            return false;
+                        }.bind(this);
+
+                        this.loadGrid();
+                        resizeGrid();
+
+
+                        this.items = [
+                            { x: 0, y: 0, width: 2, height: 2 },
+                            { x: 3, y: 1, width: 1, height: 2 },
+                            { x: 4, y: 1, width: 1, height: 1 },
+                            { x: 2, y: 3, width: 3, height: 1 },
+                            //                    {x: 1, y: 4, width: 1, height: 1},
+                            //                    {x: 1, y: 3, width: 1, height: 1},
+                            //                    {x: 2, y: 4, width: 1, height: 1},
+                            { x: 2, y: 5, width: 1, height: 1 }
+                        ];
+
+                        this.grid = GridStack.init();//$('.grid-stack').data('gridstack');
+
+                        // grid.makeWidget('.grid-stack-item-content');
+                        this.addNewWidget = function () {
+                            var node = this.items.pop() ||
+                                {
+                                    x: 12 * Math.random(),
+                                    y: 5 * Math.random(),
+                                    width: 1 + 3 * Math.random(),
+                                    height: 1 + 3 * Math.random()
+                                };
+                            this.grid.addWidget($('<div><div class="grid-stack-item-content">' +
+                                '<div class="widget"><div class="panel module drop-accordion" id="overview" role="tablist" aria-multiselectable="true"><div class="panel-inner">' +
+                                '<div class="panel-heading tab-collapsed"><h4 class="panel-title">Overview<a class="collapse-controle" ><span class="expand-icon-wrap pull-right"><i class="material-icons">settings</i></span>' +
+                                '<span data-toggle="collapse" data-parent="#overview" href="#overviewOne" aria-expanded="true" aria-controls="overviewOne" class="expand-icon-wrap pull-right"><i class="material-icons">keyboard_arrow_up</i></span>' +
+                                '</a></h4></div> <div id="overviewOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true">' +
+                                '<div class="panel-body"><div class="row figures-wrapper"><div class="item  figures-brief col-lg-3 col-md-6 col-sm-6 col-xs-12">' +
+                                '<div class="item-title"><h4><i class="material-icons">keyboard_arrow_up</i><span>Total Ticket Sales</span></h4>' +
+                                '<p class="item-figure">1234586</p></div><div class="mini-glance-chart"><span class="peity-line-data-attributes" style="display: none;">2,3,6,6,8,9,4,6,5,3</span>' +
+                                '</div></div></div></div></div></div></div></div>' +
+                                '</div><div/>'),
+                                node.x,
+                                node.y,
+                                node.width,
+                                node.height);
+                            return false;
+                        }.bind(this);
+                        this.addNewWidgetWithHtml = function (html) {
+                            var node = this.items.pop() ||
+                                {
+                                    x: 12 * Math.random(),
+                                    y: 5 * Math.random(),
+                                    width: 1 + 3 * Math.random(),
+                                    height: 1 + 3 * Math.random()
+                                };
+                            this.grid.addWidget($('<div><div class="grid-stack-item-content">' +
+                                html+
+                                '</div><div/>'),
+                                node.x,
+                                node.y,
+                                node.width,
+                                node.height);
+                            new kachuwaNotification().Success("Success", "Widget added to dashboard");
+                            return false;
+                        }.bind(this);
+
+                        //$(document).off("click", "#btnAddNewWidget").on("click", "#btnAddNewWidget", this.addNewWidget);
+                        $(document).off("click", "#btnAddNewWidget").on("click", "#btnAddNewWidget", function() {
+                            $('#widgetsModal').modal('show');
+                        });
+
+                        $(document).off("click", ".addwidget").on("click", ".addwidget", function () {
+
+                            console.log($(this).data('wn'));
+                            var widget = $(this).parents('.box:eq(0)').find(".hidden-w>.widget").get(0).outerHTML;
+                            addNewWidgetWithHtml(widget);
+                        });
+                        $(document).off("click", ".widgetLayoutSave").on("click", ".widgetLayoutSave", function () {
+                            if (confirm("Are you sure?")) {
+                                saveLayout();
+                            }
+
+                        });
+                        $(document).off("click", "#btnReset").on("click", "#btnReset", function () {
+                            if (confirm("Are you sure?")) {
+                                resetLayout();
+                            }
+
+                        });
+
+                        hideShowSaveButton();
+                    };
+
+                    init();
+
+                }();
+
+
+                init();
+
+                return { RTCConnection: getRtcConnetion, widget: widgetManager };
+            }();
+
+    </script>
+}

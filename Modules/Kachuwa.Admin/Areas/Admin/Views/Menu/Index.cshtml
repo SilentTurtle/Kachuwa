@@ -1,0 +1,535 @@
+﻿@using Kachuwa.Web.Model
+@using Kachuwa.Localization
+@using Microsoft.AspNetCore.Html
+@model IEnumerable<Menu>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Menu");
+    ViewData["Title"] = LocaleResource.Get("Menu.PageTitle");
+}
+
+
+@{ var parents = Model.Where(x => x.ParentId == 0).ToList();}
+
+@functions{
+    public IEnumerable<Kachuwa.Web.Model.Menu> GetChildMenus(int menuid, IEnumerable<Kachuwa.Web.Model.Menu> menus)
+    {
+        return menus.Where(x => x.ParentId == menuid).ToList();
+    }
+    public bool MenuHasChild(IEnumerable<Kachuwa.Web.Model.Menu> menus, int menuId)
+    {
+        return menus.Any(x => x.ParentId == menuId);
+
+    }
+}
+@{
+
+    Func<IEnumerable<Kachuwa.Web.Model.Menu>, IHtmlContent> renderChild = @<ul class="">
+        @foreach (Menu child in item)
+        {
+                                                                               <li data-menuid="@child.MenuId">
+                                                                                   @{var hasChild = MenuHasChild(Model, child.MenuId); string classes = hasChild ? "" : "";}
+
+                                                                                   @if (!hasChild)
+                                                                                   {
+                                                                                       <span class="tree_label"> @child.Name</span>
+
+                                                                                   }
+                                                                                   else
+                                                                                   {
+                                                                                       <input type="checkbox" id="c_@child.MenuId" />
+                                                                                       <label class="tree_label" for="c_@child.MenuId"> @child.Name</label>
+                                                                                      
+                                                                                   }
+                                                                                   @if (hasChild)
+                                                                                   {
+                                                                                       var childrens = GetChildMenus(child.MenuId, Model);
+
+                                                                                       //renderChild(childrens))
+                                                                                   }
+                                                                               </li>
+        }
+    </ul>;
+
+
+}
+<link href="/module/kachuwagrid/resources/css/kgridstyle.css" rel="stylesheet">
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Menu.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm has-mdicon addnew">
+                                        <i class="material-icons md-18">add</i>@LocaleResource.Get("Menu.AddNewButtonTet")
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <ul id="MenuView" class="tree">
+                                        @foreach (var parent in parents)
+                                        {
+                                            var hasChild = MenuHasChild(Model, parent.MenuId);
+                                            string classes = hasChild ? "" : "";
+                                        <li class="@classes" data-menuid="@parent.MenuId">
+                                            @if (!hasChild)
+                                            {
+                                                <span class="tree_label"> @parent.Name</span>
+                                                <ul></ul>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="c_@parent.MenuId" />
+                                                <label class="tree_label" for="c_@parent.MenuId"> @parent.Name</label>
+
+                                            }
+                                            @if (hasChild)
+                                            {
+                                                var childrens = GetChildMenus(parent.MenuId, Model);
+
+                                                @renderChild(childrens)
+                                            }
+                                        </li>
+
+                                        }
+
+
+                                    </ul>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <form id="menuform" method="post" action="#">
+                                        <nav>                                           
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                <a class="nav-item nav-link active"  data-toggle="tab" href="#menudetail" role="tab" aria-controls="nav-home" aria-selected="true">@LocaleResource.Get("Menu.Tab.Title")</a>
+                                                <a class="nav-item nav-link" data-toggle="tab" href="#permission" role="tab" aria-controls="nav-profile" aria-selected="false">@LocaleResource.Get("Menu.Tab.Permission")</a>
+                       
+                                            </div>
+                                        </nav>
+                                            <div class="tab-content">
+                                                <div class="row tab-pane active" id="menudetail">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.Name")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.Name")"></i>
+                                                            <input name="Name" class="form-control keychange" placeholder="@LocaleResource.Get("Menu.Placeholder.Name")" type="text">
+                                                            <input name="MenuId" value="0" type="hidden"/>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.Url")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.Url")"></i>
+                                                            <input name="Url" class="form-control urlchange" placeholder="@LocaleResource.Get("Menu.Placeholder.Url")" type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.GroupId")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.GroupId")"></i>
+                                                            <select name="MenuGroupId" class="form-control" placeholder="@LocaleResource.Get("Menu.Placeholder.GroupId")"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.Icon")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.Icon")"></i>
+                                                            <input name="Icon" class="form-control" placeholder="@LocaleResource.Get("Menu.Placeholder.Icon")" type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.CssClass")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.CssClass")"></i>
+                                                            <input name="CssClass" class="form-control" placeholder="@LocaleResource.Get("Menu.Placeholder.CssClass")" type="text">
+                                                            <input type="hidden" name="MenuOrder" value="0" />
+                                                            <input type="hidden" name="ParentId" value="0" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.IsBackend")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.IsBackend")"></i>
+
+                                                            <label class="switch">
+                                                                <input name="IsBackend" value="false" type="checkbox">
+                                                                <div class="switchslider round"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>@LocaleResource.Get("Menu.Form.IsActive")</label>
+                                                            <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Menu.Help.IsActive")"></i>
+
+                                                            <label class="switch">
+                                                                <input name="IsActive" value="false" type="checkbox">
+                                                                <div class="switchslider round"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row tab-pane" id="permission">
+                                                    <table id="tblPermission" class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>@LocaleResource.Get("Menu.Permission.Form.Role")</td>
+                                                                <td>@LocaleResource.Get("Menu.Permission.Form.Allow")</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-md-12 text-right">
+                                                    <button type="button" class="btn btn-primary formsave  has-mdicon"><i class="material-icons md-18">save</i> Save</button>
+                                                    <a href="javascript:void(0)" class="btn btn-default has-mdicon cancelBut"><i class="material-icons md-18">close</i>Cancel</a>
+                                                </div>
+                                            </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{ 
+<script src="/module/kachuwagrid/resources/js/kachuwagrid.js"></script>
+<script src="/lib/sortablejs/Sortable.min.js"></script>
+<script src="/assets/js/validation/_formValidationExtentions.js"></script>
+<script>
+    var menuManager = function () {
+        var $ajaxCall = function (method, url, data, success, error) {
+            $.ajax({
+                type: method,
+                async: true,
+                url: url,
+                data: data,
+                success: success,
+                error: error
+            });
+        };
+        var getRoles = function () {
+            $("#tblPermission tbody").html('');
+            $ajaxCall("POST",
+                "/admin/menu/roles", {},
+                function (response) {
+                    $.each(response.Data,
+                        function (i, role) {
+                            var $tr = $("<tr/>");
+                            if (role.Id == 1 || role.Id == 2) {
+                                $tr.html("<td>" +
+                                    role.Name +
+                                    "</td><td><input type='checkbox' checked='checked' disabled='disabled' name='" +
+                                    role.Name +
+                                    "' value='" +
+                                    role.Id +
+                                    "' /></td>"); $("#tblPermission tbody").append($tr);
+                            } else {
+                                $tr.html("<td>" +
+                                    role.Name +
+                                    "</td><td><input type='checkbox'  name='" +
+                                    role.Name +
+                                    "' value='" +
+                                    role.Id +
+                                    "' /></td>"); $("#tblPermission tbody").append($tr);
+                            }
+
+
+                        });
+
+                },
+                function () { });
+        }
+        var getMenuGroups = function () {
+            $("select[name=MenuGroupId]").html('');
+            $ajaxCall("POST",
+                "/admin/menu/groups", {},
+                function (data) {
+                    $.each(data,
+                        function (i, group) {
+                            var option = "<option value='" + group.MenuGroupId + "' >" + group.Name + "</option>";
+                            //console.log(option)
+                            $("select[name=MenuGroupId]").append(option);
+                        });
+
+                },
+                function () { });
+        }
+        var getMenuWithPermissions = function (id) {
+            $ajaxCall("POST",
+                "/admin/menu/get", { id: id },
+                function (response) {
+                    if (response) {
+                        $("input:hidden[name=MenuId]").val(response.MenuId),
+                            $("input[name=Name]").val(response.Name);
+                        $("input[name=Url]").val(response.Url);
+                        $("select[name=GroupId]").val(response.GroupId);
+                        if (response.IsBackend)
+                            $("input[name=IsBackend]").prop('checked', true);
+                        else
+                            $("input[name=IsBackend]").prop('checked', false);
+                        if (response.IsActive)
+                            $("input[name=IsActive]").prop('checked', true);
+                        else
+                            $("input[name=IsActive]").prop('checked', false);
+                        $("input[name=Icon]").val(response.Icon);
+                        $("input[name=CssClass]").val(response.CssClass);
+                        $("input:hidden[name=MenuOrder]").val(response.MenuOrder);
+                        $("input:hidden[name=ParentId]").val(response.ParentId);
+
+                        $("#tblPermission tbody tr").find("input:checkbox").prop('checked', false);
+                        $("#tblPermission tbody tr").find("input:checkbox[value=1],input:checkbox[value=2]").prop('checked', true);
+                        $.each(response.Permissions,
+                            function (i, p) {
+                                $("#tblPermission tbody tr").find("input:checkbox[value=" + p.RoleId + "]")
+                                    .prop('checked', true);
+                            });
+                    }
+
+                },
+                function () { });
+        }
+        var saveMenuWithPermissions = function () {
+
+            var permissions = [];
+            $("#tblPermission tbody tr").find("input:checkbox:checked").each(function (index, cb) {
+                var roleId = $(cb).val();
+                permissions.push({ RoleId: roleId, AllowAccess: true, AllowAccessForAll: false });
+            });
+            var param = {
+                model: {
+                    MenuId: $("input:hidden[name=MenuId]").val(),
+                    Name: $("input[name=Name]").val(),
+                    Url: $("input[name=Url]").val(),
+                    MenuGroupId: $("select[name=MenuGroupId]").val(),
+                    IsBackend: $("input[name=IsBackend]").is(":checked"),
+                    IsActive: $("input[name=IsActive]").is(":checked"),
+                    Icon: $("input[name=Icon]").val(),
+                    CssClass: $("input[name=CssClass]").val(),
+                    Permissions: permissions
+                }
+            };
+            $ajaxCall("POST",
+                "/admin/menu/save", param,
+                function (response) {
+                    if (response) {
+                        new kachuwaNotification().Success(Locale.Get("Success"),
+                            Locale.Get("Data has been saved successfully"));
+                        clearForm();
+                        window.location.href = '/admin/menu';
+                    } else {
+                        new kachuwaNotification().Error(Locale.Get("Error"),
+                            Locale.Get("Failed to save data."));
+                    }
+
+                },
+                function () { });
+        }
+        var clearForm = function () {
+            $("input:hidden[name=MenuId]").val(0),
+                $("input[name=Name]").val('');
+            $("input[name=Url]").val('');
+            $("select[name=MenuGroupId]").val();
+            $("input[name=IsBackend]").prop('checked', false);
+            $("input[name=IsActive]").prop('checked', false);
+            $("input[name=Icon]").val('');
+            $("input[name=CssClass]").val('');
+            $("input:hidden[name=MenuOrder]").val(0);
+            $("input:hidden[name=ParentId]").val(0);
+            $("#tblPermission tbody tr").find("input:checkbox").prop('checked', false);
+            $("#tblPermission tbody tr").find("input:checkbox[value=1],input:checkbox[value=2]").prop('checked', true);
+        }
+        var saveMenuOrder = function () {
+            var menuOrder = [];
+            $(".tree>li").each(function (i, li) {
+                //console.log(i, li);
+                var menuId = $(li).data('menuid');
+                var parentId = 0;
+                var order = i;
+                menuOrder.push({ MenuId: menuId, MenuOrder: order, ParentId: parentId });
+                $(li).find("ul").find("li").each(function (j, k) {
+                    var smenuId = $(k).data('menuid');
+                    var sparentId = $(k).parents("li:eq(0)").data('menuid');
+                    var sorder = j;
+                    menuOrder.push({ MenuId: smenuId, MenuOrder: sorder, ParentId: sparentId });
+                });
+            });
+            var param = {
+                model: menuOrder
+            };
+            $ajaxCall("POST",
+                "/admin/menu/sort/save", param,
+                function (response) {
+                    if (response) {
+                        new kachuwaNotification().Success(Locale.Get("Success"),
+                            Locale.Get("Data has been saved successfully"));
+                        clearForm();
+                        window.location.href = '/admin/menu';
+                    } else {
+                        new kachuwaNotification().Error(Locale.Get("Error"),
+                            Locale.Get("Failed to save data."));
+                    }
+
+                },
+                function () { });
+        }
+        var init = function () {
+            getRoles();
+            getMenuGroups();
+            $(".keychange").keyup(function (event) {
+                var name = $(this).val();
+                var dname_without_space = name.replace(/\s\s+/g, ' ');
+                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                if (this.name == "Name") {
+                    $(this).val(name_without_special_char);
+                } else
+                    $(".keychange").val(name_without_special_char);
+                if ($.trim(name_without_special_char).replace(/ /g, "-") != "")
+                    $(".urlchange").val("/" + $.trim(name_without_special_char).replace(/ /g, "-"));
+                else {
+                    $(".urlchange").val("");
+                }
+                // $("#lblUrl").text(hostUrl + "/" + name_without_special_char);
+
+            });
+
+            $(".keychange").change(function (event) {
+
+                var name = $(this).val();
+                var dname_without_space = name.replace(/\s\s+/g, ' ');
+                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                if (this.id == "Title") {
+                    $(this).val(name_without_special_char);
+                } else
+                    $(".keychange").val(name_without_special_char);
+                if ($.trim(name_without_special_char).replace(/ /g, "-") != "")
+                    $(".urlchange").val("/" + $.trim(name_without_special_char).replace(/ /g, "-"));
+                else {
+                    $(".urlchange").val("");
+                }
+                //$("#lblUrl").text(hostUrl + "/" + name_without_special_char);
+
+            });
+
+            $(".urlchange").keyup(function (event) {
+                var fulltxt = $(this).val();
+                var pagename = fulltxt;//.replace("/", "");
+                var dname_without_space = pagename.replace(/ /g, "");
+                var name_without_special_char2 = dname_without_space.replace(/[`~!@@#$%^&*()_|+\-=?;:'"]/gi, '');
+                name_without_special_char2.replace(/\-+/g, '-');
+                if (!name_without_special_char2.startsWith('/')) {
+                    $(this).val('/' + name_without_special_char2);
+                } else
+                    $(this).val(name_without_special_char2);
+            });
+
+
+            var formValication = $("#menuform").validate({
+                rules: {
+                    Name: {
+                        required: true
+                    },
+                    Url: {
+                        required: true
+                    },
+                    MenuGroupId: {
+                        required: true
+                    }
+                },
+                messages: {
+                    Name: {
+                        required: "*"
+                    },
+                    Url: {
+                        required: "*"
+                    },
+                    MenuGroupId: {
+                        required: "*"
+                    }
+                },
+                validClass: 'is-valid',
+                errorClass: 'is-invalid',
+                highlight: function (element, errorClass, validClass) {
+                    $(element).removeClass(validClass)
+                        .addClass(errorClass);
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass(errorClass)
+                        .addClass(validClass);
+                }
+            });
+
+            $(document).off("click", ".formsave").on("click",
+                ".formsave",
+                function () {
+
+                    if (formValication.form()) {
+                        saveMenuWithPermissions();
+                    }
+                });
+            $(document).off("click", ".tree .tree_label").on("click",
+                ".tree .tree_label",
+                function () {
+                    var id = $(this).parents('li:eq(0)').data('menuid');
+                    getMenuWithPermissions(id);
+                });
+            $(document).off("click", ".cancelBut,.addnew").on("click",
+                ".cancelBut,.addnew",
+                function () {
+                    clearForm();
+                    $(".nav-tabs>li:first>a").click();
+                });
+
+              var sortable1 = new Sortable($(".tree")[0], {
+                animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+                group: "sorting",
+                sort: true,
+                ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+                chosenClass: "sortable-chosen",
+                onSort: function (/**Event*/evt) {
+                    // console.log('onSort.foo:', [evt.item, evt.from]);
+                    saveMenuOrder();
+                },
+                put: true,
+                pull: 'true'
+
+
+            });
+             var sortable2 = new Sortable($(".tree ul")[0],{
+                animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+                group: "sorting",
+                sort: true,
+                ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+                chosenClass: "sortable-chosen",
+                onSort: function (/**Event*/evt) {
+                    //console.log('onSort.foo:', [evt.item, evt.from]);
+                    saveMenuOrder();
+                },
+                put: false,
+                //  //filter: ".page-row",
+                pull: 'true'
+
+
+            });
+
+        }
+        init();
+    }();
+
+</script>
+}

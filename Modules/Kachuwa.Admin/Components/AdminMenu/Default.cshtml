@@ -1,0 +1,137 @@
+﻿@using Microsoft.AspNetCore.Routing
+@model IEnumerable<Kachuwa.Web.Model.Menu>
+@{ var parents = Model.Where(x => x.ParentId == 0).ToList();}
+
+@functions{
+    public IEnumerable<Kachuwa.Web.Model.Menu> GetChildMenus(int menuid, IEnumerable<Kachuwa.Web.Model.Menu> menus)
+    {
+        return menus.Where(x => x.ParentId == menuid).ToList();
+    }
+    public bool MenuHasChild(IEnumerable<Kachuwa.Web.Model.Menu> menus, int menuId)
+    {
+        return menus.Any(x => x.ParentId == menuId) ;
+
+    }
+}
+
+
+<div class="side-menu">
+    <nav class="navbar navbar-default" role="navigation">
+        <!-- Main Menu -->
+        <div class="side-menu-container">
+            <!-- Brand -->
+            <div class="brand-name-wrapper">
+                <a class="" href="#">
+                    <img src="~/assets/images/logo.png" class="img-responsive" alt="Kachuwa Framework" />
+                </a>
+            </div>
+            <span class="menu-label">Menu</span>
+            <ul class="nav navbar-nav">               
+                @foreach (var parent in parents)
+                {
+                    var hasChild = MenuHasChild(Model, parent.MenuId);
+                    string classes = hasChild ? "dropdown" : "";
+                    <li class="@classes">
+                        @if (!hasChild)
+                        {
+                            <a href="@parent.Url">
+                                @if (parent.Icon != null && parent.Icon.Contains("fa"))
+                                {
+                                    <i class="@parent.Icon"></i>
+                                }
+                                else
+                                {
+                                    <i class="@parent.CssClass">@parent.Icon</i>
+                                }
+
+                                @parent.Name
+
+                            </a>
+                        }
+                        else
+                        {
+                            <a data-toggle="collapse" href="#dropdown-@parent.MenuId">
+                                @if (parent.Icon != null && parent.Icon.Contains("fa"))
+                                {
+                                    <i class="@parent.Icon"></i>
+                                }
+                                else
+                                {
+                                    <i class="@parent.CssClass">@parent.Icon</i>
+                                }
+
+                                @parent.Name
+
+                            </a>
+                        }
+                        @if (hasChild)
+                        {
+                            var childrens = GetChildMenus(parent.MenuId, Model);
+
+                            <div id="dropdown-@parent.MenuId" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        @foreach (var child in childrens)
+                                        {
+                                            <li>
+                                                <a href="@child.Url">
+                                                    @if (child.Icon != null && child.Icon.Contains("fa"))
+                                                    {
+                                                        <i class="@child.Icon"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="@child.CssClass">@child.Icon</i>
+                                                    }
+
+                                                    @child.Name
+
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </li>
+                }               
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+</div>
+@section scripts{ 
+<script type="text/javascript" asp-add-nonce="true">
+    $.holdReady(true);
+    @{
+        string actionName = this.Context.GetRouteValue("action").ToString();
+        string controllerName = this.Context.GetRouteValue("controller").ToString();
+        string area = this.Context.GetRouteValue("area").ToString();
+        string currentUrl = @Url.Action(actionName, controllerName,new{ Area = area });
+    }
+    var currentPage = '@currentUrl';
+    currentPage = currentPage.replace("/page", "");
+   
+    $(document).ready(function () {
+        console.log('run');
+        $(document).off("click", ".side-menu ul li").on("click",
+            ".side-menu ul li",
+            function() {
+                $(".side-menu").find("ul li").removeClass('active');
+                $(this).addClass('active');
+            });
+
+
+        if ($(".side-menu").find("ul li a[href='" + currentPage + "']").length > 0) {
+            $(".side-menu").find("ul li").removeClass('active');
+            var $menu = $(".side-menu").find("ul li a[href='" + currentPage + "']");
+            $menu.parents("li:last").addClass('active').find('a').trigger("click");
+            $menu.parents("li:eq(0)").addClass("active");
+
+        }
+      
+    });
+    $.holdReady(false);
+</script>
+}

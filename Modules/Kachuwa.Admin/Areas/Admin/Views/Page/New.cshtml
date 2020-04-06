@@ -1,0 +1,202 @@
+﻿@using Kachuwa.Identity
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@using Kachuwa.Web
+@model PageViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Page");
+    ViewData["Title"] = LocaleResource.Get("Page.PageTitle.New");
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="cardform-wrapper">
+
+                @(Html.CreateKachuwaForm<PageViewModel>("pageForm", Model)
+                                                .SetHeading("")
+                                                .ActionUrl("/admin/page/new")
+                                                .CancelUrl("/admin/page")
+                                                .CreateSection(section =>
+                                                {
+                                                    section.Add("section1", "form-section", rows =>
+                                                    {
+                                                        rows.Add("1strow", "row", columns =>
+                                                        {
+                                                            columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                <h4>@LocaleResource.Get("Page.Info.Page")</h4>
+                                                                <p>@LocaleResource.Get("Page.Info.PageText")</p>
+                                                            </div>);
+                                                                                                                columns.Add("right", "col-md-8", control =>
+                                                                                                                {
+                                                                                                                    control.Add("form-control", model => model.PageId, FormInputControl.Hidden);
+
+                                                                                                                    control.Add("form-control keychange", x => x.Name, FormInputControl.TextBox)
+                                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                                        .SetHelp(LocaleResource.Get("Page.Help.Name"))
+                                                                                                                        .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.Name"))
+                                                                                                                        .SetDisplayName(LocaleResource.Get("Page.Form.Name"));
+
+                                                                                                                    control.Add("form-control", model => model.UseMasterLayout, FormInputControl.Switch)
+                                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                                        .SetHelp(LocaleResource.Get("Page.Help.UseMasterLayout"))
+                                                                                                                        .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.UseMasterLayout"))
+                                                                                                                        .SetDisplayName(LocaleResource.Get("Page.Form.UseMasterLayout"));
+
+                                                                                                                    control.Add("form-control", model => model.IsActive, FormInputControl.Switch)
+                                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                                        .SetHelp(LocaleResource.Get("Page.Help.IsActive"))
+                                                                                                                        .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.IsActive"))
+                                                                                                                        .SetDisplayName(LocaleResource.Get("Page.Form.IsActive"));
+
+                                                                                                                    control.Add("form-control", model => model.IsPublished, FormInputControl.Switch)
+                                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                                        .SetHelp(LocaleResource.Get("Page.Help.IsPublished"))
+                                                                                                                        .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.IsPublished"))
+                                                                                                                        .SetDisplayName(LocaleResource.Get("Page.Form.IsPublished"));
+
+
+                                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                                            });
+                                                                                                            rows.Add("12strow", "row", columns =>
+                                                                                                            {
+                                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                    <h4>@LocaleResource.Get("Page.Info.SEO")</h4>
+                                                                                                                    <p>@LocaleResource.Get("Page.Info.SEOText")</p>
+                                                                                                                </div>);
+                                                                                                                                                                    columns.Add("12strow1stcol", "", @<div>
+                                                                                                                                                                        <input type="hidden" name="IsNew" value="true" />
+                                                                                                                                                                        <input type="hidden" name="OldUrl" value="" />
+                                                                                                                                                                        <input name="SeoType" value="page" type="hidden" />
+                                                                                                                                                                    </div>);
+                                                                                                                                                                                                                        columns.Add("right", "col-md-8", control =>
+                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                            control.Add("form-control", model => model.SEOId, FormInputControl.Hidden);
+
+                                                                                                                                                                                                                            control.Add("form-control keychange", x => x.MetaTitle, FormInputControl.TextBox)
+                                                                                                                                                                                                                                .SetFirstParentClass("form-group")
+                                                                                                                                                                                                                                .SetSecondParentClass("col-md-6")
+                                                                                                                                                                                                                                .SetHelp(LocaleResource.Get("Page.Help.MetaTitle"))
+                                                                                                                                                                                                                                .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.MetaTitle"))
+                                                                                                                                                                                                                                .SetDisplayName(LocaleResource.Get("Page.Form.MetaTitle"));
+                                                                                                                                                                                                                            control.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox)
+                                                                                                                                                                                                                                .SetFirstParentClass("form-group")
+                                                                                                                                                                                                                                .SetSecondParentClass("col-md-6")
+                                                                                                                                                                                                                                .SetHelp(LocaleResource.Get("Page.Help.Url"))
+                                                                                                                                                                                                                                .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.Url"))
+                                                                                                                                                                                                                                .SetDisplayName(LocaleResource.Get("Page.Form.Url"));
+                                                                                                                                                                                                                            control.Add("form-control", model => model.MetaDescription, FormInputControl.TextArea)
+                                                                                                                                                                                                                                .SetFirstParentClass("form-group")
+                                                                                                                                                                                                                                .SetSecondParentClass("col-md-6")
+                                                                                                                                                                                                                                .SetHelp(LocaleResource.Get("Page.Help.MetaDescription"))
+                                                                                                                                                                                                                                .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.MetaDescription"))
+                                                                                                                                                                                                                                .SetDisplayName(LocaleResource.Get("Page.Form.MetaDescription"));
+                                                                                                                                                                                                                            control.Add("form-control", model => model.Image, FormInputControl.Image)
+                                                                                                                                                                                                                                .SetFirstParentClass("form-group")
+                                                                                                                                                                                                                                .SetSecondParentClass("col-md-6")
+                                                                                                                                                                                                                                .SetHelp(LocaleResource.Get("Page.Help.Image"))
+                                                                                                                                                                                                                                .SetPlaceHolder(LocaleResource.Get("Page.PlaceHolder.Image"))
+                                                                                                                                                                                                                                .SetDisplayName(LocaleResource.Get("Page.Form.Image"));
+
+                                                                                                                                                                                                                        }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                                                                                                                                                    });
+                                                                                                                                                                                                                    rows.Add("12strow", "row", columns =>
+                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                        columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                                                                                                                                            <h4>Page Permission</h4>
+                                                                                                                                                                                                                                                            <p>Set Page access permission </p>
+                                                                                                                                                                                                                                                            @*<h4>@LocaleResource.Get("Page.Info.SEO")</h4>
+                                                                                                                                                                                                                                                    <p>@LocaleResource.Get("Page.Info.SEOText")</p>*@
+                                                                                                                                                                                                                                                        </div>);
+                                                                                                                                                                                                                                                                                                                                            columns.Add("right", "col-md-8", @<div class="col-md-12">
+                                                                                                                                                                                                                                                                                                                                                <table id="tblPermission" class="table table-bordered">
+                                                                                                                                                                                                                                                                                                                                                    <thead>
+                                                                                                                                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                                                                                                                                            <td>Role</td>
+                                                                                                                                                                                                                                                                                                                                                            <td>Allow</td>
+                                                                                                                                                                                                                                                                                                                                                            @*<td>@LocaleResource.Get("Page.Permission.Form.Role")</td>
+                                                                                                                                                                                                                                                                                                                                                    <td>@LocaleResource.Get("Page.Permission.Form.Allow")</td>*@
+                                                                                                                                                                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                                                                                                                                                                    </thead>
+                                                                                                                                                                                                                                                                                                                                                    <tbody>
+                                                                                                                                                                                                                                                                                                                                                    @{
+                                                                                                                                                                                                                                                                                                                                                        int permissionIndex = 0;
+                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                    @foreach (var permission in Model.PagePermissions)
+                                                                                                                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                                                                                                                                            <td> @permission.RoleName </td>
+                                                                                                                                                                                                                                                                                                                                                            <td>
+                                                                                                                                                                                                                                                                                                                                                                @if (permission.RoleName == KachuwaRoleNames.Admin || permission.RoleName == KachuwaRoleNames.SuperAdmin)
+                                                                                                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                                                                                                    <input type="checkbox" checked="checked" disabled="disabled" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                else
+                                                                                                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                                                                                                    if (permission.AllowAccess)
+                                                                                                                                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                                                                                                                                        <input type="checkbox" checked="checked" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                    else
+                                                                                                                                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                                                                                                                                        <input type="checkbox" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                            </td>
+                                                                                                                                                                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                                                                                                                                                                        permissionIndex++;
+                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                    </tbody>
+                                                                                                                                                                                                                                                                                                                                                </table>
+                                                                                                                                                                                                                                                                                                                                            </div>).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+
+                                                                                                                                                                                                                                                                                                                                                                                                                            });
+
+                                                                                                                                                                                                                                                                                                                                                                                        })
+                                                                                                                                                                                                                                                                                                                                                                                            .SetHeading(LocaleResource.Get("Page.Form.Title.New"));
+                                                                                                                                                                                                                                                                                                                                                                                    }))
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script type="text/javascript" asp-add-nonce="true">
+        (function () {
+            $(document).off("input", ".keychange").on("input",
+                ".keychange",
+                function (event) {
+                    var name = $(this).val();
+                    var nameWithoutSpace = name.replace(/\s\s+/g, ' ');
+                    var nameWithoutSpecialChar = nameWithoutSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    if (this.name == "MetaTitle") {
+                        $(this).val(nameWithoutSpecialChar);
+                    } else
+                        $(".keychange").val(nameWithoutSpecialChar);
+                    $(".urlchange").val($.trim(nameWithoutSpecialChar).replace(/ /g, "-"));
+                });
+
+            $(document).off("input", ".urlchange").on("input",
+                ".urlchange",
+                function (event) {
+                    var fulltxt = $(this).val();
+                    var pagename = fulltxt.replace("/", "");
+                    var pagenam2 = fulltxt.replace("/", "");
+                    var nameWithoutSpace = pagename.replace(/ /g, "");
+                    var dnameWithSpace = pagenam2.replace(/-/g, " ");
+                    var nameWithoutSpecialChar = nameWithoutSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    var nameWithoutSpecialChar2 = dnameWithSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    $(this).val(nameWithoutSpecialChar.replace(/\-+/g, '-'));
+                });
+
+        })();
+
+
+    </script>
+}

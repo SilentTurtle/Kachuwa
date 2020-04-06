@@ -1,0 +1,93 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Web.Grid
+@using Kachuwa.Web.Model
+@model IEnumerable<Kachuwa.Web.Model.SEO>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("SEO");
+    ViewData["Title"] = LocaleResource.Get("SEO.PageTitle");
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">                       
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("SEO.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    <a href="/admin/seo/new" class="btn btn-primary btn-sm has-mdicon"><i class="material-icons md-18">add</i>@LocaleResource.Get("SEO.AddNewButtonText")</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                            .CreateKachuwaGrid(Model)
+                            .Build(columns =>
+                            {
+                                columns.Add(model => model.PageName).SetTitle(LocaleResource.Get("SEO.Grid.PageName"));
+                                columns.Add(model => model.SeoType).SetTitle(LocaleResource.Get("SEO.Grid.SeoType"));
+                                columns.Add(model => model.MetaTitle).SetTitle(LocaleResource.Get("SEO.Grid.MetaTitle"));
+                                columns.Add(model => "<label class='switch'><input name=\"SEOstatus\" value='" + model.IsActive.ToString().ToLower() + (model.IsActive ? "'checked='checked'" : "'") + " type='checkbox'><div class='switchslider round'></div></label>")
+                        .SetTitle(LocaleResource.Get("Status")).Encoding(false).Css("text-center");
+                            }).AddCommands(commands =>
+                            {
+                                commands.Add(LocaleResource.Get("Grid.Command.Edit"), "Edit", "fas fa-edit", "", "/admin/SEO/edit", model => model.SEOId);
+                                commands.Add(LocaleResource.Get("Grid.Command.Edit"), "Delete", "fas fa-trash", "kachuwagrid.delete", model => model.SEOId,
+                                    "/admin/SEO/delete");
+                            }).Css("table-hover").RowCss(model => model.IsActive == true ? "active" : "")
+                            .Empty(LocaleResource.Get("SEO.Grid.EmptyText"))
+                            .Pagination(pager =>
+                            {
+                                pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                                pager.Api = "/admin/SEO";
+                            })
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script type="text/javascript" asp-add-nonce="true">
+
+        $(document).ready(function (e) {
+            $(document).off("change", "input[type=checkbox][name=SEOstatus]");
+            $(document).on("change",
+                "input[type=checkbox][name=SEOstatus]",
+                function (e) {
+                    var $this = $(this),
+                        id = $this.closest("tr").find("td:eq(0) input").val(),
+                        status = $this.is(":checked");
+                    $.ajax({
+                        url: "/admin/SEO/updatestatus",
+                        dataType: "json",
+                        data: { id: id, status: status },
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        error: function (jqXHR, textStatus) {
+                            console.log("Error " + textStatus, jqXHR);
+                        },
+                        async: false,
+                        success: function (response) {
+                            if (response.Code == "200") {
+                            } else {
+                                if (status) {
+                                    $this.removeAttr("checked");
+                                } else {
+                                    $this.attr("checked", "checked");
+                                }
+                            }
+                        },
+                        type: 'POST'
+                    });
+                });
+
+
+        });
+    </script>
+}

@@ -1,0 +1,100 @@
+﻿@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@using Kachuwa.Web
+@model PageRolePermissionViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Page");
+    ViewData["Title"] = LocaleResource.Get("Page.PageTitle.Edit");
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="cardform-wrapper">
+                @(Html.CreateKachuwaForm<PageRolePermissionViewModel>("pageForm", Model)
+                                                                        .SetHeading("")
+                                                                        .ActionUrl("/admin/page/pagepermission")
+                                                                        .CancelUrl("/admin/page")
+                                                                        .CreateSection(section =>
+                                                                        {
+                                                                            section.Add("section1", "form-section", rows =>
+                                                                            {
+                                                                                rows.Add("12strow", "row", columns =>
+                                                                                {
+                                                                                    columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                        <h4>Page Permission</h4>
+                                                                                        <p>Set Page access permission </p>
+                                                                                        @*<h4>@LocaleResource.Get("Page.Info.SEO")</h4>
+                                                                                            <p>@LocaleResource.Get("Page.Info.SEOText")</p>*@
+                                                                                    </div>);
+                                                                                    columns.Add("right", "col-md-8", @<div class="col-md-12">
+                                                                                                                         <input type="hidden" name="PageId"  value="@Model.PageId" />
+                                                                                                                         <table id="tblPermission" class="table table-bordered">
+                                                                                                                             <thead>
+                                                                                                                             <tr>
+                                                                                                                                 <td>Role</td>
+                                                                                                                                 <td>Allow</td>
+                                                                                                                                 @*<td>@LocaleResource.Get("Page.Permission.Form.Role")</td>
+                                                                                                                                                                                    <td>@LocaleResource.Get("Page.Permission.Form.Allow")</td>*@
+                                                                                                                             </tr>
+                                                                                                                             </thead>
+                                                                                                                             <tbody>
+                                                                                                                             @{
+                                                                                                                                 int permissionIndex = 0;
+                                                                                                                             }
+                                                                                                                             @foreach (var permission in Model.PagePermissions)
+                                                                                                                             {
+                                                                                                                                 <tr>
+                                                                                                                                     <td> @permission.RoleName </td>
+                                                                                                                                     <td>
+                                                                                                                                         @if (permission.RoleName == KachuwaRoleNames.Admin || permission.RoleName == KachuwaRoleNames.SuperAdmin)
+                                                                                                                                         {
+                                                                                                                                             <input type="hidden" name="PagePermissionsRole" value="@permission.RoleId" />
+                                                                                                                                             <input type="checkbox" checked="checked" disabled="disabled" name="PagePermissionsRole" value="@permission.RoleId" />
+                                                                                                                                         }
+                                                                                                                                         else
+                                                                                                                                         {
+                                                                                                                                             if (permission.AllowAccess)
+                                                                                                                                             {
+                                                                                                                                                 <input type="checkbox" checked="checked" name="PagePermissionsRole" value="@permission.RoleId" />
+                                                                                                                                             }
+                                                                                                                                             else
+                                                                                                                                             {
+                                                                                                                                                 <input type="checkbox" name="PagePermissionsRole" value="@permission.RoleId" />
+                                                                                                                                             }
+
+                                                                                                                                         }
+                                                                                                                                         @*@if (permission.RoleName == KachuwaRoleNames.Admin || permission.RoleName == KachuwaRoleNames.SuperAdmin)
+        {
+            <input type="hidden" name="PagePermissions[@permissionIndex].RoleId" value="@permission.RoleId"/>
+            <input type="checkbox" checked="checked" disabled="disabled" name="PagePermissions[@permissionIndex].RoleId" value="@permission.RoleId"/>
+        }
+        else
+        {
+            if (permission.AllowAccess)
+            {
+                <input type="checkbox" checked="checked" name="PagePermissions[@permissionIndex].RoleId" value="@permission.RoleId"/>
+            }
+            else
+            {
+                <input type="checkbox" name="PagePermissions[@permissionIndex].RoleId" value="@permission.RoleId"/>
+            }
+
+        }*@
+                                                                                                                                     </td>
+                                                                                                                                 </tr>
+                                                                                                                                 permissionIndex++;
+                                                                                                                             }
+                                                                                                                             </tbody>
+                                                                                                                         </table>
+                                                                                                                     </div>).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+
+                                                                                                                                                                                                                                        });
+                                                                                                                                                                                                                                    })
+                                                                                                                                                                                                                                                                                                                                                                                            .SetHeading(LocaleResource.Get("Page.Form.Title.Edit"));
+                                                                                                                                                                                                                                }))
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,266 @@
+﻿@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@using Kachuwa.Web
+@using Kachuwa.Web.Model
+@model Setting
+@inject ILocaleResourceProvider LocaleResource
+@{
+
+    LocaleResource.LookUpGroupAt("Setting");
+    ViewData["Title"] = LocaleResource.Get("Setting.Web.PageTitle");
+    var formDataSource = (FormDatasource)ViewData["FormDatasource"];
+}
+
+
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="cardform-wrapper">
+
+                @(Html.CreateKachuwaForm<Setting>("newSetting.WebForm", Model)
+                          .SetHeading("")
+                          .EncType("multipart/form-data")
+                          .ActionUrl("/admin/setting/web")
+                          .CancelUrl("/admin/setting/web")
+                                                                                    .CreateSection(section =>
+                                                                                    {
+                                                                                        section.Add("section1", "form-section", rows =>
+                                                                                        {
+                                                                                            rows.Add("1strow", "row", columns =>
+                                                                                            {
+                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                    <h4>@LocaleResource.Get("Setting.Web.Info.Configuration")</h4>
+                                                                                                                                    <p>@LocaleResource.Get("Setting.Web.Info.ConfigurationText")</p>
+                                                                                                                                </div>);
+                                                                                                columns.Add("right", "col-md-8", controls =>
+                                                                                                {
+                                                                                                    controls.Add("form-control", model => model.SettingId, FormInputControl.Hidden);
+
+                                                                                                    controls.Add("form-control", x => x.WebsiteName, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Name"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Name"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Name"));
+                                                                                                    controls.Add("form-control", x => x.Description, FormInputControl.TextArea)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Description"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Description"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Description"));
+                                                                                                    controls.Add("form-control", x => x.Logo, FormInputControl.Hidden);
+
+                                                                                                    controls.Add("form-control", x => x.Logo, FormInputControl.ImageViewer)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Logo"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Logo"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Logo"));
+                                                                                                    controls.Add("form-control", x => x.LogoFile, FormInputControl.File)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.LogoFile"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.LogoFile"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.LogoFile"));
+
+                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                            });
+                                                                                            rows.Add("2strow", "row", columns =>
+                                                                                            {
+                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                    <h4>@LocaleResource.Get("Setting.Web.Info.Locality")</h4>
+                                                                                                                                    <p>@LocaleResource.Get("Setting.Web.Info.LocalityText")</p>
+                                                                                                                                </div>);
+                                                                                                columns.Add("right", "col-md-8", controls =>
+                                                                                                {
+                                                                                                    controls.Add("form-control", x => x.BaseCulture, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.BaseCulture"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.BaseCulture"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.BaseCulture"));
+
+                                                                                                    controls.Add("form-control", x => x.BaseCurrency,
+                                                                                                        FormInputControl.TextBox).SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.BaseCurrency"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.BaseCurrency"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.BaseCurrency"));
+                                                                                                    controls.Add("form-control", x => x.CurrencyCode, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.CurrencyCode"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.CurrencyCode"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.CurrencyCode"));
+                                                                                                    controls.Add("form-control", x => x.TimeZoneOffset, FormInputControl.Select, formDataSource.GetSource("FormDatasource"))
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.TimeZoneOffset"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.TimeZoneOffset"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.TimeZoneOffset"));
+                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                            });
+                                                                                            rows.Add("3strow", "row", columns =>
+                                                                                            {
+                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                    <h4>@LocaleResource.Get("Setting.Web.Info.Location")</h4>
+                                                                                                                                    <p>@LocaleResource.Get("Setting.Web.Info.LocationText")</p>
+                                                                                                                                </div>);
+                                                                                                columns.Add("right", "col-md-8", controls =>
+                                                                                                {
+
+                                                                                                    controls.Add("form-control", x => x.Address1, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Address1"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Address1"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Address1"));
+
+                                                                                                    controls.Add("form-control", x => x.Address2, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Address2"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Address2"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Address2"));
+
+
+                                                                                                    controls.Add("form-control", x => x.City, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.City"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.City"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.City"));
+
+                                                                                                    controls.Add("form-control", x => x.State, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.State"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.State"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.State"));
+
+                                                                                                    controls.Add("form-control", x => x.Country, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-4")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Country"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Country"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Country"));
+
+
+
+                                                                                                    controls.Add("form-control", x => x.Longitude, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Longitude"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Longitude"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Longitude"));
+
+                                                                                                    controls.Add("form-control", x => x.Lattitude, FormInputControl.TextBox)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-6")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.Lattitude"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.Lattitude"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.Lattitude"));
+
+
+
+                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                            });
+                                                                                            rows.Add("4strow", "row", columns =>
+                                                                                            {
+                                                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                                                    <h4>@LocaleResource.Get("Setting.Web.Info.Other")</h4>
+                                                                                                                                    <p>@LocaleResource.Get("Setting.Web.Info.OtherText")</p>
+                                                                                                                                </div>);
+                                                                                                columns.Add("right", "col-md-8", controls =>
+                                                                                                {
+                                                                                                    controls.Add("form-control", x => x.GoogleAnalyticScript, FormInputControl.TextArea)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.GoogleAnalyticScript"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.GoogleAnalyticScript"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.GoogleAnalyticScript"));
+
+                                                                                                    controls.Add("form-control", x => x.UseHttps, FormInputControl.Switch)
+                                                                                                        .SetFirstParentClass("form-group")
+                                                                                                        .SetSecondParentClass("col-md-12")
+                                                                                                        .SetHelp(LocaleResource.Get("Setting.Web.Help.UseHttps"))
+                                                                                                        .SetPlaceHolder(LocaleResource.Get("Setting.Web.PlaceHolder.UseHttps"))
+                                                                                                        .SetDisplayName(LocaleResource.Get("Setting.Web.Form.UseHttps"));
+
+
+
+
+
+                                                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                            });
+
+
+                                                                                        })
+                                                                                            .SetHeading(LocaleResource.Get("Setting.Web.Form.Title"));
+                                                                                    }))
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script type="text/javascript" asp-add-nonce="true">
+        (function () {
+
+            $(".keychange").keyup(function (event) {
+
+                var name = $(this).val();
+                var dname_without_space = name.replace(/\s\s+/g, ' ');
+                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                if (this.name == "Name") {
+                    $(this).val(name_without_special_char);
+                } else
+                    $(".keychange").val(name_without_special_char);
+                if ($.trim(name_without_special_char).replace(/ /g, "-") != "")
+                    $(".urlchange").val("/" + $.trim(name_without_special_char).replace(/ /g, "-"));
+                else {
+                    $(".urlchange").val("");
+                }
+                // $("#lblUrl").text(hostUrl + "/" + name_without_special_char);
+
+            });
+
+            $(".keychange").change(function (event) {
+
+                var name = $(this).val();
+                var dname_without_space = name.replace(/\s\s+/g, ' ');
+                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                if (this.id == "Title") {
+                    $(this).val(name_without_special_char);
+                } else
+                    $(".keychange").val(name_without_special_char);
+                if ($.trim(name_without_special_char).replace(/ /g, "-") != "")
+                    $(".urlchange").val("/" + $.trim(name_without_special_char).replace(/ /g, "-"));
+                else {
+                    $(".urlchange").val("");
+                }
+                //$("#lblUrl").text(hostUrl + "/" + name_without_special_char);
+
+            });
+            $(".urlchange").keyup(function (event) {
+
+                var fulltxt = $(this).val();
+                var pagename = fulltxt.replace("/", "");
+                var pagenam2 = fulltxt.replace("/", "");
+                // console.log(pagename);
+                var dname_without_space = pagename.replace(/ /g, "");
+                var dname_with_space = pagenam2.replace(/-/g, " ");
+                var name_without_special_char = dname_without_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                var name_without_special_char2 = dname_with_space.replace(/[^a-zA-Z 0-9 -]+/g, "");
+
+                $(this).val("/" + name_without_special_char.replace(/\-+/g, '-'));
+                //$("#lblUrl").text(hostUrl + "/" + name_without_special_char);
+                // $(".keychange").val(name_without_special_char2);
+            });
+        })();
+
+
+    </script>
+}

@@ -1,0 +1,59 @@
+﻿@using Kachuwa.Web
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model IEnumerable<Page>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Page");
+    ViewData["Title"] = LocaleResource.Get("Page.PageTitle");
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Page.PageTitle")</h2>
+                          
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    <a href="/admin/page/new" class="btn btn-primary btn-sm has-mdicon">
+                                        <i class="material-icons md-18">add</i>
+                                        @LocaleResource.Get("Page.AddNewButtonText")
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                                          .CreateKachuwaGrid(Model)
+                                          .Build(columns =>
+                                          {
+                                              columns.Add(model => model.Name).SetTitle(LocaleResource.Get("Page.Grid.Name"));
+                                              columns.Add(model => model.Url).SetTitle(LocaleResource.Get("Page.Grid.Url"));
+                                              columns.Add(model => model.IsBackend ? LocaleResource.Get("Page.Grid.Yes") : LocaleResource.Get("Page.Grid.No")).SetTitle(LocaleResource.Get("Page.Grid.IsBackend"));
+                                              columns.Add(model => model.IsActive ? LocaleResource.Get("Page.Grid.Yes") : LocaleResource.Get("Page.Grid.No")).SetTitle(LocaleResource.Get("Page.Grid.IsActive"));
+                                              columns.Add(model => model.IsPublished ? LocaleResource.Get("Page.Grid.Yes") : LocaleResource.Get("Page.Grid.No")).SetTitle(LocaleResource.Get("Page.Grid.IsPublished"));
+                                          }).AddCommands(commands =>
+                                          {
+                                              commands.Add(LocaleResource.Get("Grid.Command.Module"), "Module", "fa fa-cogs", "", "/admin/page/config", model => model.PageId);
+                                              commands.Add(LocaleResource.Get("Grid.Command.Edit"), "Edit", "fa fa-edit", "", "/admin/page/edit", model => model.PageId);
+                                              commands.Add(LocaleResource.Get("Grid.Command.Delete"), "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.PageId,
+                                                  "/admin/page/delete");
+                                              commands.Add(LocaleResource.Get("Grid.Command.Permission"), "Permission", "fa fa-eye-slash", "", "/admin/page/pagepermission", model => model.PageId);
+                                          }).Css("table-hover")
+                                          .Empty(LocaleResource.Get("Page.Grid.EmptyText"))
+                                          .Pagination(pager =>
+                                          {
+                                              pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                                              pager.Api = "/admin/page";
+                                          })
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
