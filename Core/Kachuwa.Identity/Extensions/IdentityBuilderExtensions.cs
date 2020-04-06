@@ -18,7 +18,7 @@ namespace Kachuwa.Identity
     public static class IdentityBuilderExtensions
     {
 
-        public static void AddKachuwaIdentitySever(this IServiceCollection serviceCollection, IHostingEnvironment environment,IConfiguration configuration)
+        public static void AddKachuwaIdentitySever(this IServiceCollection serviceCollection, IWebHostEnvironment environment,IConfiguration configuration)
         {
             //  var cert = new X509Certificate2(Path.Combine(environment.ContentRootPath, "kachuwaframework.pfx"), "");
             //serviceCollection.AddIdentityServer()

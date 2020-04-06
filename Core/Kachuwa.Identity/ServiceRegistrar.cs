@@ -97,7 +97,7 @@ namespace Kachuwa.Identity
             });
             serviceCollection.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(30));
 
-            serviceCollection.AddKachuwaIdentitySever(serviceCollection.BuildServiceProvider().GetService<IHostingEnvironment>(),configuration);
+            serviceCollection.AddKachuwaIdentitySever(serviceCollection.BuildServiceProvider().GetService<IWebHostEnvironment>(),configuration);
 
 
 

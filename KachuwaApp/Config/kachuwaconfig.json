@@ -2,7 +2,7 @@
   "KachuwaAppConfig": {
     "AppName": "KachuwaApp",
     "SiteUrl": "https://kachuwaframework.com",
-    "IsInstalled": true,
+    "IsInstalled": false,
     "DbProvider": "SQLServer",
     "Framework": "",
     "Version": "1.0.0",

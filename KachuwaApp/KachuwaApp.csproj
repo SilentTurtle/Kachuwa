@@ -7,45 +7,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="App_Data\**" />
     <Compile Remove="DbLogs\**" />
     <Compile Remove="db\**" />
     <Compile Remove="Locale\**" />
     <Compile Remove="Logs\**" />
+    <Compile Remove="Overrides\Admin\**" />
+    <Content Remove="App_Data\**" />
     <Content Remove="DbLogs\**" />
     <Content Remove="db\**" />
     <Content Remove="Locale\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="Overrides\Admin\**" />
+    <EmbeddedResource Remove="App_Data\**" />
     <EmbeddedResource Remove="DbLogs\**" />
     <EmbeddedResource Remove="db\**" />
     <EmbeddedResource Remove="Locale\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Overrides\Admin\**" />
+    <None Remove="App_Data\**" />
     <None Remove="DbLogs\**" />
     <None Remove="db\**" />
     <None Remove="Locale\**" />
     <None Remove="Logs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Overrides\Admin\Dashboard\Index.cshtml" />
-    <Content Remove="Overrides\Admin\Menu\Frontend.cshtml" />
-    <Content Remove="Overrides\Admin\Menu\Index.cshtml" />
+    <None Remove="Overrides\Admin\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Program.bak" />
     <None Remove="Startup.bak" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Overrides\Admin\Dashboard\Index.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Overrides\Admin\Menu\Frontend.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Overrides\Admin\Menu\Index.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -55,7 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 

@@ -160,12 +160,15 @@ $body-font-weight: 400;
       float: left;
       background: #f6f6f6;
       padding: 20px;
-      height: 550px;
+      height: 460px;
       overflow: hidden;
       @media(max-width:767px){
           width:100%;
           float:none;
           height:330px;
+      }
+      img{
+          width:100%;
       }
   }
 
