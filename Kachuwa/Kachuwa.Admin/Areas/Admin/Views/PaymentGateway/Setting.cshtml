@@ -1,0 +1,49 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Web.Model
+@model PaymentGatewaySettingViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("PaymentGateway");
+    ViewData["Title"] = LocaleResource.Get("PaymentGateway.PageTitle.Setting");
+}
+<link href="/module/KachuwaGrid/resources/css/kgridstyle.min.css" rel="stylesheet" />
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="form-section">
+                <div id="dvsetting" class="col-lg-12 col-sm-12">
+                    <plugin name="@Model.SystemName" component="Setting"></plugin>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+<script src="/module/KachuwaGrid/resources/js/kachuwagrid.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var $ajaxCall = function (data, url, success, error) {
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: url,
+                data: data,
+                success: success,
+                error: error
+            });
+        };
+
+        var load=function() {
+            $ajaxCall({ SystemName: '@ViewBag.SysName' }, "/admin/paymentgateway/LoadSetting?sysName=@ViewBag.SysName", function (response) {
+
+                $("#dvsetting").html(response);
+
+            }, function () { });
+        }
+
+        //load();
+    });
+</script>

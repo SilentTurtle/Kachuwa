@@ -1,0 +1,54 @@
+﻿@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model IEnumerable<Kachuwa.Identity.Models.IdentityRole>
+@inject ILocaleResourceProvider LocaleResource
+@{
+
+    LocaleResource.LookUpGroupAt("Role");
+    ViewData["Title"] = LocaleResource.Get("Role.PageTitle");
+}
+<div class="row">
+    <div class="col-12 col-sm-5">
+        <div class="breadcumb-wrapper pt-3 pt-sm-0 mb-3">
+            <h4 class="page-title mb-0">Roles</h4>
+            <ul class="breadcrumb breadcrumb-separatorless fw-normal fs-6 pt-1">
+                <li class="breadcrumb-item ">
+                    <a href="/admin/dashboard" class="">Home</a>
+                </li>
+                <li class="breadcrumb-item">Roles</li>
+            </ul>
+        </div>
+    </div><!-- breadcumb-->
+    <div class="col-12 col-sm-7 breadcumb-meta-btns d-flex justify-content-end align-items-center mb-2">
+        <a href="/admin/role/new" class="btn btn breadcumb-btn"><i class="fa fa-plus"></i> Add Role</a>
+    </div>
+</div>
+ 
+                            @(Html
+                                    .CreateKachuwaGrid(Model)
+                                    .Build(columns =>
+                                    {
+
+                                        columns.Add(model => model.Name).SetTitle("Name");
+                                    //  columns.Add(model => model.IsSystem ? LocaleResource.Get("Role.Grid.Yes") : LocaleResource.Get("Role.Grid.No")).SetTitle(LocaleResource.Get("Role.Grid.IsSystem"));
+                                        columns.Add(model =>new{model.IsSystem, notsys=!model.IsSystem}).SetTitle("IsSystem")
+                                        .Template("{{#if IsSystem}}Yes{{/if}}{{#if notsys}}No{{/if}}")
+                                            .Encoding(false);
+                                                                
+                                        }).AddCommands(commands =>
+                                    {
+                                        commands.Add("", "Edit", "fas fa-edit", "", "/admin/role/edit", model => model.Id);
+                                        commands.Add("", "Delete", "fa fa-trash", "kachuwagrid.delete", Model => Model.Id,
+                                            "/admin/role/delete");
+
+                                    }).Css("table-hover")
+                                    .Empty(LocaleResource.Get("Role.Grid.EmptyText"))
+                                    .Pagination(pager =>
+                                    {
+                                        pager.Api = "/admin/role";
+                                    })
+
+)
+
+ 
+

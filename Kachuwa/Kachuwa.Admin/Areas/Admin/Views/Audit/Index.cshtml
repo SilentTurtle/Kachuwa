@@ -1,0 +1,75 @@
+﻿@using Kachuwa.Identity.Models
+@using Kachuwa.Web
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@inject ILocaleResourceProvider LocaleResource
+@model IEnumerable<Kachuwa.Web.Model.Audit>
+@{
+
+    LocaleResource.LookUpGroupAt("Audit");
+    ViewData["Title"] = LocaleResource.Get("Audit.PageTitle");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">                       
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Audit.Title")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                                                  .CreateKachuwaGrid(Model)
+                                                  .Build(columns =>
+                                                  {
+                                                      columns.Add(model => model.Url).SetTitle(LocaleResource.Get("Audit.Grid.Url"));
+                                                      columns.Add(model => model.Action).SetTitle(LocaleResource.Get("Audit.Grid.Action"));
+                                                      columns.Add(model => new { model.UserName, model.Role }).SetTitle(LocaleResource.Get("Audit.Grid.UserName"))
+                                                          .Encoding(false)
+                                                          .Template("<p>{{UserName}}</p><p>{{Role}}</p>");
+                                                      columns.Add(model => model.IpAddress).SetTitle(LocaleResource.Get("Audit.Grid.IpAddress"));
+                                                      columns.Add(model => model.UserAgent).SetTitle(LocaleResource.Get("Audit.Grid.UserAgent"));
+                                                      columns.Add(model => new { model.Duration }).SetTitle(LocaleResource.Get("Audit.Grid.Duration"))
+                                                          .Encoding(false)
+                                                          .Template("<p>{{Duration}}ms</p>");
+                                                      columns.Add(model => model.AddedOn).SetTitle(LocaleResource.Get("Audit.Grid.AddedOn"));
+
+                                                  }).AddCommands(commands =>
+                                                  {
+                                                      //commands.Add(LocaleResource.Get("Grid.Command.Detail"), "Detail", "fa fa-eye", "audit.view", Model => Model.AuditId,
+                                                      //    "/admin/audit/detail");
+
+                                                  }).Css("table-hover")
+                                                  .Empty(LocaleResource.Get("Audit.Grid.EmptyText"))
+                                                  .Pagination(pager =>
+                                                  {
+                                                      pager.CurrentPage = (int)ViewData["Page"];
+                                                      pager.Api = "/admin/audit";
+                                                  })
+
+                            )
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script asp-add-nonce="true">
+    var audit = function () {
+
+        var getDetail = function(apiurl) {
+
+        }
+        return { view: getDetail };
+    }()
+</script>

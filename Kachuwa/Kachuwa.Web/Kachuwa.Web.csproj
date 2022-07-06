@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="API\Extension\**" />
+    <Compile Remove="API\Provider\**" />
+    <Compile Remove="API\Version\**" />
+    <Compile Remove="EmailTemplate\**" />
+    <Compile Remove="Grid\**" />
+    <Compile Remove="Job\**" />
+    <Compile Remove="SEO\Sitemap\Samples\**" />
+    <Compile Remove="State\**" />
+    <Compile Remove="Views\Installer\**" />
+    <EmbeddedResource Remove="API\Extension\**" />
+    <EmbeddedResource Remove="API\Provider\**" />
+    <EmbeddedResource Remove="API\Version\**" />
+    <EmbeddedResource Remove="EmailTemplate\**" />
+    <EmbeddedResource Remove="Grid\**" />
+    <EmbeddedResource Remove="Job\**" />
+    <EmbeddedResource Remove="SEO\Sitemap\Samples\**" />
+    <EmbeddedResource Remove="State\**" />
+    <EmbeddedResource Remove="Views\Installer\**" />
+    <None Remove="API\Extension\**" />
+    <None Remove="API\Provider\**" />
+    <None Remove="API\Version\**" />
+    <None Remove="EmailTemplate\**" />
+    <None Remove="Grid\**" />
+    <None Remove="Job\**" />
+    <None Remove="SEO\Sitemap\Samples\**" />
+    <None Remove="State\**" />
+    <None Remove="Views\Installer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Components\LocaleSwitcher\Default.cshtml" />
+    <None Remove="Components\Pagination\Default.cshtml" />
+    <None Remove="Optimizer\smidge.json" />
+    <None Remove="resources\css\kgridstyle.css" />
+    <None Remove="resources\css\kgridstyle.min.css" />
+    <None Remove="resources\js\kachuwagrid.js" />
+    <None Remove="Views\Shared\KachuwaGrid\Form.cshtml" />
+    <None Remove="Views\Shared\KachuwaGrid\Grid.cshtml" />
+    <None Remove="Views\Shared\_Installer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="smidge.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Components\LocaleSwitcher\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Pagination\Default.cshtml" />
+    <EmbeddedResource Include="Components\NotificationBar\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="resources\css\kgridstyle.css" />
+    <EmbeddedResource Include="resources\css\kgridstyle.min.css" />
+    <EmbeddedResource Include="resources\js\kachuwagrid.js" />
+    <EmbeddedResource Include="Views\Shared\KachuwaGrid\Form.cshtml" />
+    <EmbeddedResource Include="Views\Shared\KachuwaGrid\Grid.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_Installer.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.3" />
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Mustache" Version="1.0.1" />
+	    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+	    <PackageReference Include="MXTires.Microdata.Core" Version="0.1.0" />
+	    <PackageReference Include="SkiaSharp" Version="2.80.3" />
+	    <PackageReference Include="Smidge" Version="4.0.4" />
+	    <PackageReference Include="Smidge.Nuglify" Version="4.0.4" />
+	    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Core\Kachuwa.Core.csproj" />
+    <ProjectReference Include="..\Kachuwa.Identity\Kachuwa.Identity.csproj" />
+  </ItemGroup>
+
+
+</Project>

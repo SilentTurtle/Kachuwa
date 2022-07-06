@@ -1,0 +1,58 @@
+﻿@model IdentityServer4.Admin.ViewModels.Client.ClientViewModel
+
+@section breadcrumb{
+    <li >
+        <a href="#">Create client</a>
+    </li>
+}
+
+@section header{
+    Create client<small v-text="moduleDescription"></small>
+}
+
+<div class="col-xs-12">
+    <form id="createClientForm" asp-controller="Client" asp-action="CreateAsync" method="post">
+        <div class="nav-tabs-custom" style="cursor: move;">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#name-setting" data-toggle="tab" aria-expanded="false">Name</a>
+                </li>
+                <li class="">
+                    <a href="#basic-setting" data-toggle="tab" aria-expanded="true">Basic</a>
+                </li>
+                <li class="">
+                    <a href="#authentication-setting" data-toggle="tab" aria-expanded="true">Authentication</a>
+                </li>
+                <li class="">
+                    <a href="#token-setting" data-toggle="tab" aria-expanded="true">Token</a>
+                </li>
+                <li class="">
+                    <a href="#consent-setting" data-toggle="tab" aria-expanded="true">Consent</a>
+                </li>
+                <li class="">
+                    <a href="#deviceFlow-setting" data-toggle="tab" aria-expanded="true">DeviceFlow</a>
+                </li>
+            </ul>
+            <div class="tab-content no-padding">
+                @await Html.PartialAsync("_ValidationSummary")
+                @await Html.PartialAsync("Item", Model)
+            </div>
+            <div class="box-footer clearfix">
+                <button type="submit" class="btn btn-default btn-sm  btn-flat">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    <script>
+        $(function() {
+            app.activeMenu('Client');
+        });
+        $.validator.setDefaults(
+            {
+                ignore: null                
+            }
+        );
+    </script>
+}

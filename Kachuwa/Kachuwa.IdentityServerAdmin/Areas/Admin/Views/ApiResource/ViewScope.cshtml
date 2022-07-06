@@ -1,0 +1,37 @@
+@model IdentityServer4.Admin.ViewModels.ApiResource.ApiResourceScopeViewModel
+
+@section breadcrumb{
+    <li >
+        <a href="/api-resource">API Resource</a>
+    </li>
+    <li >
+        <a href="#">API Resource Scope</a>
+    </li>
+}
+
+@section header{
+    API Resource Scope
+}
+
+<div class="col-xs-12">
+    <div class="box">
+        <form action="/api-resource/@ViewData["ApiResourceId"]/scope/@ViewData["ScopeId"]" method="post">
+            @await Html.PartialAsync("_ValidationSummary")
+            <div class="box-body">
+                @await Html.PartialAsync("ScopeItem", Model)
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <button type="submit" class="btn btn-default btn-sm  btn-flat">Submit</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.box -->
+</div>
+@section scripts{
+    <script>
+        $(function() {
+            app.activeMenu('ApiResource');
+        })
+    </script>
+}

@@ -1,0 +1,68 @@
+﻿@using Kachuwa.Web.Notification
+@using Newtonsoft.Json
+@model Kachuwa.Web.Notification.NotificationViewModel
+@inject INotificationBarConfig notificationBarConfig
+@{
+    var json = JsonConvert.SerializeObject(new
+    {
+        Info = notificationBarConfig.InfoTemplate,
+        Success = notificationBarConfig.SuccessTemplate,
+        Error = notificationBarConfig.ErrorTemplate,
+        Warning = notificationBarConfig.WarningTemplate
+    });
+}
+<div class="notification-bar">
+    @foreach (var template in Model.Templates)
+    {
+        @(template)
+    }
+
+</div>
+<script type="text/javascript">
+    var kachuwaNotification = function() {
+        var _notificationTemplates = @Html.Raw(json);
+        var container = '.notification-bar';
+
+
+        var showNotification = function(template, title, content) {
+            $(container).html(template);
+            $(container).find('.notification-title').html('').html(title);
+            $(container).find('.notification-content').html('').html(content);
+
+            $(document).off('click', '.notification-bar .fa-times-circle').on('click',
+                '.notification-bar .fa-times-circle',
+                function() {
+                    $(this).parents('div.notification:eq(0)').remove();
+
+                });
+        }
+        var showInfo = function(title, content) {
+            var template = _notificationTemplates.Info;
+            showNotification(template);
+        };
+        var showError = function(title, content) {
+            var template = _notificationTemplates.Error;
+            showNotification(template, title, content);
+        };
+        var showSuccess = function(title, content) {
+            var template = _notificationTemplates.Success;
+            showNotification(template, title, content);
+        };
+        var showWarning = function(title, content) {
+            var template = _notificationTemplates.Warning;
+            showNotification(template, title, content);
+        };
+
+       
+    
+        return { Info: showInfo, Success: showSuccess, Error: showError, Warning: showWarning };;
+
+
+    };
+    $(document).off('click', '.notification-bar .fa-times-circle').on('click',
+        '.notification-bar .fa-times-circle',
+        function() {
+            $(this).parents('div.notification:eq(0)').remove();
+
+        });
+</script>

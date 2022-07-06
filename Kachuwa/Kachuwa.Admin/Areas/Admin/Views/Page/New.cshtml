@@ -1,0 +1,214 @@
+﻿@using Kachuwa.Identity
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@using Kachuwa.Web
+@model PageViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Page");
+    ViewData["Title"] = LocaleResource.Get("Page.PageTitle.New");
+}
+   <div class="row">
+    <div class="col-12 col-sm-5">
+        <div class="breadcumb-wrapper pt-3 pt-sm-0 mb-3">
+            <h4 class="page-title mb-0">Pages</h4>
+            <ul class="breadcrumb breadcrumb-separatorless fw-normal fs-6 pt-1">
+                <li class="breadcrumb-item ">
+                    <a href="/admin/dashboard" class="">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/admin/page">Pages</a>
+                    </li>
+                <li class="breadcrumb-item">New</li>
+
+            </ul>
+        </div>
+    </div><!-- breadcumb-->
+
+@(Html.CreateKachuwaForm<PageViewModel>("pageForm", Model)
+    .SetHeading("")
+    .ActionUrl("/admin/page/new")
+    .CancelUrl("/admin/page")
+    .CreateSection(section =>
+    {
+        section.Add("section1", "form-section", rows =>
+        {
+            rows.Add("1strow", "", columns =>
+            {
+                    columns.Add("", "row", @<div class="form-header-wrapper mt-4">
+                            <div class="form-header"><h4>Enter Page Details</h4></div>
+                        </div>);
+                columns.Add("right", "col-md-12", control =>
+                {
+                    control.Add("form-control", model => model.PageId, FormInputControl.Hidden);
+
+                    control.Add("form-control keychange", x => x.Name, FormInputControl.TextBox)
+                        .SetFirstParentClass("form-group")
+                        .SetSecondParentClass("col-md-6")
+                        .SetPlaceHolder("Name")
+                        .SetDisplayName("Name")
+                        .SetLabelClass("form-label");
+
+                    control.Add("form-control", model => model.UseMasterLayout, FormInputControl.Switch)
+                        .SetFirstParentClass("form-group")
+                        .SetSecondParentClass("col-md-8")
+                        .SetPlaceHolder("UseMasterLayout")
+                        .SetDisplayName("UseMasterLayout")
+                        .SetLabelClass("form-label");
+
+                    control.Add("form-control", model => model.IsActive, FormInputControl.Switch)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-8")
+                                .SetPlaceHolder("IsActive")
+                                .SetDisplayName("IsActive")
+                                .SetLabelClass("form-label");
+                                                                            
+
+                    control.Add("form-control", model => model.IsPublished, FormInputControl.Switch)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-8")
+                                .SetPlaceHolder("IsPublished")
+                                .SetDisplayName("IsPublished")
+                                    .SetLabelClass("form-label");
+                                                                            
+
+
+                }).SetFirstChildClass("form-section").SetSecondChildClass("row");
+            @* });
+            rows.Add("12strow", "row", columns =>
+            {*@
+                @* columns.Add("left", "col-md-4", @<div class="form-description">
+                                                    <h4>@LocaleResource.Get("Page.Info.SEO")</h4>
+                                                    <p>@LocaleResource.Get("Page.Info.SEOText")</p>
+                                                </div>);
+                columns.Add("12strow1stcol", "", @<div>
+                                                        <input type="hidden" name="IsNew" value="true"/>
+                                                        <input type="hidden" name="OldUrl" value=""/>
+                                                        <input name="SeoType" value="page" type="hidden"/>
+                                                    </div>);*@
+                columns.Add("right", "col-md-12", control =>
+                {
+                    control.Add("form-control", model => model.SEOId, FormInputControl.Hidden);
+
+                    control.Add("form-control keychange", x => x.MetaTitle, FormInputControl.TextBox)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-6")
+                                .SetPlaceHolder("MetaTitle")
+                                .SetDisplayName("MetaTitle")
+                                .SetLabelClass("form-label");
+                                                                            
+                            control.Add("form-control urlchange", x => x.Url, FormInputControl.TextBox)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-6")
+                                .SetPlaceHolder("Url")
+                                .SetDisplayName("Url")
+                                .SetLabelClass("form-label");
+                                                                            
+                            control.Add("form-control", model => model.MetaDescription, FormInputControl.TextArea)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-6")
+                                .SetPlaceHolder("MetaDescription")
+                                .SetDisplayName("MetaDescription")
+                                .SetLabelClass("form-label");
+                                ;
+                            control.Add("form-control", model => model.Image, FormInputControl.Image)
+                                .SetFirstParentClass("form-group")
+                                .SetSecondParentClass("col-md-6")
+                                .SetPlaceHolder("Image")
+                                .SetDisplayName("Image")
+                                .SetLabelClass("form-label");
+                                                                            
+
+                }).SetFirstChildClass("form-section").SetSecondChildClass("row");
+            });
+                                                       
+            rows.Add("12strow", "row", columns =>
+            {
+                        @*  columns.Add("left", "col-md-4", @<div class="form-description">
+        <h4>@LocaleResource.Get("Page.Info.Permission")</h4>
+        <p>@LocaleResource.Get("Page.Info.PermissionInfo")</p>
+        </div>);
+*@               @*  columns.Add("right", "col-md-8", @<div class="col-md-12">
+                                                        <table id="tblPermission" class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <td>@LocaleResource.Get("Page.Permission.Role")</td>
+                                                                <td>@LocaleResource.Get("Page.Permission.Allow")</td>
+                                                                @*<td>@LocaleResource.Get("Page.Permission.Form.Role")</td>
+                                                                                                                                                                                                                                                                                                        <td>@LocaleResource.Get("Page.Permission.Form.Allow")</td>*@
+                                                        @*   </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @{
+                                                                int permissionIndex = 0;
+                                                            }
+                                                            @foreach (var permission in Model.PagePermissions)
+                                                            {
+                                                                <tr>
+                                                                    <td> @permission.RoleName </td>
+                                                                    <td>
+                                                                        @if (permission.RoleName == KachuwaRoleNames.Admin || permission.RoleName == KachuwaRoleNames.SuperAdmin)
+                                                                        {
+                                                                            <input type="checkbox" checked="checked" disabled="disabled" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (permission.AllowAccess)
+                                                                            {
+                                                                                <input type="checkbox" checked="checked" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <input type="checkbox" name="PagePermissionsRole" value="@permission.RoleId"/>
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                permissionIndex++;
+                                                            }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>).SetFirstChildClass("forminput-section").SetSecondChildClass("row");*@
+
+            });
+
+        });
+                                                         
+    }))
+    
+
+@section scripts{
+    <script type="text/javascript" asp-add-nonce="true">
+        (function () {
+            $(document).off("input", ".keychange").on("input",
+                ".keychange",
+                function (event) {
+                    var name = $(this).val();
+                    var nameWithoutSpace = name.replace(/\s\s+/g, ' ');
+                    var nameWithoutSpecialChar = nameWithoutSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    if (this.name == "MetaTitle") {
+                        $(this).val(nameWithoutSpecialChar);
+                    } else
+                        $(".keychange").val(nameWithoutSpecialChar);
+                    $(".urlchange").val($.trim(nameWithoutSpecialChar).replace(/ /g, "-"));
+                });
+
+            $(document).off("input", ".urlchange").on("input",
+                ".urlchange",
+                function (event) {
+                    var fulltxt = $(this).val();
+                    var pagename = fulltxt.replace("/", "");
+                    var pagenam2 = fulltxt.replace("/", "");
+                    var nameWithoutSpace = pagename.replace(/ /g, "");
+                    var dnameWithSpace = pagenam2.replace(/-/g, " ");
+                    var nameWithoutSpecialChar = nameWithoutSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    var nameWithoutSpecialChar2 = dnameWithSpace.replace(/[^a-zA-Z 0-9 -]+/g, "");
+                    $(this).val(nameWithoutSpecialChar.replace(/\-+/g, '-'));
+                });
+
+        })();
+
+
+    </script>
+}

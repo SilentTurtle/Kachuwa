@@ -1,0 +1,128 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jquery-validate@1.19.3",
+      "destination": "wwwroot/lib/jquery-validate/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.12",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "font-awesome@6.1.1",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "tinymce@6.0.2",
+      "destination": "wwwroot/lib/tinymce/"
+    },
+    {
+      "library": "moment.js@2.29.3",
+      "destination": "wwwroot/lib/moment.js/"
+    },
+    {
+      "library": "jquery.nicescroll@3.7.6",
+      "destination": "wwwroot/lib/jquery.nicescroll/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@5.1.3",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/lib/animate.css/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "janimate@0.2.1",
+      "destination": "wwwroot/lib/janimate/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "gridstack@5.0.0",
+      "destination": "wwwroot/lib/gridstack/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@oroinc/jquery.nicescroll@3.6.6",
+      "destination": "wwwroot/lib/@oroinc/jquery.nicescroll/"
+    },
+    {
+      "library": "Chart.js@3.7.1",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "microsoft-signalr@6.0.5",
+      "destination": "wwwroot/lib/microsoft-signalr/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sortablejs@1.15.0",
+      "destination": "wwwroot/lib/sortablejs/"
+    },
+    {
+      "library": "popper.js@2.11.5",
+      "destination": "wwwroot/lib/popper.js/"
+    },    
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "eonasdan-bootstrap-datetimepicker@4.17.49",
+      "destination": "wwwroot/lib/eonasdan-bootstrap-datetimepicker/"
+    },
+    {
+      "library": "tempusdominus-bootstrap-4@5.39.0",
+      "destination": "wwwroot/lib/tempusdominus-bootstrap-4/"
+    },
+    {
+      "library": "tinyColorPicker@1.1.1",
+      "destination": "wwwroot/lib/tinyColorPicker/"
+    },
+    {
+      "library": "paper-css@0.4.1",
+      "destination": "wwwroot/lib/paper-css/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@furcan/iconpicker@1.5.0",
+      "destination": "wwwroot/lib/@furcan/iconpicker/"
+    },
+    {
+      "library": "jquery.perfect-scrollbar@1.5.5",
+      "destination": "wwwroot/lib/jquery.perfect-scrollbar/"
+    },
+    {
+      "library": "progressbar.js@1.1.0",
+      "destination": "wwwroot/lib/progressbar.js/"
+    },
+    {
+      "library": "simple-line-icons@2.5.5",
+      "destination": "wwwroot/lib/simple-line-icons/"
+    },
+    {
+      "library": "bootstrap-daterangepicker@3.1",
+      "destination": "wwwroot/lib/bootstrap-daterangepicker/"
+    },
+    {
+      "library": "jquery-contextmenu@2.9.2",
+      "destination": "wwwroot/lib/jquery-contextmenu/"
+    },
+    {
+      "library": "fontawesome-iconpicker@3.2.0",
+      "destination": "wwwroot/lib/fontawesome-iconpicker/"
+    }
+  ]
+}

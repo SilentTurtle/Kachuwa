@@ -1,0 +1,58 @@
+﻿@using Kachuwa.Web.Form
+@using Kachuwa.Identity.Models
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model Kachuwa.Identity.Models.IdentityRole
+@inject ILocaleResourceProvider LocaleResource
+@{
+   
+    LocaleResource.LookUpGroupAt("Role");
+    ViewData["Title"] = @LocaleResource.Get("Role.PageTitle.New");
+}
+
+<div class="row">
+    <div class="col-12 col-sm-5">
+        <div class="breadcumb-wrapper pt-3 pt-sm-0 mb-3">
+            <h4 class="page-title mb-0">Roles</h4>
+            <ul class="breadcrumb breadcrumb-separatorless fw-normal fs-6 pt-1">
+                <li class="breadcrumb-item ">
+                    <a href="/admin/dashboard" class="">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/admin/role" class="">Roles</a>
+                        </li>
+                  <li class="breadcrumb-item">New</li>
+            </ul>
+        </div>
+    </div>
+</div> 
+
+                @(Html.CreateKachuwaForm<Kachuwa.Identity.Models.IdentityRole>("newRoleForm", Model)
+                                                                        .SetHeading("")
+                                                                        .ActionUrl("/admin/role/new")
+                                                                        .CancelUrl("/admin/role")
+                                                                        .CreateSection(section =>
+                                                                        {
+                                                                            section.Add("section1", "form-section", rows =>
+                                                                            {
+                                                                                rows.Add("1strow", "row", columns =>
+                                                                                {
+                                                                                     columns.Add("", "row", @<div class="form-header-wrapper mt-4">
+                                                                       <div class="form-header"><h4>Add Roles</h4></div>
+                                                                   </div>);
+                                                                                    columns.Add("right", "col-md-12", control =>
+                                                                                    {
+                                                                                        control.Add("form-control", model => model.Id, FormInputControl.Hidden);
+
+                                                                                        control.Add("form-control", x => x.Name, FormInputControl.TextBox)
+                                                                                            .SetFirstParentClass("form-group")
+                                                                                            .SetSecondParentClass("col-md-6")
+                                                                                               .SetPlaceHolder("Name")
+                                                                                            .SetDisplayName("Name");
+
+                                                                                    }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                                                });
+
+                                                                            });
+                                                                        }))
+           

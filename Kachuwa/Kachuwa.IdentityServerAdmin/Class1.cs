@@ -1,0 +1,3 @@
+﻿namespace Kachuwa.IdentityServerAdmin
+{
+}

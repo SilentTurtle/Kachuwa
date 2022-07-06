@@ -1,0 +1,124 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\**" />
+    <Compile Remove="resources\**" />
+    <Compile Remove="Service\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <EmbeddedResource Remove="resources\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Model\**" />
+    <None Remove="resources\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Areas\Admin\Views\Audit\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Page\Config.cshtml" />
+    <None Remove="Areas\Admin\Views\Page\Edit.cshtml" />
+    <None Remove="Areas\Admin\Views\Page\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\EmailServiceProvider\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\EmailServiceProvider\New.cshtml" />
+    <None Remove="Areas\Admin\Views\EmailServiceProvider\Setting.cshtml" />
+    <None Remove="Areas\Admin\Views\SEO\Edit.cshtml" />
+    <None Remove="Areas\Admin\Views\SEO\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\SEO\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\Edit.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Localization\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Module\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Page\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Page\PagePermission.cshtml" />
+    <None Remove="Areas\Admin\Views\PaymentGateway\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\PaymentGateway\New.cshtml" />
+    <None Remove="Areas\Admin\Views\PaymentGateway\Setting.cshtml" />
+    <None Remove="Areas\Admin\Views\Plugins\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Plugins\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Role\Edit.cshtml" />
+    <None Remove="Areas\Admin\Views\Role\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Role\New.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Security.cshtml" />
+    <None Remove="Areas\Admin\Views\Setting\Web.cshtml" />
+    <None Remove="Areas\Admin\Views\Theme\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\Theme\New.cshtml" />
+    <None Remove="Areas\Admin\Views\User\ChangePassword.cshtml" />
+    <None Remove="Areas\Admin\Views\User\Import.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Admin\Views\Audit\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\EmailServiceProvider\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\EmailServiceProvider\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\EmailServiceProvider\Setting.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\SEO\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\SEO\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\SEO\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Dashboard\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Localization\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Menu\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Module\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\Config.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\Page\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Page\PagePermission.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\PaymentGateway\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\PaymentGateway\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\PaymentGateway\Setting.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Plugins\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Plugins\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Role\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Role\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Role\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Caching.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Security.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Setting\Web.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Theme\Index.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\Theme\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\ChangePassword.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\Import.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\User\Edit.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\User\New.cshtml" />
+    <EmbeddedResource Include="Areas\Admin\Views\_ViewImports.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Admin\Views\_ViewStart.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Notification\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\TopBar\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\AdminMenu\Default.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kachuwa.Web\Kachuwa.Web.csproj" />
+  </ItemGroup>
+
+</Project>

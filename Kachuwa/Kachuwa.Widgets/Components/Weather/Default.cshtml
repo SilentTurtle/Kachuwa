@@ -1,0 +1,575 @@
+﻿@{ var id = Guid.NewGuid();}
+@using Kachuwa.Localization
+@inject ILocaleResourceProvider LocaleResourceProvider;
+@{LocaleResourceProvider.LookUpGroupAt("Widget");}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css" rel="stylesheet" />
+<style>
+
+
+    #bg-img {
+        /*background-image: url("https://image.ibb.co/nk6wEb/snow.jpg");
+        background-size: cover;*/
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    #wrapper {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1200px;
+        padding: 1%;
+    }
+
+    #forecast {
+        font-size: 100px;
+    }
+
+    #temp {
+        font-size: 1.875rem;
+        font-weight: bold;
+    }
+
+    #currentLocation,
+    #currentDate {
+        text-align: left;
+    }
+
+    #currentWeather {
+        font-size: 1.25rem;
+        font-weight: bold;
+        padding: 1rem;
+    }
+
+    #location {
+        padding: 7px;
+        border-top: 3px solid rgba(255, 255, 255, 0.6);
+    }
+
+    #high-low {
+        font-size: 0.875rem;
+    }
+
+    #parameters {
+        background-color: rgba(255, 255, 255, 0.6);
+        width: 100%;
+        overflow: hidden;
+        margin-top: 3.5%;
+        padding-left: 7px;
+    }
+
+        #parameters ul li {
+            padding-bottom: 7px;
+            line-height: 1.7;
+            list-style: none;
+        }
+
+        #parameters ul {
+            width: 33%;
+            float: left;
+            list-style: none;
+            padding: 0;
+        }
+
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 23px;
+        margin-bottom: 7px;
+    }
+
+        .toggle input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+    input:checked + .slider {
+        background-color: #3d3b8e;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #3d3b8e;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    @@media screen and (max-width: 768px) {
+        #wrapper {
+            width: 70%;
+        }
+    }
+
+    @@media screen and (max-width: 480px) {
+        #wrapper {
+            width: 95%;
+        }
+
+        #forecast {
+            font-size: 75px;
+        }
+    }
+</style>
+<div class="widget" data-wn="WeatherWidget">
+    <div id="bg-img" class="row">
+        <div id="wrapper">
+            @*<h1><i class="wi wi-horizon-alt"></i> </h1>*@
+
+            <!-- Location and Date -->
+            @*<div id="location">
+                    <h2 id="currentLocation">Location</h2>
+                    <h4 id="currentDate">Date</h4>
+                </div>*@
+
+            <!-- Current Weather -->
+            <div id="main-data">
+                <p id="forecast"><i class="wi"></i></p>
+                <p id="currentWeather"></p>
+            </div>
+
+            <!-- Temperature -->
+            <div id="temp">
+                <p id="currentTemp">@LocaleResourceProvider.Get("Widget.Weather.Title.Temperature")</p>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p id="high-low"></p>
+            </div>
+
+            <!-- Other weather data -->
+            <div id="parameters">
+                <ul>
+                    <li>@LocaleResourceProvider.Get("Widget.Weather.Title.Wind")</li>
+                    <li>@LocaleResourceProvider.Get("Widget.Weather.Title.Clouds")</li>
+                    <li>@LocaleResourceProvider.Get("Widget.Weather.Title.Humidity")</li>
+                    <li>@LocaleResourceProvider.Get("Widget.Weather.Title.Pressure")</li>
+                </ul>
+
+                <!-- Icons -->
+                <ul>
+                    <li><i class="wi wi-strong-wind"></i></li>
+                    <li><i class="wi wi-cloudy"></i></li>
+                    <li><i class="wi wi-humidity"></i></li>
+                    <li><i class="wi wi-barometer"></i></li>
+                </ul>
+                <!-- API Current Data -->
+                <ul>
+                    <li id="wind"></li>
+                    <li id="cloud"></li>
+                    <li id="humidity"></li>
+                    <li id="pressure"></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+
+    var cel = true;
+
+    // Date
+    function getTodayDate() {
+        var tdate = new Date();
+        var dd = tdate.getDate(); //day
+        var MM = tdate.getMonth(); //month
+        var yyyy = tdate.getFullYear(); //year
+        var todayDate = dd + "-" + (MM + 1) + "-" + yyyy;
+       // document.getElementById("currentDate").innerHTML = todayDate;
+    }
+
+    // Get Location - city, lat, lon
+    function getLocation() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://ipinfo.io/geo", true);
+
+        xhr.onload = function () {
+            if (this.status == 200) {
+                var userLocation = JSON.parse(this.responseText);
+                var userCity = userLocation.city;
+                var getUserLocation = userLocation.loc.split(",");
+                var userLat = getUserLocation[0];
+                var userLon = getUserLocation[1];
+
+                // Current Weather
+                function getWeatherData() {
+                    var API_KEY = "7a6fb46593b2eb27b5c12d3e169f7c87";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open(
+                        "GET",
+                        "https://api.openweathermap.org/data/2.5/weather?lat=" +
+                        userLat +
+                        "&lon=" +
+                        userLon +
+                        "&units=metric&lang=en" +
+                        "&APPID=" +
+                        API_KEY,
+                        true
+                    );
+                    xhr.onload = function () {
+                        if (this.status == 200) {
+                            var userWeather = JSON.parse(this.responseText);
+                            var currentTemperature = userWeather.main.temp;
+
+                            //Show user's city
+                            //if (userLocation) {
+                            //    document.getElementById("currentLocation").innerHTML =
+                            //        userCity;
+                            //} else {
+                            //    document.getElementById("currentLocation").innerHTML =
+                            //        "Unknown Location";
+                            //}
+
+                            // Show weather data
+                            document.getElementById("currentWeather").innerHTML =
+                                userWeather.weather[0].description;
+                            document.getElementById("currentTemp").innerHTML =
+                                userWeather.main.temp + " &#176;C";
+                            document.getElementById("high-low").innerHTML =
+                                userWeather.main.temp_max +
+                                " &#176;C" +
+                                " / " +
+                                userWeather.main.temp_min +
+                                " &#176;C";
+                            document.getElementById("cloud").innerHTML =
+                                userWeather.clouds.all + "%";
+                            document.getElementById("wind").innerHTML =
+                                userWeather.wind.speed + " m/sec";
+                            document.getElementById("humidity").innerHTML =
+                                userWeather.main.humidity + "%";
+                            document.getElementById("pressure").innerHTML =
+                                userWeather.main.pressure + " hPa";
+
+                            // Show weather icon
+                            var hours = new Date().getHours();
+                            var dayOrNight = hours > 6 && hours < 22 ? "day" : "night";
+                            var icon2 = userWeather.weather[0].id;
+                            document
+                                .getElementById("forecast")
+                                .firstChild.classList.add("wi-owm-" + dayOrNight + "-" + icon2);
+
+                            // C to F
+                            document
+                                .getElementsByClassName("slider")[0]
+                                .addEventListener("click", function () {
+                                    if (cel) {
+                                        var f = (userWeather.main.temp * 9 / 5 + 32).toFixed(2);
+                                        var fMin = (userWeather.main.temp_min * 9 / 5 + 32).toFixed(
+                                            2
+                                        );
+                                        var fMax = (userWeather.main.temp_max * 9 / 5 + 32).toFixed(
+                                            2
+                                        );
+                                        cel = !cel;
+                                        document.getElementById("currentTemp").innerHTML =
+                                            f + " &#176;F";
+                                        document.getElementById("high-low").innerHTML =
+                                            fMax + " &#176;F" + " / " + fMin + " &#176;F";
+                                    } else {
+                                        document.getElementById("currentTemp").innerHTML =
+                                            userWeather.main.temp + " &#176;C";
+                                        document.getElementById("high-low").innerHTML =
+                                            userWeather.main.temp_max +
+                                            " &#176;C" +
+                                            " / " +
+                                            userWeather.main.temp_min +
+                                            " &#176;C";
+                                        cel = true;
+                                    }
+                                });
+                        }
+                    };
+                    xhr.send();
+                }
+
+                getWeatherData();
+            }
+        };
+        xhr.send();
+    }
+    getLocation();
+    getTodayDate();
+
+</script>
+@*<script>
+        $(document).on("onDashboardReady",
+            function () {
+                if ("geolocation" in navigator) {
+                    /* geolocation is available */
+
+                    function geo_success(position) {
+                        weatherReport(position.coords.latitude, position.coords.longitude);
+                    }
+
+                    function geo_error() {
+                        alert("Sorry, no position available.");
+                    }
+
+                    var geo_options = {
+                        enableHighAccuracy: true,
+                        maximumAge: 30000,
+                        timeout: 27000
+                    };
+
+                    var wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+                } else {
+                    /* geolocation IS NOT available */
+                } // convert degrees to celsius
+
+                function fToC(fahrenheit) {
+                    var fTemp = fahrenheit,
+                        fToCel = (fTemp - 32) * 5 / 9;
+
+                    return fToCel;
+                }
+
+                function skycons() {
+                    var i,
+                        icons = new Skycons({
+                            "color": "#FFFFFF",
+                            "resizeClear": true // nasty android hack
+                        }),
+                        list = [// listing of all possible icons
+                            "clear-day",
+                            "clear-night",
+                            "partly-cloudy-day",
+                            "partly-cloudy-night",
+                            "cloudy",
+                            "rain",
+                            "sleet",
+                            "snow",
+                            "wind",
+                            "fog"
+                        ];
+
+                    // loop thru icon list array
+                    for (i = list.length; i--;) {
+                        var weatherType = list[i], // select each icon from list array
+                            // icons will have the name in the array above attached to the
+                            // canvas element as a class so let's hook into them.
+                            elements = document.getElementsByClassName(weatherType);
+
+                        // loop thru the elements now and set them up
+                        for (e = elements.length; e--;) {
+                            icons.set(elements[e], weatherType);
+                        }
+                    }
+
+                    // animate the icons
+                    icons.play();
+                }
+
+                function weatherReport(latitude, longitude) {
+                    // variables config for coordinates, url and api key
+                    // latitude and longitude are accepted arguments and passed
+                    // once a user has submitted the form.
+                    var apiKey = 'a385c47f07f967bc1bd64b40133676b8',
+                        url = 'https://api.darksky.net/forecast/',
+                        lati = latitude,
+                        longi = longitude,
+                        api_call = url + apiKey + "/" + lati + "," + longi + "?extend=hourly&callback=?";
+
+                    // Hold our days of the week for reference later.
+                    var days = [
+                        'Sunday',
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday'
+                    ];
+
+                    // Hold hourly values for each day of the week.
+                    // This will store our 24 hour forecast results.
+                    var sunday = [],
+                        monday = [],
+                        tuesday = [],
+                        wednesday = [],
+                        thursday = [],
+                        friday = [],
+                        saturday = [];
+
+                    // Celsius button check. Is it toggled or not?
+                    var isCelsiusChecked = $('#celsius:checked').length > 0;
+
+                    // Hourly report method to reference in our daily loop
+                    function hourlyReport(day, selector) {
+                        for (var i = 0, l = day.length; i < l; i++) {
+                            $("." + selector + " " + "ul").append('<li>' + Math.round(day[i]) + '</li>');
+                        }
+                    }
+
+                    // Call to the DarkSky API to retrieve JSON
+                    $.getJSON(api_call,
+                        function (forecast) {
+
+                            // Loop thru hourly forecasts
+                            for (var j = 0, k = forecast.hourly.data.length; j < k; j++) {
+                                var hourly_date = new Date(forecast.hourly.data[j].time * 1000),
+                                    hourly_day = days[hourly_date.getDay()],
+                                    hourly_temp = forecast.hourly.data[j].temperature;
+
+                                // If Celsius is checked then convert degrees to celsius
+                                // for general forecast report.
+                                if (isCelsiusChecked) {
+                                    hourly_temp = fToC(hourly_temp);
+                                    hourly_temp = Math.round((hourly_temp));
+                                }
+
+                                // push 24 hour forecast values to our empty days array
+                                switch (hourly_day) {
+                                    case 'Sunday':
+                                        sunday.push(hourly_temp);
+                                        break;
+                                    case 'Monday':
+                                        monday.push(hourly_temp);
+                                        break;
+                                    case 'Tuesday':
+                                        tuesday.push(hourly_temp);
+                                        break;
+                                    case 'Wednesday':
+                                        wednesday.push(hourly_temp);
+                                        break;
+                                    case 'Thursday':
+                                        thursday.push(hourly_temp);
+                                        break;
+                                    case 'Friday':
+                                        friday.push(hourly_temp);
+                                        break;
+                                    case 'Saturday':
+                                        saturday.push(hourly_temp);
+                                        break;
+                                    default:
+                                        console.log(hourly_date.toLocaleTimeString());
+                                        break;
+                                }
+                            }
+
+                            // Loop thru daily forecasts
+                            for (var i = 0, l = forecast.daily.data.length; i < l - 1; i++) {
+
+                                var date = new Date(forecast.daily.data[i].time * 1000),
+                                    day = days[date.getDay()],
+                                    skicons = forecast.daily.data[i].icon,
+                                    time = forecast.daily.data[i].time,
+                                    humidity = forecast.daily.data[i].humidity,
+                                    summary = forecast.daily.data[i].summary,
+                                    temp = Math.round(forecast.hourly.data[i].temperature),
+                                    tempMax = Math.round(forecast.daily.data[i].temperatureMax);
+
+                                // If Celsius is checked then convert degrees to celsius
+                                // for 24 hour forecast results
+                                if (isCelsiusChecked) {
+                                    temp = fToC(temp);
+                                    tempMax = fToC(tempMax);
+                                    temp = Math.round(temp);
+                                    tempMax = Math.round(tempMax);
+                                }
+
+                                // Append Markup for each Forecast of the 7 day week
+                                $(".weatherReport").append(
+                                    '<li class="shade-' +
+                                    skicons +
+                                    '"><div class="card-container"><div><div class="front card"><div>' +
+                                    "<div class='graphic'><canvas class=" +
+                                    skicons +
+                                    "></canvas></div>" +
+                                    "<div><b>Day</b>: " +
+                                    date.toLocaleDateString() +
+                                    "</div>" +
+                                    "<div><b>Temperature</b>: " +
+                                    temp +
+                                    "</div>" +
+                                    "<div><b>Max Temp.</b>: " +
+                                    tempMax +
+                                    "</div>" +
+                                    "<div><b>Humidity</b>: " +
+                                    humidity +
+                                    "</div>" +
+                                    '<p class="summary">' +
+                                    summary +
+                                    '</p>' +
+                                    '</div></div><div class="back card">' +
+                                    '<div class="hourly' +
+                                    ' ' +
+                                    day +
+                                    '"><b>24hr Forecast</b><ul class="list-reset"></ul></div></div></div></div></li>'
+                                );
+
+                                // Daily forecast report for each day of the week
+                                switch (day) {
+                                    case 'Sunday':
+                                        hourlyReport(sunday, days[0]);
+                                        break;
+                                    case 'Monday':
+                                        hourlyReport(monday, days[1]);
+                                        break;
+                                    case 'Tuesday':
+                                        hourlyReport(tuesday, days[2]);
+                                        break;
+                                    case 'Wednesday':
+                                        hourlyReport(wednesday, days[3]);
+                                        break;
+                                    case 'Thursday':
+                                        hourlyReport(thursday, days[4]);
+                                        break;
+                                    case 'Friday':
+                                        hourlyReport(friday, days[5]);
+                                        break;
+                                    case 'Saturday':
+                                        hourlyReport(saturday, days[6]);
+                                        break;
+                                }
+                            }
+
+                            skycons(); // inject skycons for each forecast
+
+                        });
+                }
+            });
+
+    </script>*@

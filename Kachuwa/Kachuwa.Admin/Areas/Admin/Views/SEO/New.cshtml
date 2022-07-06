@@ -1,0 +1,103 @@
+﻿@using Kachuwa.Localization
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Web.Model
+@using Newtonsoft.Json
+@model Kachuwa.Web.Model.SEO
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("SEO");
+    ViewData["Title"] = LocaleResource.Get("SEO.PageTitle.New");
+    FormDatasource dataSource = (FormDatasource)ViewData["FormDataSources"];
+}
+}
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="cardform-wrapper">
+                @(
+    Html.CreateKachuwaForm<SEO>("SEOForm", Model)
+        .SetHeading("")
+        .ActionUrl("/admin/SEO/new")
+        .CancelUrl("/admin/SEO")
+        .EncType("multipart/form-data")
+        .CreateSection(section =>
+        {
+            section.Add("section1", "form-section", rows =>
+            {
+                rows.Add("1strow", "row", columns =>
+                {
+                    columns.Add("left", "col-md-4", @<div class="form-description">
+                                                        <h4>@LocaleResource.Get("SEO.Info.SEO")</h4>
+                                                        <p>@LocaleResource.Get("SEO.Info.SEO.Text")</p>
+                                                    </div>);
+                    columns.Add("right", "col-md-8", control =>
+                    {
+                        control.Add("form-control", model => model.SEOId, FormInputControl.Hidden);
+                        control.Add("form-control", model => model.PageName, FormInputControl.TextBox)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-12")
+                            .SetHelp(LocaleResource.Get("SEO.Help.PageName"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.PageName"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.PageName"));
+                        control.Add("form-control", model => model.MetaTitle, FormInputControl.TextBox)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-12")
+                            .SetHelp(LocaleResource.Get("SEO.Help.MetaTitle"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.MetaTitle"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.MetaTitle"));
+                        //control.Add("form-control", model => model.MetaKeyWords, FormInputControl.TextBox)
+                        //    .SetFirstParentClass("form-group")
+                        //    .SetSecondParentClass("col-md-12")
+                        //    .SetHelp(LocaleResource.Get("SEO.Help.MetaKeyWords"))
+                        //    .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.MetaKeyWords"))
+                        //    .SetDisplayName(LocaleResource.Get("SEO.Form.MetaKeyWords"));
+                        control.Add("form-control", model => model.MetaDescription, FormInputControl.TextArea)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-12")
+                            .SetHelp(LocaleResource.Get("SEO.Help.MetaDescription"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.MetaDescription"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.MetaDescription"));
+                        control.Add("form-control", model => model.SeoType, FormInputControl.Select, dataSource.GetSource("SEOTypes"))
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetHelp(LocaleResource.Get("SEO.Help.SeoType"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.SeoType"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.SeoType"));
+                        control.Add("form-control", model => model.Url, FormInputControl.TextBox)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetHelp(LocaleResource.Get("SEO.Help.Url"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.Url"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.Url"));
+
+                        control.Add("form-control", model => model.ImageFile, FormInputControl.File)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetHelp(LocaleResource.Get("SEO.Help.Image"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.Image"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.Image"));
+                        control.Add("form-control", model => model.ProductId, FormInputControl.Number)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetHelp(LocaleResource.Get("SEO.Help.ProductId"))
+                            .SetPlaceHolder(LocaleResource.Get("SEO.PlaceHolder.ProductId"))
+                            .SetDisplayName(LocaleResource.Get("SEO.Form.ProductId"));
+
+
+                    }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                });
+
+
+            }).SetHeading(LocaleResource.Get("SEO.Form.Title.New"));
+        }))
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{ 
+    <script type="text/javascript">
+       
+
+    </script>
+}

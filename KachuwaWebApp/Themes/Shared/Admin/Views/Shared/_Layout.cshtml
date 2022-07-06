@@ -1,0 +1,75 @@
+﻿@using Kachuwa.Web.Optimizer
+@inject IKachuwaBundler bundler
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    @*@await bundler.BundleCss("theme-core", new string[] { "~/lib/bootstrap/dist/css/bootstrap.min.css", "~/lib/font-awesome/css/all.css" })*@
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="~/Themes/Shared/Admin/css/theme.min.css" rel="stylesheet" />
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    @await bundler.BundleJs("jquery-core", new string[]
+                {
+        "~/lib/jquery/jquery.js",
+        "~/lib/jquery-validation/dist/jquery.validate.min.js"
+        ,"~/lib/jquery-validation/dist/additional-methods.min.js"
+                })
+    @RenderSection("Stylesheet", required: false)
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <link href="~/lib/pqGrid/themes/Office/pqgrid.min.css" rel="stylesheet" />
+    <script src="~/lib/pqGrid/pqgrid.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Main Sidebar -->
+        <component name="AdminMenu"></component>
+        <!-- End Main Sidebar -->
+        <main class="main-content">
+            <component name="TopBar"></component>
+
+            <div class="main-content-container container-fluid px-4">
+                @RenderBody()
+
+            </div>
+            <component name="NotificationBar"></component>
+        </main>
+
+    </div>
+
+    @*<div class="container-fluid">
+
+            <component name="AdminMenu"></component>
+
+            <main class="main-content">
+                <component name="TopBar"></component>
+
+                <div class="main-content-container container-fluid px-4">
+                    @RenderBody()
+
+                </div>
+                <component name="NotificationBar"></component>
+            </main>
+
+        </div>*@
+    <script src="~/themes/shared/admin/js/main.js"></script>
+    @*<script src="~/themes/shared/admin/js/theme.js"></script>*@
+
+    @RenderSection("Scripts", required: false)
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

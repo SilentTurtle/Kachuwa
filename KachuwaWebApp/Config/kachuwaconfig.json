@@ -1,0 +1,37 @@
+{
+  "KachuwaAppConfig": {
+    "AppName": "KachuwaFramework", //make it same in other app as well/multi sub domain support
+    "SiteUrl": "https://localhost:44360",
+    "IsInstalled": true,
+    "DbProvider": "SQLServer",
+    "Framework": "",
+    "Version": "1.0.0",
+    "EnableLogging": true,
+    "EnableDbLogging": false,
+    "Theme": "Default",
+    "AdminTheme": "Admin",
+    "FacebookAppId": "",
+    "RequireConfirmedEmail": false,
+    "PasswordLength": 8,
+    "RequireNonAlphanumeric": false,
+    "RequireUppercase": false,
+    "DataProtectionKeyPath": "app_data",
+    "CookieDomain": "localhost",
+    "CookieIdentity": "kachuwa.id", //identity cookie regenerate,
+    "ApiTokenEndPoint": "https://localhost:44360/connect/token",
+    "ApiEndPoint": "https://localhost:44360",
+    "TokenAuthority": "https://localhost:44360",
+    "SMTMConfig": {
+      "Host": "smtp.sendgrid.net",
+      "UserName": "username",
+      "Password": "password",
+      "UseSSL": false,
+      "Port": 25
+    },
+    "JobConnection": "JobConnection"
+  },
+  "DapperIdentityCryptography": {
+    "Key": "FrFE/VtQ5pfNhGYVnyf65Sa6j4h6ion3It  kAnqLsnBE=",
+    "IV": "Ig/YU0tgUqI1u2VzWH0plQ=="
+  }
+}

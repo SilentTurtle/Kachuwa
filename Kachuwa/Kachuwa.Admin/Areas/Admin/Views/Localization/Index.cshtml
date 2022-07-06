@@ -1,0 +1,151 @@
+﻿@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@inject ILocaleResourceProvider LocaleResource
+@model IEnumerable<Kachuwa.Localization.LocaleRegionViewModel>
+@{
+
+    LocaleResource.LookUpGroupAt("Localization");
+    ViewData["Title"] = LocaleResource.Get("Localization.PageTitle");
+}
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="grid-section">
+                <div class="panel module" aria-multiselectable="true">
+                    <div class="panel-inner">                       
+                        <div class="panel-heading clearfix">
+                            <h2 class="panel-title float-left">@LocaleResource.Get("Localization.PageTitle")</h2>
+
+                            <div class="float-right">
+                                <div class="input-group-btn ">
+                                    <a href="#" class="btn btn-warning btn-sm has-mdicon export">
+                                        <i class="material-icons md-18">import_export</i>
+                                        @LocaleResource.Get("Localization.Import")
+                                    </a>
+                                    <a href="/admin/localization/new" class="btn btn-primary btn-sm has-mdicon">
+                                        <i class="material-icons md-18">add</i>
+                                        @LocaleResource.Get("Localization.AddLocaleRegion")
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            @(Html
+                                          .CreateKachuwaGrid(Model)
+                                          .Build(columns =>
+                                          {
+                                              columns.Add(model => new { model.CountryName, model.Flag }).SetTitle(LocaleResource.Get("Localization.Grid.Country"))
+                                                  .Encoding(false)
+                                                  .Template("<p><img src='/country/flags/{{Flag}}' width='20' />{{CountryName}}</p>");
+                                              columns.Add(model => model.Culture).SetTitle(LocaleResource.Get("Localization.Grid.Culture"));
+                                              columns.Add(model => model.IsDefault ? LocaleResource.Get("Localization.Grid.Yes") : LocaleResource.Get("Localization.Grid.No")).SetTitle(LocaleResource.Get("Localization.Grid.IsDefault"));
+                                              columns.Add(model => model.IsActive ? LocaleResource.Get("Localization.Grid.Yes") : LocaleResource.Get("Localization.Grid.No")).SetTitle(LocaleResource.Get("Localization.Grid.IsActive"));
+
+                                          }).AddCommands(commands =>
+                                          {
+                                              commands.Add(LocaleResource.Get("Grid.Command.Export"), "Export", "fas fa-file-export", "", "/admin/localization/export", model => model.LocaleRegionId);
+                                              commands.Add(LocaleResource.Get("Grid.Command.Edit"), "Edit", "fas fa-pen", "", "/admin/localization/edit", model => model.LocaleRegionId);
+                                              commands.Add(LocaleResource.Get("Grid.Command.Delete"), "Delete", "fas fa-trash", "kachuwagrid.delete", Model => Model.LocaleRegionId,
+                                                  "/admin/localization/delete");
+
+                                          }).Css("table-hover")
+                                          .Empty(LocaleResource.Get("Localization.Grid.EmptyText"))
+                                          .Pagination(pager =>
+                                          {
+                                              pager.Api = "/admin/localization";
+                                          })
+
+                            )
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="modal right fade" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+             
+
+                <h4 class="modal-title">
+                    @LocaleResource.Get("Localization.Import")
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <section name="section1" class="form-section">
+                                <form method="post" action="/admin/localization/import" enctype="multipart/form-data">
+
+                                    <div class="form-group">
+
+
+                                        <label>@LocaleResource.Get("Localization.Upload")</label>
+                                        <i class="fa fa-question-circle input-description" data-toggle="tooltip" data-placement="bottom" title="@LocaleResource.Get("Localization.Form.Help.Import")"></i>
+                                        <input class="form-control" id="importFile" name="importfile" data-val="true" data-val-required="*" type="file">
+                                    </div>
+                                    <div class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-primary formsave  has-mdicon"><i class="material-icons md-18">import_export</i>  @LocaleResource.Get("Localization.Import")</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var localiztionManager = function () {
+
+            var init = function () {
+
+                $(document).off("click", ".export").on("click",
+                    ".export",
+                    function () {
+                        $("#importModal").modal('show');
+
+                    });
+                $(document).off("change", "#importFile").on("change",
+                    "#importFile",
+                    function () {
+                        var filename = $('#importFile').val().replace(/.*(\/|\\)/, '');
+                        console.log(filename);
+                        var extension = filename.substr((filename.lastIndexOf('.') +1) );
+                        switch(extension) {
+                        case 'xls':
+                            return true;
+                            break;
+                        case 'xlsx':
+                            return true;
+                            break;
+                        default:
+                                new kachuwaNotification().Warning(Locale.Get("Warning"), Locale.Get("Please upload excel file only."));
+                            $('#importFile').val('');
+                            return false;
+                        }
+
+                    });
+                
+            }();
+        }();
+
+    </script>
+}

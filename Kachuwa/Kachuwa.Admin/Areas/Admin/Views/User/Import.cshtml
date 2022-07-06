@@ -1,0 +1,251 @@
+﻿@using Kachuwa.Identity.Models
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model Kachuwa.Identity.Models.UserImportViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+
+    LocaleResource.LookUpGroupAt("User");
+    ViewData["Title"] = LocaleResource.Get("User.PageTitle.Import");
+    FormDatasource dataSource = (FormDatasource)ViewData["FormDataSource"];
+}
+
+  <div class="row">
+    <div class="col-12 col-sm-5">
+        <div class="breadcumb-wrapper pt-3 pt-sm-0 mb-3">
+            <h4 class="page-title mb-0">Import</h4>
+            <ul class="breadcrumb breadcrumb-separatorless fw-normal fs-6 pt-1">
+                <li class="breadcrumb-item ">
+                    <a href="/admin/dashboard" class="">Home</a>
+                </li>
+                <li class="breadcrumb-item"><a href="/admin/user">Users</a></li>
+                <li class="breadcrumb-item">Import</li>
+            </ul>
+        </div>
+    </div><!-- breadcumb-->
+
+@(Html.CreateKachuwaForm<UserImportViewModel>("taxrateForm", Model)
+        .SetHeading("")
+        .ActionUrl("/admin/user/import")
+        .CancelUrl("/admin/user")
+  .EncType("multipart/form-data")
+        .CreateSection(section =>
+        {
+            section.Add("section1", "form-section", rows =>
+            {
+                rows.Add("1strow", "", columns =>
+                {
+                        columns.Add("", "row", @<div class="form-header-wrapper mt-4">
+                        <div class="form-header"><h4>Import Details</h4></div>
+                    </div>);
+
+                        columns.Add("right", "col-md-12", control =>
+                    {                                                                      
+                                                                      
+                            control.Add("form-control", model => model.ImportFile, FormInputControl.File)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetLabelClass("form-label")
+                            .SetDisplayName("ImportFile");
+
+                        control.Add("form-control", model => model.AutoGenerateEmailAddress, FormInputControl.Switch)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-8")
+                            .SetLabelClass("form-label")
+                            .SetPlaceHolder("AutoGenerateEmailAddress")
+                            .SetDisplayName("AutoGenerateEmailAddress");
+                        control.Add("form-control", model => model.AutoGenerateUserName, FormInputControl.Switch)
+                            .SetFirstParentClass("form-group")
+                            .SetSecondParentClass("col-md-6")
+                            .SetLabelClass("form-label")
+                            .SetPlaceHolder("AutoGenerateUserName")
+                            .SetDisplayName("AutoGenerateUserName");
+                                                                       
+
+                    }).SetFirstChildClass("form-section").SetSecondChildClass("row");
+                });
+                rows.Add("2ndRow", "row", columns =>
+                {
+                    columns.Add("", "row", @<div class="form-header-wrapper mt-4">
+                        <div class="form-header"><h4>User Info</h4></div>
+                    </div>);
+                    columns.Add("right", "col-md-8", @<div class="col-md-12">
+                                                            <div class="col-md-8">
+                                                                <label>@("Roles")</label>
+                                                                <div style="max-height: 200px; overflow: auto;">
+                                                                    <ul class="list-group checked-list-box" style="margin-bottom: 0px;">
+                                                                        @{
+                                                                            var counter = 0;
+
+                                                                        }
+                                                                        @foreach (var role in Model.UserRoles)
+                                                                        {
+                                                                            <li class="list-group-item" data-name="UserRoles[@counter]" data-selected="false" data-val="@role.RoleId">
+
+                                                                                @role.Name
+
+                                                                            </li>
+
+                                                                            counter++;
+                                                                        }
+
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <table style="color: red;" class="table bg-error">
+                                                                    @foreach (var errorUser in Model.Users)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@errorUser.FirstName @errorUser.LastName</td>
+                                                                            <td>@errorUser.ImportMessage</td>
+                                                                        </tr>
+                                                                    }
+                                                                </table>
+                                                                <div style="color: red;" asp-validation-summary="All"></div>
+                                                            </div>
+                                                        </div>
+                        ).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                });
+            });
+                                                                
+        }))
+      
+@section scripts{
+    <script asp-add-nonce="true">
+        (function () {
+            var categoryListInit = function () {
+
+                var reArrangeIndex = function () {
+
+                    $('.list-group.checked-list-box .list-group-item.active').each(function (index, item) {
+                        var li = $(item);
+                        li.find("input:hidden.isselected").prop("name", "UserRoles[" + index + "].IsSelected");
+
+                        li.find("input:checkbox").prop("name", "UserRoles[" + index + "].RoleId");
+                    });
+                }
+
+                //startSortable();
+                $('.list-group.checked-list-box .list-group-item').each(function () {
+                    // Settings
+                    var $widget = $(this),
+                        $checkbox = $('<input type="checkbox" class="hidden" />'),
+                        color = ($widget.data('color') ? $widget.data('color') : "primary"),
+                        style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+                        settings = {
+                            on: {
+                                icon: 'fa fa-check-square'
+                            },
+                            off: {
+                                icon: 'fa fa-unchecked'
+                            }
+                        };
+                    //console.log($widget.data())
+                    var isSelcted = $widget.data('selected');
+                    if (isSelcted) {
+                        $checkbox.prop('checked', true);
+                    }
+                    $checkbox.prop('name', $widget.data('name'));
+                    $checkbox.prop('value', $widget.data('val'));
+                    $widget.css('cursor', 'pointer');
+                    $widget.append($checkbox);
+                    $widget.append("<input type='hidden' class='isselected' name='' value='false'>");
+                    // Event Handlers
+                    $widget.on('click',
+                        function () {
+                            $checkbox.prop('checked', !$checkbox.is(':checked'));
+                            $checkbox.triggerHandler('change');
+
+                            if ($checkbox.is(':checked')) {
+                                $widget.find("input:hidden.isselected").val(true);
+                            } else { $widget.find("input:hidden.isselected").val(false); }
+                            //if ($widget.find("input:hidden").length > 0) {
+                            //    if () {
+
+                            //        $widget.append("<input type='hidden' class='isselected'  value='" +
+                            //            $checkbox.prop('value') +
+                            //            "'/>");
+                            //    } else {
+                            //        $widget.find("input:hidden").remove();
+                            //    }
+                            //} else {
+                            //    if ($checkbox.is(':checked')) {
+
+                            //        $widget.append("<input type='hidden'  class='isselected'  value='" +
+                            //            $checkbox.prop('value') +
+                            //            "'/>");
+                            //    } else {
+                            //        $widget.find("input:hidden").remove();
+                            //    }
+
+                            //}
+
+                            updateDisplay();
+                        });
+                    $checkbox.on('change',
+                        function () {
+                            updateDisplay();
+                        });
+
+
+                    // Actions
+                    function updateDisplay() {
+                        var isChecked = $checkbox.is(':checked');
+
+                        // Set the button's state
+                        $widget.data('state', (isChecked) ? "on" : "off");
+
+                        // Set the button's icon
+                        $widget.find('.state-icon')
+                            .removeClass()
+                            .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+                        // Update the button's color
+                        if (isChecked) {
+                            $widget.addClass(style + color + ' active');
+                        } else {
+                            $widget.removeClass(style + color + ' active');
+                        }
+                        reArrangeIndex();
+
+                    }
+
+                    // Initialization
+                    function init() {
+
+                        if ($widget.data('checked') == true) {
+                            $checkbox.prop('checked', !$checkbox.is(':checked'));
+                        }
+
+                        updateDisplay();
+
+                        // Inject the icon if applicable
+                        if ($widget.find('.state-icon').length == 0) {
+                            $widget.prepend('<span class="state-icon ' +
+                                settings[$widget.data('state')].icon +
+                                '"></span>');
+                        }
+                    }
+
+                    init();
+                });
+
+                $('#get-checked-data').on('click',
+                    function (event) {
+                        event.preventDefault();
+                        var checkedItems = {}, counter = 0;
+                        $("#check-list-box li.active").each(function (idx, li) {
+                            checkedItems[counter] = $(li).text();
+                            counter++;
+                        });
+                        $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+                    });
+            };
+            categoryListInit();
+
+
+        })();
+    </script>
+}

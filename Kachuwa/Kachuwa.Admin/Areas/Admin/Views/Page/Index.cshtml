@@ -1,0 +1,54 @@
+﻿@using Kachuwa.Web
+@using Kachuwa.Web.Grid
+@using Kachuwa.Localization
+@model IEnumerable<Page>
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("Page");
+    ViewData["Title"] = LocaleResource.Get("Page.PageTitle");
+}
+ 
+ <div class="row">
+    <div class="col-12 col-sm-5">
+        <div class="breadcumb-wrapper pt-3 pt-sm-0 mb-3">
+            <h4 class="page-title mb-0">Pages</h4>
+            <ul class="breadcrumb breadcrumb-separatorless fw-normal fs-6 pt-1">
+                <li class="breadcrumb-item ">
+                    <a href="/admin/dashboard" class="">Home</a>
+                </li>
+                <li class="breadcrumb-item">Page</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-12 col-sm-7 breadcumb-meta-btns d-flex justify-content-end align-items-center mb-2">
+        <a href="/admin/page/new" class="btn btn breadcumb-btn"><i class="fa fa-plus"></i> Add New</a>
+    </div>
+</div>
+
+@*//? LocaleResource.Get("Page.Grid.Yes") : LocaleResource.Get("Page.Grid.No"))*@
+                            @(Html
+                                          .CreateKachuwaGrid(Model)
+                                          .Build(columns =>
+                                          {
+                                              columns.Add(model => model.Name).SetTitle("Name");
+                                              columns.Add(model => model.Url).SetTitle("Url");
+                                              columns.Add(model => model.IsBackend).SetTitle("IsBackend");
+                                              columns.Add(model => model.IsActive).SetTitle("IsActive");
+                                              columns.Add(model => model.IsPublished).SetTitle("IsPublished");
+                                          }).AddCommands(commands =>
+                                          {
+                                                        commands.Add("Module", "Module", "fas fa-cogs", "", "/admin/page/config", model => model.PageId);
+                                                        commands.Add("Edit", "Edit", "fas fa-edit", "", "/admin/page/edit", model => model.PageId);
+                                                        commands.Add("Delete", "Delete", "fa fa-trash", "kachuwagrid.delete", model => model.PageId,
+                                                          "/admin/page/delete");
+                                                       commands.Add("Permission", "Permission", "fa fa-eye-slash", "", "/admin/page/pagepermission", model => model.PageId);
+                                                
+                                             
+                                          }).Css("table-hover")
+                                          .Empty("No Page Added Yet")
+                                          .Pagination(pager =>
+                                          {
+                                              pager.CurrentPage = (int)ViewData["Page"];//later will come form view bag where page logic implemented
+                                              pager.Api = "/admin/page";
+                                          })
+                     )

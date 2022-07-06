@@ -1,0 +1,360 @@
+.notification-bar {
+    position: fixed;
+    right: 15px;
+    bottom: 60px;
+    z-index: 9999999;
+    /*background: white;
+    -moz-box-shadow: 0 0 10px #cacaca;
+    -webkit-box-shadow: 0 0 10px #cacaca;
+    box-shadow: 0 0 10px #cacaca;*/
+}
+
+.notification {
+    background-color: white;
+    -moz-box-shadow: 0 0 10px #cacaca;
+    -webkit-box-shadow: 0 0 10px #cacaca;
+    box-shadow: 0 0 10px #cacaca;
+    border-radius: 7px;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 10px 0;
+
+    .dismiss {
+        color: #2c2c2c;
+        float: right;
+        cursor: pointer;
+    }
+}
+
+.notification-fullbar {
+    display: inherit;
+    width: 100%;
+    /* To initially hide the notification .... can be commented if not required.  */
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    display: block;
+    border-radius: 100%;
+    transform: translate(0, 53%);
+    color: whitesmoke;
+    padding: 12px;
+}
+
+.info {
+    width: 80%;
+    transform: translate(57px, -33px);
+    padding: 10px;
+}
+
+.info span.notification-title {
+    display: block;
+    color: #38ad65;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.info span.notification-content {
+    color: #919191;
+    font-size: 13px;
+}
+
+.info span a {
+    color: #545454;
+    text-decoration: none;
+    font-weight: 600;
+}
+/* To dim the background Elements */
+
+.dark-back {
+    position: fixed;
+    z-index: 2;
+    top: 0px;
+    opacity: 0.9;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* The Notification body */
+
+.notification-body {
+    position: relative;
+    z-index: 3;
+    text-align: left;
+    min-height: 20%;
+    padding: 0px 7%;
+    float: right;
+    min-width: 350px;
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    .notification-btn {
+        border: 2px solid white;
+        font-weight: bold;
+        min-width: 10%;
+        padding: 10px;
+        position: absolute;
+        right: 95px;
+        top: 31px;
+    }
+}
+
+.black {
+    .circle {
+        background-color: rgb(39, 37, 37);
+    }
+
+    .info span.notification-title {
+        color: rgb(39, 37, 37);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.green {
+    /*background-color: rgb(50, 179, 106);
+    color: white;*/
+    .circle {
+        background-color: rgb(50, 179, 106);
+    }
+
+    .info span.notification-title {
+        color: rgb(50, 179, 106);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.teal {
+    .circle {
+        background-color: #008299;
+    }
+
+    .info span.notification-title {
+        color: #008299;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.blue {
+    .circle {
+        background-color: #2672EC;
+    }
+
+    .info span.notification-title {
+        color: #2672EC;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.purple {
+    .circle {
+        background-color: #8C0095;
+    }
+
+    .info span.notification-title {
+        color: #8C0095;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.dark-purple {
+    .circle {
+        background-color: #5133AB;
+    }
+
+    .info span.notification-title {
+        color: #5133AB;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.pink {
+    .circle {
+        background-color: rgb(244, 114, 208);
+    }
+
+    .info span.notification-title {
+        color: rgb(244, 114, 208);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.red {
+
+    .circle {
+        background-color: #d71010;
+    }
+
+    .info span.notification-title {
+        color: #d71010;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.orange {
+    .circle {
+        background-color: #D24726;
+    }
+
+    .info span.notification-title {
+        color: #D24726;
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.amber {
+    .circle {
+        background-color: rgb(240, 163, 10);
+    }
+
+    .info span.notification-title {
+        color: rgb(240, 163, 10);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.yellow {
+    .circle {
+        background-color: rgb(227, 200, 0);
+    }
+
+    .info span.notification-title {
+        color: rgb(227, 200, 0);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}
+
+.brown {
+    .circle {
+        background-color: rgb(130, 90, 44);
+    }
+
+    .info span.notification-title {
+        color: rgb(130, 90, 44);
+    }
+
+    .info span.notification-content {
+    }
+
+    .info span a {
+    }
+
+    .notification-body {
+        /*background-color: rgb(50, 179, 106);*/
+        color: white;
+    }
+}

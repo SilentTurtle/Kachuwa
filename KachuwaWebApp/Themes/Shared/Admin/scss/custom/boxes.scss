@@ -1,0 +1,149 @@
+// DESCRIPTION:
+// An easy way to create 'card' like content
+// that appears inside a padded box.
+//
+//
+// MARKUP:
+//
+// <div class="box">
+//   ...
+// </div>
+//
+// MODIFIERS:
+// .box-lg - place more padding on the box
+// .box-sm - place less padding on the box
+// .box-border - place a border around the box
+// .bg-primary, .bg-primary-1 etc. - Change the BG colour of the box
+
+$base-line-height: 1.6875em;
+$box-padding: $base-line-height * 2;
+$box-border: 1px solid #ececec;
+$box-shadow-level: 1; // value from 1 - 5, shallow - deep
+.box{
+	position: relative;
+	overflow: hidden;
+	padding: $box-padding;
+	margin-bottom: 30px;
+	&.box-lg{
+		padding: $box-padding * 1.5;
+	}
+	&.box-sm{
+		padding: $box-padding / 1.5;
+	}
+	&.box-border{
+		border: $box-border;
+	}
+	>div[class*='col-']:first-child:not(.box){
+		padding-left: 0;
+	}
+	>div[class*='col-']:last-child:not(.box){
+		padding-right: 0;
+	}
+}
+
+img + .box{
+	margin-top: -$base-line-height;
+}
+
+@media all and (max-width: 767px){
+	.box{
+		padding: $box-padding/1.5;
+		margin-bottom: 15px;
+		&.box-lg{
+			padding: $box-padding/1.5;
+		}
+		div[class*='col-']:not(.box){
+			padding: 0;
+		}
+		&:last-child{
+			margin-bottom: 15px;
+		}
+	}
+}
+
+
+
+//overrideing
+
+/*! - Stack Boxes - */
+
+.box {
+	border-radius: 6px;
+
+	.background-image-holder {
+		border-radius: 6px;
+	}
+
+	&:before {
+		border-radius: 6px;
+	}
+
+	&:not(:last-child) {
+		margin-bottom: 30px;
+	}
+
+	&:not([class*='bg-']) {
+		background: #f9f9f9;
+	}
+
+	&.bg-secondary {
+		.box {
+			background: #f4f4f4;
+		}
+	}
+}
+.box-shadow {
+	box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.04);
+}
+@media all and (min-width: 768px) {
+	.switchable {
+		.imagebg {
+			.box {
+				padding-left: $base-line-height*3;
+			}
+		}
+	}
+}
+
+.bg-dark, .imagebg:not(.image-light) {
+	.box:not([class*='bg-']) {
+		background: none;
+		color: #fff;
+
+		&.box-border {
+			border-color: lighten(#222, 10%);
+		}
+	}
+
+	.box {
+		&[class*='bg-'] {
+			&.box-border {
+				border: none;
+			}
+		}
+	}
+}
+
+.imagebg {
+	&:not(.image-light) {
+		.box:not(.bg-white):not(.bg-none) {
+			background: rgba(20,20,20,0.3);
+
+			&.box-border {
+				border: none;
+			}
+
+			.box {
+				background: none;
+			}
+		}
+	}
+}
+
+@media all and (min-width: 768px) {
+	.box {
+		&.box-emphasis {
+			/*@include scale(1.075);*/
+		}
+	}
+}

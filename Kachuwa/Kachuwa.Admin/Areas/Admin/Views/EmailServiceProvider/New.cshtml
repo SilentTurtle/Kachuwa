@@ -1,0 +1,60 @@
+﻿@using Kachuwa.Web.Model
+@using Kachuwa.Localization
+@using Kachuwa.Web.Form
+@using Kachuwa.Web.Grid
+@model PaymentGatewayViewModel
+@inject ILocaleResourceProvider LocaleResource
+@{
+    LocaleResource.LookUpGroupAt("PaymentGateway");
+    ViewData["Title"] = LocaleResource.Get("PaymentGateway.PageTitle.New");
+}
+
+
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="cardform-wrapper">
+
+                @(
+                                                    Html.CreateKachuwaForm<PaymentGatewayViewModel>("pgfrom", Model)
+                                                    .SetHeading("")
+                                                        .EncType("multipart/form-data")
+                                                        .ActionUrl("/admin/paymentgateway/new")
+                                                        .CancelUrl("/admin/paymentgateway")
+                                                    .CreateSection(section =>
+                                                    {
+                                                        section.Add("section1", "form-section", rows =>
+                                                        {
+                                                            rows.Add("1strow", "row", columns =>
+                                                            {
+                                                                columns.Add("left", "col-md-4", @<div class="form-description">
+                                                                                                    <h4>@LocaleResource.Get("PaymentGateway.Info.Payment")</h4>
+
+                                                                                                    <p>
+                                                                                                        @LocaleResource.Get("PaymentGateway.Info.PaymentText")
+                                                                                                    </p>
+                                                                                                    <p>
+                                                                                                        @LocaleResource.Get("PaymentGateway.Info.PaymentText2")
+                                                                                                    </p>
+                                                                                                </div>);
+                                                                columns.Add("right", "col-md-8", control =>
+                                                                {
+                                                                    control.Add("form-control", model => model.PluginZipFile, FormInputControl.File)
+                                                                        .SetFirstParentClass("form-group")
+                                                                        .SetSecondParentClass("col-md-12")
+                                                                        .SetHelp(LocaleResource.Get("PaymentGateway.Help.PluginZipFile"))
+                                                                        .SetPlaceHolder(LocaleResource.Get("PaymentGateway.PlaceHolder.PluginZipFile"))
+                                                                        .SetDisplayName(LocaleResource.Get("PaymentGateway.Form.PluginZipFile"));
+
+                                                                }).SetFirstChildClass("forminput-section").SetSecondChildClass("row");
+                                                            });
+                                                        })
+                                                            .SetHeading(LocaleResource.Get("PaymentGateway.Form.Title.New"));
+                                                    }))
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
