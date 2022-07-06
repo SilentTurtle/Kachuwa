@@ -218,4 +218,6 @@ KachuwaWebApp/Locale/*
 KachuwaWebApp/Logs
 KachuwaWebApp/DbLogs
 KachuwaWebApp/wwwroot/lib
+KachuwaWebApp/Smidge
+KachuwaWebApp/app_data
 
